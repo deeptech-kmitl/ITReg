@@ -4,7 +4,6 @@
 
 Once you've created a project, start a development server:
 
-    cd ITReg
     npm install
     npm run dev
     
