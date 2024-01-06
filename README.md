@@ -1,8 +1,12 @@
-# React + Vite
+# Welcome to ITReg!
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Developing
 
-Currently, two official plugins are available:
+Once you've created a project, start a development server:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+    cd ITReg
+    npm install
+    npm run dev
+    
+    # or start the server and open the app in a new browser tab
+    npm run dev -- --open
