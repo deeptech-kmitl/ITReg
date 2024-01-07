@@ -1,13 +1,13 @@
 import React from 'react'
-import { Outlet, Link } from "react-router-dom";
-import Homepage_bg from '../assets/Homepage_bg.png'
+import { Link } from "react-router-dom";
+import HomepageBG from '../assets/HomepageBG.png'
 import Logo from '../assets/Logo.png'
 
 
 function Homepage() {
 
     return (
-        <div style={{ backgroundImage: `url(${Homepage_bg})` }}
+        <div style={{ backgroundImage: `url(${HomepageBG})` }}
             className='bg-no-repeat bg-cover bg-center h-screen px-40 py-16 bg-[#181754] text-white'>
             <div className='flex justify-between items-center'>
                 <Link to='/'><img src={Logo} alt="Logo" className='w-28' /></Link>
@@ -29,7 +29,7 @@ function Homepage() {
                     <p className=''>There are several steps to help you get ready for your college experience</p>
                     <p className=''>here are some tips on how to register for college classes.</p>
                 </div>
-                <Link className='box-btnGradient font-medium text-[20px] text-[#0cb6ff] px-9 py-3 mt-20' to="/dashboard">Get Started</Link>
+                <Link to='/dashboard' className='box-btnGradient font-medium text-[20px] text-[#0cb6ff] px-9 py-3 mt-20'>Get Started</Link>
             </div>
         </div>
     )
