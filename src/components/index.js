@@ -1,5 +1,5 @@
-import Sitebar from './sitebar/Sitebar'
+import SideNavBar from './sidebar/SideNavBar'
 
 export {
-    Sitebar,
+    SideNavBar,
 }
