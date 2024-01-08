@@ -3,21 +3,15 @@ import { Link, useNavigate, useLocation } from "react-router-dom"
 import Logo from '../../assets/Logo.png'
 import './SideNavBarStyle.css'
 
-function SideNavBar() {
-    const initialIsOpen = localStorage.getItem('isOpen') === 'false' ? false : true;
-    const [isOpen, setIsOpen] = useState(initialIsOpen);
+function SideNavBar({ toggle, isOpen, setIsOpen }) {
     const location = useLocation();
-
-    const toggle = () => {
-        setIsOpen(!isOpen);
-    };
 
     useEffect(() => {
         localStorage.setItem('isOpen', isOpen);
     }, [isOpen]);
 
     return (
-        <div className={`h-screen p-2`}>
+        <div className='fixed h-screen p-2'>
             <div className={`sidebar ${isOpen ? '' : 'active'} bg-[#181754] h-full rounded-[30px] text-white py-10 flex flex-col justify-between`}>
                 <div className='header flex justify-between items-center pl-10 pr-8 h-[50px]'>
                     <Link className='logo' to='/'><img src={Logo} alt="Logo" className='w-28' /></Link>
@@ -48,7 +42,7 @@ function SideNavBar() {
                         </Link>
                     </li>
                     <li className={location.pathname === '/howToRegister' ? 'active' : ''}>
-                        <Link to='/howToRegister'>
+                        <Link to='/howToRegister' onClick={() => { setIsOpen(false) }}>
                             <img src={`https://img.icons8.com/material-rounded/${location.pathname === '/howToRegister' ? '181754' : 'FFFFFF'}/idea--v1.png`} alt="idea--v1" />
                             <span>How To Register</span>
                         </Link>

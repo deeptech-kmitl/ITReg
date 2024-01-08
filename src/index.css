@@ -48,3 +48,13 @@ body {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.layout {
+  margin-right: 8rem;
+  transition: 0.5s ease;
+}
+
+.layout.active {
+  margin-right: 21rem;
+  transition: 0.5s ease;
+}
