@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import {
   Homepage,
   Dashboard,
@@ -7,6 +7,7 @@ import {
   HowToRegister,
   SignIn,
   SignUp,
+  Layout,
 } from './pages/index'
 
 function App() {
@@ -14,14 +15,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/">
-          <Route index element={<Homepage />} />
-          <Route path="dashboard" element={<Dashboard />} />
+        <Route path="/" element={<Homepage />} />
+        <Route path="signIn" element={<SignIn />} />
+        <Route path="signUp" element={<SignUp />} />
+        <Route element={<Layout />}>
+          <Route index path="dashboard" element={<Dashboard />} />
           <Route path="review" element={<Review />} />
           <Route path="studyPlan" element={<StudyPlan />} />
           <Route path="howToRegister" element={<HowToRegister />} />
-          <Route path="signIn" element={<SignIn />} />
-          <Route path="signUp" element={<SignUp />} />
         </Route>
       </Routes>
     </BrowserRouter>
