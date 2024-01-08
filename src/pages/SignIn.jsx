@@ -26,10 +26,12 @@ function SignIn() {
                         /> */}
                         <form action="" className='flex flex-col gap-6 mt-6'>
                             <div className='input-box'>
-                                <input type='text' name='email' placeholder='Email' className='w-[600px] h-[60px]'></input>
+                                <img width="35" height="35" src='https://img.icons8.com/fluency-systems-regular/48/151c38/new-post.png' className='icon mt-3 ml-6'></img>
+                                <input type='text' name='email' placeholder='Email' className='w-[600px] h-[60px] font-light'></input>
                             </div>
                             <div className='input-box'>
-                               <input type='password' name='password' placeholder='Password' className='w-[600px] h-[60px]'></input> 
+                            <img width="35" height="35" src='https://img.icons8.com/fluency-systems-regular/48/151c38/password--v1.png' className='icon mt-3 ml-6'></img>
+                                <input type='password' name='password' placeholder='Password' className='w-[600px] h-[60px] font-light'></input> 
                             </div>
                         </form>
 
@@ -40,7 +42,7 @@ function SignIn() {
                         <img src={SignInImage}></img>
                         <div>
                             <p className='font-normal text-[25px] inline'>Don't have an account?  </p>
-                            <p className='font-normal text-[25px] textGradient underline underline-offset-4 decoration-[#3753cf8f] inline'>Sign Up</p>
+                            <Link to='/signUp' className='font-normal text-[25px] textSignInGradient underline underline-offset-4 decoration-[#3753cf8f] inline'>Sign Up</Link>
                         </div>
                     </div>
 
