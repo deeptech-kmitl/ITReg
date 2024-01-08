@@ -1,20 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import Logo from '../../assets/Logo.png'
 import './SideNavBarStyle.css'
 
 function SideNavBar() {
-    const [isOpen, setIsOpen] = useState(false);
+    const initialIsOpen = localStorage.getItem('isOpen') === 'false' ? false : true;
+    const [isOpen, setIsOpen] = useState(initialIsOpen);
     const location = useLocation();
 
-    const toggle = () => setIsOpen(!isOpen);
+    const toggle = () => {
+        setIsOpen(!isOpen);
+    };
+
+    useEffect(() => {
+        localStorage.setItem('isOpen', isOpen);
+    }, [isOpen]);
 
     return (
-        <div className='h-screen w-[320px] p-2'>
-            <div className='sidebar bg-[#181754] h-full rounded-[30px] text-white py-10 flex flex-col justify-between'>
-                <div className='flex justify-between items-center pl-10 pr-8'>
-                    <Link to='/'><img src={Logo} alt="Logo" className='w-28' /></Link>
-                    <button onClick={toggle}>
+        <div className={`h-screen p-2`}>
+            <div className={`sidebar ${isOpen ? '' : 'active'} bg-[#181754] h-full rounded-[30px] text-white py-10 flex flex-col justify-between`}>
+                <div className='header flex justify-between items-center pl-10 pr-8 h-[50px]'>
+                    <Link className='logo' to='/'><img src={Logo} alt="Logo" className='w-28' /></Link>
+                    <button
+                        className={`menuToggle ${isOpen ? '' : 'active'}`}
+                        onClick={toggle}
+                    >
                         <img width="35" height="35" src="https://img.icons8.com/sf-black/FFFFFF/menu.png" alt="menu" />
                     </button>
                 </div>
@@ -45,11 +55,11 @@ function SideNavBar() {
                     </li>
                 </ul>
                 <div className='profile-detail pl-10 pr-8 flex justify-between items-center'>
-                    <div className='flex items-center gap-4'>
+                    <div className='profile-content flex items-center gap-4'>
                         <div className='bg-white w-12 h-12 rounded-[50px]'></div>
-                        <span className='text-[18px] font-light'>Username</span>
+                        <span className='username text-[18px] font-light'>Username</span>
                     </div>
-                    <Link to='/'>
+                    <Link className='logout' to='/'>
                         <img width='24' height='24' src="https://img.icons8.com/ios-filled/FFFFFF/logout-rounded.png" alt="logout-rounded" />
                     </Link>
                 </div>
