@@ -11,45 +11,35 @@ function SignIn() {
             className='bg-no-repeat bg-cover bg-center h-screen px-40 py-16 bg-[#181754] text-white'
         >
             <div className='flex justify-center items-center h-full text-3xl'>
-                {/* <div className="grid grid-cols-2"> */}
-                    <div className='flex flex-col justify-center items-center w-1/2'>
-                        <Link to='/'><img src={Logo} alt="Logo" className='w-28' /></Link>
-                        <h1 className='font-bold text-[60px] tracking-[2px] mt-4'>LOGIN</h1>
-                        <p className='font-light text-[40px] tracking-[2px] mt-4'>Login to continues</p>
-                        {/* <input
-                            type="email" className='bg-[#FFFFFF] mt-8 w-[600px] border border-[#D9D9D9] text-lg rounded-xl block p-2.5 dark:placeholder-gray-400 text-[#151C38] focus:border-[#000000] focus:ring-[#000000]'
-                            placeholder="Email"
-                        />
-                        <input
-                            type="password" className='bg-[#FFFFFF] mt-4 w-[600px] text-lg rounded-xl block p-2.5 dark:placeholder-gray-400 text-[#151C38]'
-                            placeholder="Password"
-                        /> */}
-                        <form action="" className='flex flex-col gap-6 mt-6'>
-                            <div className='input-box'>
-                                <img width="35" height="35" src='https://img.icons8.com/fluency-systems-regular/48/151c38/new-post.png' className='icon mt-3 ml-6'></img>
-                                <input type='text' name='email' placeholder='Email' className='w-[600px] h-[60px] font-light'></input>
-                            </div>
-                            <div className='input-box'>
-                            <img width="35" height="35" src='https://img.icons8.com/fluency-systems-regular/48/151c38/password--v1.png' className='icon mt-3 ml-6'></img>
-                                <input type='password' name='password' placeholder='Password' className='w-[600px] h-[60px] font-light'></input> 
-                            </div>
-                        </form>
-
-                        <Link to='/dashboard' className='box-btnGradient font-bold text-[20px] text-[#0cb6ff] flex flex-col justify-center items-center py-3 mt-10 w-[600px]'>LOGIN</Link>
-
-                    </div>
-                    <div className='flex flex-col justify-center items-center ml-20 w-1/2'>
-                        <img src={SignInImage}></img>
-                        <div>
-                            <p className='font-normal text-[25px] inline'>Don't have an account?  </p>
-                            <Link to='/signUp' className='font-normal text-[25px] textSignInGradient underline underline-offset-4 decoration-[#3753cf8f] inline'>Sign Up</Link>
+                <div className='flex flex-col justify-center items-center w-1/2'>
+                    <Link to='/'><img src={Logo} alt="Logo" className='w-28' /></Link>
+                    <h1 className='font-bold text-[50px] tracking-[2px] mt-4'>LOGIN</h1>
+                    <p className='font-light text-[30px] tracking-[2px] mt-4'>Login to continues</p>
+                    <form action="" className='flex flex-col gap-6 mt-6'>
+                        <div className='input-box'>
+                            <img width="35" height="35" src='https://img.icons8.com/fluency-systems-regular/48/151c38/new-post.png' className='icon mt-3 ml-6'></img>
+                            <input type='text' name='email' placeholder='Email' className='w-[600px] h-[60px] font-light'></input>
                         </div>
-                    </div>
+                        <div className='input-box'>
+                            <img width="35" height="35" src='https://img.icons8.com/fluency-systems-regular/48/151c38/password--v1.png' className='icon mt-3 ml-6'></img>
+                            <input type='password' name='password' placeholder='Password' className='w-[600px] h-[60px] font-light'></input>
+                        </div>
+                    </form>
 
+                    <Link to='/dashboard' className='box-btnGradient font-bold text-[20px] text-[#0cb6ff] flex flex-col justify-center items-center py-3 mt-10 w-[600px]'>LOGIN</Link>
+
+                </div>
+                <div className='flex flex-col justify-center items-center ml-20 w-1/2'>
+                    <img src={SignInImage}></img>
+                    <div>
+                        <p className='font-normal text-[25px] inline'>Don't have an account ?  </p>
+                        <Link to='/signUp' className='font-normal text-[25px] textSignInGradient underline underline-offset-4 decoration-[#3753cf8f] inline'>Sign Up</Link>
+                    </div>
                 </div>
 
             </div>
-        // </div>
+
+        </div>
     )
 }
 
