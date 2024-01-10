@@ -23,25 +23,25 @@ function SideNavBar({ toggle, isOpen, setIsOpen }) {
                     </button>
                 </div>
                 <ul className='pl-5'>
-                    <li className={location.pathname === '/dashboard' ? 'active' : ''}>
+                    <li className={location.pathname === '/dashboard' && 'active'}>
                         <Link to='/dashboard'>
                             <img src={`https://img.icons8.com/fluency-systems-filled/${location.pathname === '/dashboard' ? '181754' : 'FFFFFF'}/home.png`} alt="home" />
                             <span>Dashboard</span>
                         </Link>
                     </li>
-                    <li className={location.pathname === '/review' ? 'active' : ''}>
+                    <li className={location.pathname === '/review' && 'active'}>
                         <Link to='/review'>
                             <img src={`https://img.icons8.com/fluency-systems-filled/${location.pathname === '/review' ? '181754' : 'FFFFFF'}/very-popular-topic.png`} alt="very-popular-topic" />
                             <span>Review</span>
                         </Link>
                     </li>
-                    <li className={location.pathname === '/studyPlan' ? 'active' : ''}>
+                    <li className={location.pathname === '/studyPlan' && 'active'}>
                         <Link to='/studyPlan'>
                             <img src={`https://img.icons8.com/material-rounded/${location.pathname === '/studyPlan' ? '181754' : 'FFFFFF'}/book.png`} alt="book" />
                             <span>Study Plan</span>
                         </Link>
                     </li>
-                    <li className={location.pathname === '/howToRegister' ? 'active' : ''}>
+                    <li className={location.pathname === '/howToRegister' && 'active'}>
                         <Link to='/howToRegister' onClick={() => { setIsOpen(false) }}>
                             <img src={`https://img.icons8.com/material-rounded/${location.pathname === '/howToRegister' ? '181754' : 'FFFFFF'}/idea--v1.png`} alt="idea--v1" />
                             <span>How To Register</span>
