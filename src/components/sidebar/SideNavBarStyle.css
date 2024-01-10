@@ -121,3 +121,36 @@
     font-size: 18px;
     font-weight: 300;
 }
+
+
+/* Responsive */
+
+@media screen and (min-width: 1024px) {
+    .sidebar.active {
+        width: 100px;
+    }
+
+    .sidebar ul li {
+        margin-bottom: 20px;
+    }
+
+    .sidebar ul li a img {
+        width: 24px;
+        height: auto;
+    }
+
+    .sidebar ul li a span,
+    .sidebar ul li.active a span {
+        font-size: 14px;
+    }
+
+    .sidebar ul li,
+    .sidebar ul li.active {
+        height: 50px;
+    }
+
+    .sidebar ul li a {
+        column-gap: 15px;
+        margin-left: 20px;
+    }
+}

@@ -23,11 +23,11 @@ function Homepage() {
                 </ul>
             </div>
             <div className='h-full flex flex-col justify-center items-center'>
-                <h2 className='font-semibold text-[80px] tracking-[2px]'>HOW TO</h2>
-                <h1 className='font-bold text-[120px] tracking-[15px] mt-[-50px] textTitleGradient'
+                <h2 className='font-semibold text-[80px] lg:text-[50px] tracking-[2px]'>HOW TO</h2>
+                <h1 className='font-bold text-[120px] lg:text-[80px] tracking-[15px] mt-[-50px] lg:mt-[-40px] textTitleGradient'
                 >
                     REGISTER</h1>
-                <div className='flex flex-col items-center text-[22px] font-light mt-2'>
+                <div className='flex flex-col items-center text-[22px] lg:text-[18px] font-light mt-2 m:mt-0'>
                     <p className=''>There are several steps to help you get ready for your college experience</p>
                     <p className=''>here are some tips on how to register for college classes.</p>
                 </div>

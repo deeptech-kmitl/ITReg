@@ -12,14 +12,14 @@ function SideNavBar({ toggle, isOpen, setIsOpen }) {
 
     return (
         <div className='fixed h-screen p-2'>
-            <div className={`sidebar ${isOpen ? '' : 'active'} bg-[#181754] h-full rounded-[30px] text-white py-10 flex flex-col justify-between`}>
+            <div className={`sidebar ${isOpen ? '' : 'active'} lg:w-[240px] bg-[#181754] h-full rounded-[30px] text-white py-10 lg:py-8 flex flex-col justify-between`}>
                 <div className='header flex justify-between items-center pl-10 pr-8 h-[50px]'>
-                    <Link className='logo' to='/'><img src={Logo} alt="Logo" className='w-28' /></Link>
+                    <Link className='logo' to='/'><img src={Logo} alt="Logo" className='w-28 lg:w-20' /></Link>
                     <button
                         className={`menuToggle ${isOpen ? '' : 'active'}`}
                         onClick={toggle}
                     >
-                        <img width="35" height="35" src="https://img.icons8.com/sf-black/FFFFFF/menu.png" alt="menu" />
+                        <img className='lg:w-6' width="35" height="35" src="https://img.icons8.com/sf-black/FFFFFF/menu.png" alt="menu" />
                     </button>
                 </div>
                 <ul className='pl-5'>
@@ -48,13 +48,13 @@ function SideNavBar({ toggle, isOpen, setIsOpen }) {
                         </Link>
                     </li>
                 </ul>
-                <div className='profile-detail pl-10 pr-8 flex justify-between items-center'>
-                    <div className='profile-content flex items-center gap-4'>
-                        <div className='bg-white w-12 h-12 rounded-[50px]'></div>
-                        <span className='username text-[18px] font-light'>Username</span>
+                <div className='profile-detail pl-10 lg:pl-8 pr-8 flex justify-between items-center'>
+                    <div className='profile-content flex items-center gap-4 lg:gap-3'>
+                        <div className='bg-white w-12 lg:w-9 h-12 lg:h-9 rounded-[50px]'></div>
+                        <span className='username text-[18px] lg:text-[14px] font-light lg:font-medium'>Username</span>
                     </div>
                     <Link className='logout' to='/'>
-                        <img width='24' height='24' src="https://img.icons8.com/ios-filled/FFFFFF/logout-rounded.png" alt="logout-rounded" />
+                        <img className='lg:w-5' width='24' height='24' src="https://img.icons8.com/ios-filled/FFFFFF/logout-rounded.png" alt="logout-rounded" />
                     </Link>
                 </div>
             </div>
