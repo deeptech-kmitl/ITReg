@@ -82,3 +82,17 @@ body {
 .input-box .icon {
   position: absolute;
 }
+
+
+
+/* Responsive */
+
+@media not all and (min-width: 1536px) {
+  .layout {
+    margin-right: 6rem;
+  }
+
+  .layout.active {
+    margin-right: 15.5rem;
+  }
+}

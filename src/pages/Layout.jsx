@@ -17,7 +17,7 @@ function Layout() {
             <div className={`layout ${isOpen === true ? 'active' : ''}`}>
                 <SideNavBar toggle={toggle} isOpen={isOpen} setIsOpen={setIsOpen} location={location} />
             </div>
-            <div className={`h-screen w-full p-10`}>
+            <div className={`h-auto w-full m-10`}>
                 <Outlet />
             </div>
         </div>
