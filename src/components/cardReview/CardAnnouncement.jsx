@@ -30,14 +30,14 @@ const CardAnnouncement = () => {
         <div>
             {DetailCard.map((detail, index) => (
                 <div className="w-full p-2 mt-4 rounded-lg hover:border-[1px] hover:border-[#C0C0C0] hover:bg-white">
-                    <div className='grid grid-cols-3'>
-                        <div className='w-[80px] h-[80px] bg-[#151C38] rounded-2xl'></div>
-                        <div className='pl-2 w-[140px]'>
+                    <div className='flex flex-row w-full'>
+                        <div className='w-[120px] h-[65px] mt-1 bg-[#151C38] rounded-xl'></div>
+                        <div className='pl-5 w-full'>
                             <h5 className='font-semibold text-sm tracking-tight text-[#151C38]'>{detail.titlename}</h5>
                             {detail.message.length > 50 ? (<p className="mb-3 font-light text-gray-500 text-xs">{detail.message.substring(0, 50)} ...</p>) : (<p className="mb-3 font-light text-gray-500 text-xs">{detail.message}</p>) }
                         
                         </div>
-                        <p className="mb-3 text-right font-light text-xs text-gray-500">{detail.time}</p>
+                        <p className="mb-3 w-[100px] text-right font-light text-xs text-gray-500">{detail.time}</p>
                     </div>
                 </div>
             ))}
