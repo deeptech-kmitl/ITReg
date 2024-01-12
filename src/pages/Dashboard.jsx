@@ -1,5 +1,6 @@
 import React from 'react'
 import PostDetailCard from '../components/post/PostDetailCard'
+import PopularSubjectsCard from '../components/popular_subjects/PopularSubjectsCard'
 
 function Dashboard() {
   return (
@@ -13,6 +14,7 @@ function Dashboard() {
         </div>
         <div className='w-[30%] border-l-[1px] border-[#00000052] pl-10'>
           <h1 className='text-[26px] max-2xl:text-[20px] font-medium'>Popular subjects</h1>
+          <PopularSubjectsCard/>
         </div>
       </div>
     </div>
