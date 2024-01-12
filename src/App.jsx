@@ -8,6 +8,7 @@ import {
   SignIn,
   SignUp,
   Layout,
+  ReviewSubjectDetail
 } from './pages/index'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="review" element={<Review />} />
           <Route path="studyPlan" element={<StudyPlan />} />
           <Route path="howToRegister" element={<HowToRegister />} />
+          <Route path="reviewSubjectDetail" element={<ReviewSubjectDetail/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

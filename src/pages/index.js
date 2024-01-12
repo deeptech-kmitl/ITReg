@@ -6,6 +6,7 @@ import HowToRegister from "./HowToRegister"
 import SignIn from "./SignIn"
 import SignUp from "./SignUp"
 import Layout from "./Layout"
+import ReviewSubjectDetail from "./ReviewSubjectDetail"
 
 export {
     Homepage,
@@ -16,4 +17,5 @@ export {
     SignIn,
     SignUp,
     Layout,
+    ReviewSubjectDetail
 }
