@@ -21,7 +21,7 @@ const CardSubject = () => {
     return (
         <div>
         {ContentSubjectCard.map((detail, index) => (
-            <div className="max-w mt-4 p-6 bg-white border border-gray-200 rounded-xl">
+            <div className="max-w mt-4 p-6 bg-white border border-gray-200 rounded-xl hover:bg-gray-100">
                 <div className="grid grid-cols-3">
                     <h5 className="mb-2 text-lg font-bold text-[#151C38]">{detail.subjectId}</h5>
                     <div>

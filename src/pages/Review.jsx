@@ -1,6 +1,7 @@
 import React from 'react'
 import CardSubject from '../components/cardReview/CardSubject'
 import { Link } from "react-router-dom";
+import CardAnnouncement from '../components/cardReview/CardAnnouncement';
 
 function Review() {
   return (
@@ -31,12 +32,13 @@ function Review() {
             </button>
           </div>
           <Link to={'/reviewSubjectDetail'}>
-            <CardSubject/>
+            <CardSubject />
           </Link>
-          
+
         </div>
-        <div className='w-[30%] border-l-[1px] border-[#00000052] px-10'>
+        <div className='w-[30%] border-l-[1px] border-[#00000052] px-5'>
           <h1 className='text-[26px] font-medium'>Announcement</h1>
+          <CardAnnouncement/>
         </div>
       </div>
     </div>
