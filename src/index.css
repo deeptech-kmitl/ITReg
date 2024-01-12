@@ -83,6 +83,21 @@ body {
   position: absolute;
 }
 
+.inputSearch input {
+  background: #FFFFFF;
+  border: none;
+  outline: none;
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+  font-size: 18px;
+  color: #151C38;
+  padding-left: 50px;
+}
+
+.inputSearch .icon {
+  position: absolute;
+}
+
 
 
 /* Responsive */
