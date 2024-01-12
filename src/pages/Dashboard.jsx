@@ -1,6 +1,7 @@
 import React from 'react'
 import PostDetailCard from '../components/post/PostDetailCard'
 import PopularSubjectsCard from '../components/popular_subjects/PopularSubjectsCard'
+import AddNewPost from '../components/createpost (admin)/AddNewPost'
 
 function Dashboard() {
   return (
@@ -10,6 +11,7 @@ function Dashboard() {
       </header>
       <div className='w-full h-auto flex mt-5'>
         <div className='w-[70%] mr-10'>
+          <AddNewPost/>
           <PostDetailCard/>
         </div>
         <div className='w-[30%] border-l-[1px] border-[#00000052] pl-10'>
