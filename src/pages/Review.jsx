@@ -17,7 +17,7 @@ function Review() {
       subjectName: "การประมวลผลภาพ",
       subjectNameEn: "IMAGE PROCESSING",
       subjectCredit: "3(3-0-6)",
-      subjectType: "หมวดเสรีบังคับ"
+      subjectType: "หมวดเสรีคณะ"
     },
   ];
 

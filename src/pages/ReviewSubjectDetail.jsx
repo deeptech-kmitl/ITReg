@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { QuestionComponent } from '../components/index'
+import CardDetailSubject from '../components/cardReview/CardDetailSubject'
 
 function ReviewSubjectDetail() {
 
@@ -9,23 +10,21 @@ function ReviewSubjectDetail() {
     <div className='w-full'>
       {/* ReviewDetail */}
       <div name="ReviewDetail">
-        <div className='border-2 border-[#000] h-[30dvh]'>
-          Review Detail
-        </div>
+        <CardDetailSubject/>
       </div>
 
       {/* ReviewOrQuestion */}
       <div name="ReviewOrQuestion">
-        <div className='h-[48dvh]'>
+        <div className='h-[48dvh] mt-4'>
           <div name='btnReviewOrQuestion'>
             <button
               onClick={() => setActiveTab("review")}
-              className={`${activeTab === "review" ? "border-[#181754] text-[#181754]" : "border-[#00000020] text-[#00000020]"} border-b-4 px-5`}>
+              className={`${activeTab === "review" ? "border-[#151C38] text-[#151C38] font-medium text-lg" : "border-[#00000020] text-[#00000020] font-medium text-lg"} border-b-4 px-5`}>
               Review
             </button>
             <button
               onClick={() => setActiveTab("question")}
-              className={`${activeTab === "question" ? "border-[#181754] text-[#181754]" : "border-[#00000020] text-[#00000020]"} border-b-4 px-5`}>
+              className={`${activeTab === "question" ? "border-[#151C38] text-[#151C38] font-medium text-lg" : "border-[#00000020] text-[#00000020] font-medium text-lg"} border-b-4 px-5`}>
               Question
             </button>
           </div>
