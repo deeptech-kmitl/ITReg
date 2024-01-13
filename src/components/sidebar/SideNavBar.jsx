@@ -41,9 +41,9 @@ function SideNavBar({ toggle, isOpen, setIsOpen }) {
                                     <span>Dashboard</span>
                                 </Link>
                             </li>
-                            <li className={location.pathname === '/review' && 'active'}>
+                            <li className={location.pathname === '/review' || location.pathname.startsWith('/review/') ? 'active' : ''}>
                                 <Link to='/review'>
-                                    <img src={`https://img.icons8.com/fluency-systems-filled/${location.pathname === '/review' ? '181754' : 'FFFFFF'}/very-popular-topic.png`} alt="very-popular-topic" />
+                                    <img src={`https://img.icons8.com/fluency-systems-filled/${location.pathname === '/review' || location.pathname.startsWith('/review/') ? '181754' : 'FFFFFF'}/very-popular-topic.png`} alt="very-popular-topic" />
                                     <span>Review</span>
                                 </Link>
                             </li>
