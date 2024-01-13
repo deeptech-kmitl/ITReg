@@ -56,7 +56,6 @@ body {
 
 .layout.active {
   margin-right: 21rem;
-  transition: 0.5s ease;
 }
 
 .textSignInGradient {
