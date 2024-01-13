@@ -1,6 +1,5 @@
 import React from 'react'
 import CardSubject from '../components/cardReview/CardSubject'
-import { Link } from "react-router-dom";
 import CardAnnouncement from '../components/cardReview/CardAnnouncement';
 
 function Review() {
@@ -23,11 +22,8 @@ function Review() {
   ];
 
   return (
-    <div>
-      <header className='text-[40px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] inline-block text-transparent bg-clip-text'>
-        Review
-      </header>
-      <div className='w-full h-auto flex mt-5'>
+    <>
+      <div className='w-full h-auto flex'>
         <div className='w-[70%] pr-5'>
           <div className='flex flex-row gap-3'>
             <h1 className='text-[26px] font-medium text-[#151C38]'>รายวิชาเรียน</h1>
@@ -49,9 +45,7 @@ function Review() {
               <img width="20" height="20" src='https://img.icons8.com/material-rounded/24/737373/delete-sign.png' className='icon top-3 ml-4'></img>
             </button>
           </div>
-          <Link to={`/reviewSubjectDetail`}>
-            <CardSubject item={ContentSubjectCard} />
-          </Link>
+          <CardSubject item={ContentSubjectCard} />
 
         </div>
         <div className='w-[30%] border-l-[1px] border-[#00000052] px-5'>
@@ -59,7 +53,7 @@ function Review() {
           <CardAnnouncement />
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

@@ -11,7 +11,6 @@ import {
   ReviewSubjectDetail,
   ReviewLayout,
 } from './pages/index';
-import Test from "./pages/Test";
 
 function App() {
 
@@ -27,7 +26,7 @@ function App() {
           <Route path="howToRegister" element={<HowToRegister />} />
 
           <Route path="review" element={<ReviewLayout />} >
-            <Route index element={<Test />} />
+            <Route index element={<Review />} />
             <Route path=":reviewId" element={<ReviewSubjectDetail />} />
           </Route>
         </Route>
