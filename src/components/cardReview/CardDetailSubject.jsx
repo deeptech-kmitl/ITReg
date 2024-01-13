@@ -23,7 +23,7 @@ const CardDetailSubject = () => {
     return (
         <div>
         {/* {ContentSubjectCard.map((detail, index) => ( */}
-            <div className="max-w p-6 bg-white border border-gray-200 rounded-xl hover:bg-gray-100">
+            <div className="max-w p-6 bg-white border border-gray-200 rounded-xl">
                 <div className="flex flex-row">
                     <h5 className="mb-2 text-xl font-bold text-[#151C38]">{ContentSubjectDetailCard[0].subjectId}</h5>
                     <div>
