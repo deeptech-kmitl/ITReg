@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import "./PostDetailCard.css";
 import { Carousel } from "@material-tailwind/react";
+import DropdownDots from "./DropdownDots";
 
 const DetailCard = [
   {
@@ -60,8 +61,9 @@ const PostDetailCard = () => {
       {DetailCard.map((detail, index) => (
         <div key={index} className="mt-4">
           <div className="flex-shrink-0 border-[1px] border-solid border-gray-300 rounded-[30px] p-6 bg-white">
-            <div className="text-[#151C38] text-2xl font-[500] leading-normal">
-              {detail.titlename}
+            <div className="text-[#151C38] text-2xl font-[500] leading-normal flex justify-between">
+              <span>{detail.titlename}</span>
+              <DropdownDots />
             </div>
 
             <div className="mt-5 flex items-start">
