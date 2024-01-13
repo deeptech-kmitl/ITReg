@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function StudyPlanForm() {
+    const navigate = useNavigate();
 
     const yearOptions = ['2566', '2565', '2564']
     const courseOptions = [
@@ -109,6 +111,7 @@ function StudyPlanForm() {
                 <button
                     className='py-2 tracking-[1px] rounded-[10px] text-white uppercase w-full bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%]'
                     type="submit"
+                    onClick={() => { navigate('/studyPlan/result'); }}
                 >
                     Search
                 </button>

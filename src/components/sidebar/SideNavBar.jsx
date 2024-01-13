@@ -16,9 +16,9 @@ function SideNavBar({ toggle, isOpen, setIsOpen }) {
         <div className='fixed h-screen p-2'>
             {location.pathname === '/howToRegister' ? (
                 <>
-                    <div className='w-[90px] h-[90px] bg-[#181754] rounded-[30px] py-10 max-2xl:py-8 flex justify-center items-center'>
+                    <div className='w-[90px] max-2xl:w-[80px] h-[90px] max-2xl:h-[80px] bg-[#181754] rounded-[30px] py-10 max-2xl:py-8 flex justify-center items-center'>
                         <button onClick={() => { navigate(-1); setIsOpen(true) }}>
-                            <img width="40" height="40" src="https://img.icons8.com/sf-black/FFFFFF/back.png" alt="back" />
+                            <img className='w-[40px] max-2xl:w-[35px]' src="https://img.icons8.com/sf-black/FFFFFF/back.png" alt="back" />
                         </button>
                     </div>
                 </>
@@ -47,9 +47,9 @@ function SideNavBar({ toggle, isOpen, setIsOpen }) {
                                     <span>Review</span>
                                 </Link>
                             </li>
-                            <li className={location.pathname === '/studyPlan' && 'active'}>
+                            <li className={location.pathname === '/studyPlan' || location.pathname.startsWith('/studyPlan/') ? 'active' : ''}>
                                 <Link to='/studyPlan'>
-                                    <img src={`https://img.icons8.com/material-rounded/${location.pathname === '/studyPlan' ? '181754' : 'FFFFFF'}/book.png`} alt="book" />
+                                    <img src={`https://img.icons8.com/material-rounded/${location.pathname === '/studyPlan' || location.pathname.startsWith('/studyPlan/') ? '181754' : 'FFFFFF'}/book.png`} alt="book" />
                                     <span>Study Plan</span>
                                 </Link>
                             </li>

@@ -11,6 +11,10 @@ import {
   ReviewSubjectDetail,
   ReviewLayout,
 } from './pages/index';
+import {
+  StudyPlanForm,
+  StudyPlanTable,
+} from './components/index'
 
 function App() {
 
@@ -22,13 +26,15 @@ function App() {
         <Route path="signUp" element={<SignUp />} />
         <Route element={<Layout />}>
           <Route index path="dashboard" element={<Dashboard />} />
-          <Route path="studyPlan" element={<StudyPlan />} />
-          <Route path="howToRegister" element={<HowToRegister />} />
-
           <Route path="review" element={<ReviewLayout />} >
             <Route index element={<Review />} />
             <Route path=":reviewId" element={<ReviewSubjectDetail />} />
           </Route>
+          <Route path="studyPlan" element={<StudyPlan />} >
+            <Route index element={<StudyPlanForm />} />
+            <Route path="result" element={<StudyPlanTable />} />
+          </Route>
+          <Route path="howToRegister" element={<HowToRegister />} />
         </Route>
       </Routes>
     </BrowserRouter>
