@@ -20,7 +20,7 @@ function ReviewSubjectDetail() {
 
       {/* ReviewOrQuestion */}
       <div name="ReviewOrQuestion">
-        <div className='border-2 border-[#000] h-[50dvh]'>
+        <div className='h-[50dvh]'>
           <div name='btnReviewOrQuestion'>
             <button
               onClick={() => setActiveTab("review")}
@@ -33,7 +33,7 @@ function ReviewSubjectDetail() {
               Question
             </button>
           </div>
-          <div>
+          <div className='h-full' >
             {activeTab === "review" && <div>review</div>}
             {activeTab === "question" && <QuestionComponent/>}
           </div>

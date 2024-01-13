@@ -5,5 +5,5 @@ import QuestionComponent from './question/questionComponent'
 export {
     SideNavBar,
     StudyPlanForm,
-    QuestionComponent
+    QuestionComponent,
 }
