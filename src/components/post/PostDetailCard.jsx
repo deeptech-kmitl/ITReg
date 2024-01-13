@@ -179,12 +179,12 @@ const PostDetailCard = () => {
               <div className="ml-1 mt-[1px]">
                 <p className="text-[#151C38] text-sm mr-3">{detail.like}</p>
               </div>
-              <div className="mt-[2.5px]">
+              <div className="mt-[1px]">
               <Icon
-                icon="fa:comment-o"
+                 icon={showComments[index] ? "iconamoon:comment-fill" : "iconamoon:comment"}
                 color="#151c38"
-                width="19"
-                height="19"
+                width="20"
+                height="20"
                 onClick={() => handleToggleComments(index)}
               />
             </div>
