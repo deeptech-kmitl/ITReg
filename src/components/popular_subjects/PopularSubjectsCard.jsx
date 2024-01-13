@@ -22,7 +22,7 @@ const PopularSubjectsCard = () => {
       <div className="mt-8 relative">
         {DetailSubjectsCard.map((subject, index) => (
           <Link
-            to={`/reviewSubjectDetail/${subject.coursecode}`}
+            to={`/review/${subject.coursecode}`}
             key={index}
             className="relative group"
           >
