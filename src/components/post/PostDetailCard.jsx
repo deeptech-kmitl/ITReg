@@ -3,6 +3,9 @@ import { Icon } from "@iconify/react";
 import "./PostDetailCard.css";
 import { Carousel } from "@material-tailwind/react";
 import DropdownDots from "./DropdownDots";
+import CommentBox from "./CommentBox";
+import CommentInput from "./CommentInput";
+
 
 const DetailCard = [
   {
@@ -14,7 +17,8 @@ const DetailCard = [
       "คณะเทคโนโลยีสารสนเทศ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง เปิดรับสมัครเข้าศึกษาต่อระดับปริญญาตรี ประจำปีการศึกษา 2563 TCAS 63 รอบที่ 4 (Admission) 2 หลักสูตร 1) เทคโนโลยีสารสนเทศ (Information Technology : IT) รับจำนวน 15 คน 2) ข้อมูลและการวิเคราะห์เชิงธุรกิจ (Data Science and Business Analytics : DSBA) รับจำนวน 6 คน ยกเลิกการสอบสัมภาษณ์ เนื่องจากสถานการณ์เชื้อ COVID -19 ระบาด",
     image: [
       "https://www.it.kmitl.ac.th/wp-content/uploads/2020/05/1300x867pix-%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B8%AA%E0%B8%A1%E0%B8%B1%E0%B8%84%E0%B8%A3-TCAS63-4-Admission.jpg",
-      "https://osda.kmitl.ac.th/storage/cover_image/qecgcbzJO7u35tV60AAcF5ihBI3M2n8wIJcVVlcb.jpeg",
+      "https://osda.kmitl.ac.th/storage/cover_image/qecgcbzJO7u35tV60AAcF5ihBI3M2n8wIJcVVlcb.jpeg","https://www.aad.kmitl.ac.th/wp-content/uploads/2021/12/20211203-913x547.jpg",
+      "https://www.aad.kmitl.ac.th/wp-content/uploads/2019/02/%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B8%AA%E0%B8%A1%E0%B8%B1%E0%B8%84%E0%B8%A3-%E0%B9%82%E0%B8%97-%E0%B9%80%E0%B8%AD%E0%B8%81.jpg",
     ],
     like: 145,
     comment: 76,
@@ -34,6 +38,10 @@ const DetailCard = [
 
 const PostDetailCard = () => {
   const [likedPosts, setLikedPosts] = useState([]);
+  const [showFullScreen, setShowFullScreen] = useState(false);
+  const [imgForFullScreen, setImgForFullScreen] = useState("");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showComments, setShowComments] = useState([]);
 
   const handleLikeClick = (index) => {
     if (likedPosts.includes(index)) {
@@ -43,18 +51,34 @@ const PostDetailCard = () => {
     }
   };
 
-  const [showFullScreen, setShowFullScreen] = useState(false);
-  const [imgForFullScreen, setImgForFullScreen] = useState("");
-
-  const handleImageClick = (item) => {
+  const handleImageClick = (item, index) => {
     setImgForFullScreen(item);
-    console.log("img: ", item);
+    setCurrentImageIndex(index);
     setShowFullScreen(true);
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % DetailCard.length);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex(
+      (prevIndex) => (prevIndex - 1 + DetailCard.length) % DetailCard.length
+    );
   };
 
   const handleCloseFullScreen = () => {
     setShowFullScreen(false);
   };
+
+  const handleToggleComments = (index) => {
+    setShowComments((prev) => {
+      const newShowComments = [...prev];
+      newShowComments[index] = !newShowComments[index];
+      return newShowComments;
+    });
+  };
+  
 
   return (
     <div className="mt-5">
@@ -80,34 +104,68 @@ const PostDetailCard = () => {
             <div className="mt-5">
               <p className="text-black text-l font-light">{detail.message}</p>
 
-              <React.Fragment key={index}>
-                {detail.image.map((item, i) => {
-                  return (
+              {detail.image.length === 1 ? (
+                <img
+                  src={detail.image[0]}
+                  className="object-cover w-full rounded-lg cursor-pointer"
+                  alt={`post-${index}`}
+                  onClick={() => handleImageClick(detail.image[0], index)}
+                />
+              ) : (
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  {detail.image.slice(0, 4).map((item, i) => (
                     <div key={i}>
                       <img
                         src={item}
-                        className="object-center"
-                        alt="post"
-                        onClick={() => handleImageClick(item)}
+                        className="object-cover w-full h-44 rounded-lg cursor-pointer"
+                        alt={`post-${index}-${i}`}
+                        onClick={() => handleImageClick(item, index)}
                       />
-                      {showFullScreen && (
-                        <div
-                          className="fullscreen-overlay active"
-                          onClick={handleCloseFullScreen}
-                        >
-                          <div className="fullscreen-image">
-                            <img
-                              className="centered-image"
-                              src={imgForFullScreen}
-                              alt="Full Screen"
-                            />
-                          </div>
-                        </div>
-                      )}
                     </div>
-                  );
-                })}
-              </React.Fragment>
+                  ))}
+                  {detail.image.length > 4 && (
+                    <div
+                      className="object-cover w-full h-44 rounded-lg cursor-pointer"
+                      onClick={() => handleImageClick(detail.image[4], index)}
+                    >
+                      <p className="text-white text-lg font-bold">
+                        +{detail.image.length - 4}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {showFullScreen && (
+                <div
+                  className="fullscreen-overlay active"
+                  onClick={handleCloseFullScreen}
+                >
+                  <div className="fullscreen-image">
+                    <Icon
+                      icon="fluent:chevron-left-24-filled"
+                      color="white"
+                      width="32"
+                      height="32"
+                      className="absolute top-1/2 left-4 cursor-pointer"
+                      onClick={handlePrevImage}
+                    />
+                    <img
+                      className="centered-image"
+                      src={imgForFullScreen}
+                      alt="Full Screen"
+                    />
+                    <Icon
+                      icon="fluent:chevron-right-24-filled"
+                      color="white"
+                      width="32"
+                      height="32"
+                      className="absolute top-1/2 right-4 cursor-pointer"
+                      onClick={handleNextImage}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="mt-3 flex items-start">
@@ -122,17 +180,24 @@ const PostDetailCard = () => {
                 <p className="text-[#151C38] text-sm mr-3">{detail.like}</p>
               </div>
               <div className="mt-[2.5px]">
-                <Icon
-                  icon="fa:comment-o"
-                  color="#151c38"
-                  width="19"
-                  height="19"
-                />
-              </div>
+              <Icon
+                icon="fa:comment-o"
+                color="#151c38"
+                width="19"
+                height="19"
+                onClick={() => handleToggleComments(index)}
+              />
+            </div>
               <div className="ml-1 mt-[1px]">
                 <p className="text-[#151C38] text-sm">{detail.comment}</p>
               </div>
             </div>
+            {showComments[index] && ( 
+            <div>
+              <CommentBox />
+              <CommentInput />
+            </div>
+          )}
           </div>
         </div>
       ))}
