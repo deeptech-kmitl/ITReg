@@ -4,6 +4,24 @@ import { Link } from "react-router-dom";
 import CardAnnouncement from '../components/cardReview/CardAnnouncement';
 
 function Review() {
+
+  const ContentSubjectCard = [
+    {
+      subjectId: "06016321",
+      subjectName: "วิศวกรรมซอฟต์แวร์",
+      subjectNameEn: "SOFTWARE ENGINEERING",
+      subjectCredit: "3(3-0-6)",
+      subjectType: "หมวดบังคับ"
+    },
+    {
+      subjectId: "06016366",
+      subjectName: "การประมวลผลภาพ",
+      subjectNameEn: "IMAGE PROCESSING",
+      subjectCredit: "3(3-0-6)",
+      subjectType: "หมวดเสรีบังคับ"
+    },
+  ];
+
   return (
     <div>
       <header className='text-[40px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] inline-block text-transparent bg-clip-text'>
@@ -31,14 +49,14 @@ function Review() {
               <img width="20" height="20" src='https://img.icons8.com/material-rounded/24/737373/delete-sign.png' className='icon top-3 ml-4'></img>
             </button>
           </div>
-          <Link to={'/reviewSubjectDetail'}>
-            <CardSubject />
+          <Link to={`/reviewSubjectDetail`}>
+            <CardSubject item={ContentSubjectCard} />
           </Link>
 
         </div>
         <div className='w-[30%] border-l-[1px] border-[#00000052] px-5'>
           <h1 className='text-[26px] font-medium'>Announcement</h1>
-          <CardAnnouncement/>
+          <CardAnnouncement />
         </div>
       </div>
     </div>

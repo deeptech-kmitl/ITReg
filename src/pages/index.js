@@ -7,6 +7,7 @@ import SignIn from "./SignIn"
 import SignUp from "./SignUp"
 import Layout from "./Layout"
 import ReviewSubjectDetail from "./ReviewSubjectDetail"
+import ReviewLayout from "./ReviewLayout"
 
 export {
     Homepage,
@@ -17,5 +18,6 @@ export {
     SignIn,
     SignUp,
     Layout,
-    ReviewSubjectDetail
+    ReviewSubjectDetail,
+    ReviewLayout,
 }
