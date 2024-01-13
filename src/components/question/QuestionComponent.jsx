@@ -4,7 +4,7 @@ import QuestionCard from "./QuestionCard";
 function QuestionComponent() {
 
     return (
-        <div className="w-full border-2 rounded-[30px] bg-[#ffffff] p-[20px] h-full">
+        <div className="w-full border-2 rounded-[30px] bg-[#ffffff] p-[20px]">
             {/* สร้างคำถาม */}
             <div name="post" className="relative ">
                 <input
