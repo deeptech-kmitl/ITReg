@@ -149,19 +149,23 @@ function QuestionCard() {
         )
     }
 
-    return (
-        <div>
-            {database.map((question, index) => (
-                <div key={index} className="pt-[20px]">
-                    <div className="w-[100%] border-2 rounded-[10px] bg-[#ffffff] p-[20px] relative ">
+    const [openIndex, setOpenIndex] = useState(null);
+    const toggleOpen = (index) => {
+        setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
+    };
 
+    return (
+        <div className="mt-4">
+            {database.map((question, index) => (
+                <div key={index} className="mt-4">
+                    <div className="w-[100%] p-6 bg-[#ffffff] border border-gray-200 rounded-xl relative">
                         {/* Can it be Edit/Delete ? */}
                         {question.name === user &&
                             <div className="mt-[2.5px] absolute right-5">
                                 <Icon icon="prime:ellipsis-h" color="#151c38" width="19" height="19" />
                             </div>}
                         {/* profile */}
-                        <div className="mt-3 flex items-start">
+                        <div className="mt-2 flex flex-row">
                             <div className="w-[50px] h-[50px] flex-shrink-0 rounded-full bg-[#151C38]"></div>
                             <div className="ml-4">
                                 <p className="text-[#151C38] text-l font-[400]">{question.name}</p>
@@ -178,15 +182,17 @@ function QuestionCard() {
                                 {/* Did you like it ? */}
                                 {question.like.filter(user_id => user_id === user).length > 0 ?
                                     (
+                                        // กรณี มีชื่อ user ใน 'like'
                                         <div name="like" className="rotate-0" onClick={() => handleToggleLike(index)}>
                                             <Icon
                                                 icon="streamline:like-1-solid"
-                                                color="#151c38"
+                                                color="#D91818"
                                                 width="22"
                                                 height="22"
                                             />
                                         </div>
                                     ) : (
+                                        // กรณี ไม่มีชื่อ user ใน 'like'
                                         <div name="like" className="rotate-0" onClick={() => handleToggleLike(index)}>
                                             <Icon
                                                 icon="streamline:like-1"
@@ -203,6 +209,7 @@ function QuestionCard() {
                                 {/* Did you dislike it ? */}
                                 {question.dislike.filter(user_id => user_id === user).length > 0 ?
                                     (
+                                        // กรณี มีชื่อ user ใน 'dislike'
                                         <div name="dislike" className="rotate-180" onClick={() => handleToggleDislike(index)}>
                                             <Icon
                                                 icon="streamline:like-1-solid"
@@ -212,6 +219,7 @@ function QuestionCard() {
                                             />
                                         </div>
                                     ) : (
+                                        // กรณี ไม่มีชื่อ user ใน 'dislike'
                                         <div name="dislike" className="rotate-180" onClick={() => handleToggleDislike(index)}>
                                             <Icon
                                                 icon="streamline:like-1"
@@ -233,13 +241,13 @@ function QuestionCard() {
                                 </div>
                             </div>
                             {/* openCardComment */}
-                            <div className="border-b-2 border-[#000] py-2 w-[97%]" >
-                                <div className="rotate-0 absolute right-5">
+                            <div className="border-b-2 border-[#000] py-2 w-[97%]" onClick={() => toggleOpen(index)}>
+                                <div className={`rotate-0 absolute right-5 mt-[-2px] ${openIndex === index ? 'rotate-0': 'rotate-180'}`}>
                                     <Icon icon="mingcute:down-line" color="#151c38" width="19" height="19" />
                                 </div>
                             </div>
                             <div>
-                                <CommentCard data={question} />
+                                {openIndex === index && <CommentCard data={question} />}
                             </div>
                         </div>
 
