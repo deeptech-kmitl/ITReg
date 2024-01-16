@@ -8,6 +8,7 @@ function QuestionCard() {
 
     const [database, setDatabase] = useState([
         {
+            id: '1',
             name: "Anonymous1",
             date: "11/1/2567",
             time: "11.30 PM",
@@ -30,6 +31,7 @@ function QuestionCard() {
             ],
         },
         {
+            id: '2',
             name: "Anonymous3",
             date: "14/1/2567",
             time: "15.30 PM",
@@ -46,6 +48,7 @@ function QuestionCard() {
             ],
         },
         {
+            id: '3',
             name: "Anonymous1",
             date: "11/1/2567",
             time: "11.30 PM",
@@ -68,6 +71,7 @@ function QuestionCard() {
             ],
         },
         {
+            id: '4',
             name: "Anonymous3",
             date: "14/1/2567",
             time: "15.30 PM",
@@ -104,22 +108,26 @@ function QuestionCard() {
     ]);
 
     const handleToggleLike = (index) => {
+        console.log("กด like")
         setDatabase(
             (dumyDatabase) => {
                 const updatedDatabase = [...dumyDatabase];
                 const likeByUser = updatedDatabase[index].like.includes(user);
+                console.log('user มีข้อมูลใน like >>> ', likeByUser)
 
-                if (likeByUser) {
-                    // ถ้า user กด'like'ในข้อมูลเดิม ให้ลบออก
-                    updatedDatabase[index].like = updatedDatabase[index].like.filter(user_id => user_id !== user);
-                } else {
+                // user ไม่มีข้อมูลใน like >>> จะใส่สี
+                if (!likeByUser) {
                     const dislikeByUser = updatedDatabase[index].dislike.includes(user);
                     if (dislikeByUser) {
                         // ถ้า user กด'dislike'ในข้อมูลเดิม แล้วกด'like' ข้อมูล'dislike'เดิมจะถูกนำออก
                         updatedDatabase[index].dislike = updatedDatabase[index].dislike.filter(user_id => user_id !== user);
                     }
-                    // ถ้า user ไม่ได้กด'like'ในข้อมูลเดิม ให้เพิ่มเข้า
+                    // เพิ่ม user ลง 'like'
                     updatedDatabase[index].like.push(user);
+                }
+                // user มีข้อมูลใน like >>> จะลบสี
+                else{
+                    updatedDatabase[index].like = updatedDatabase[index].like.filter(user_id => user_id !== user);
                 }
                 return updatedDatabase;
             }
@@ -127,32 +135,78 @@ function QuestionCard() {
     }
 
     const handleToggleDislike = (index) => {
+        console.log("กด dislike")
         setDatabase(
             (dumyDatabase) => {
                 const updatedDatabase = [...dumyDatabase];
                 const dislikeByUser = updatedDatabase[index].dislike.includes(user);
+                console.log('user มีข้อมูลใน dislike >>> ', dislikeByUser)
 
-                if (dislikeByUser) {
-                    // ถ้า user กด'dislike'ในข้อมูลเดิม ให้ลบออก
-                    updatedDatabase[index].dislike = updatedDatabase[index].dislike.filter(user_id => user_id !== user);
-                } else {
+                // user ไม่มีข้อมูลใน dislike >>> จะใส่สี
+                if (!dislikeByUser) {
                     const likeByUser = updatedDatabase[index].like.includes(user);
                     if (likeByUser) {
                         // ถ้า user กด'like'ในข้อมูลเดิม แล้วกด'dislike' ข้อมูล'like'เดิมจะถูกนำออก
                         updatedDatabase[index].like = updatedDatabase[index].like.filter(user_id => user_id !== user);
                     }
-                    // ถ้า user ไม่ได้กด'dislike'ในข้อมูลเดิม ให้เพิ่มเข้า
+                    // เพิ่ม user ลง 'dislike'
                     updatedDatabase[index].dislike.push(user);
                 }
+                // user มีข้อมูลใน dislike >>> จะลบสี
+                else{
+                    updatedDatabase[index].dislike = updatedDatabase[index].dislike.filter(user_id => user_id !== user);
+                }
+                console.log(updatedDatabase)
                 return updatedDatabase;
             }
         )
     }
 
-    const [openIndex, setOpenIndex] = useState(null);
-    const toggleOpen = (index) => {
-        setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
+    // เปิด-ปิด Comment
+    const [openComment, setOpenComment] = useState(null);
+    const toggleComment = (index) => {
+        setOpenComment((prevIndex) => (prevIndex === index ? null : index));
     };
+
+    // เปิด-ปิด edit/delete Question
+    const [openEditOrDelete, setOpenEditOrDelete] = useState(null);
+    const toggleEditOrDelete = (index) => {
+        setOpenEditOrDelete((prevIndex) => (prevIndex === index ? null : index));
+    }
+
+    // เปิด-ปิด edit
+    const [openEdit, setOpenEdit] = useState(false);
+    const [textQues, setTextQues] = useState('');
+    const [cloneQuestion, setCloneQuestion] = useState('');
+    const handleInputQuestionChange = (e) => {
+        setTextQues(e.target.value);
+    };
+    const toggleEdit = (question, type) => {
+        if (openEdit === false && type === 'open') {
+            console.log("Open toggle Edit")
+            setOpenEdit(true)
+            setCloneQuestion(question)
+            setTextQues(question.details)
+        }
+        else if (openEdit === true && type === 'close') {
+            console.log("Close toggle Edit")
+            setOpenEdit(false)
+        }
+        else if (openEdit === true && type === 'save') {
+            console.log("Save toggle Edit")
+            // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
+            const dataIndex = database.findIndex((item) => item.id === cloneQuestion.id);
+            setDatabase((prevDatabase) => {
+                const updatedDatabase = [...prevDatabase];
+                updatedDatabase[dataIndex].details = textQues;
+                return updatedDatabase;
+            })
+            setOpenEdit(false)
+            setOpenEditOrDelete(null)
+            setCloneQuestion('')
+            setTextQues('')
+        }
+    }
 
     return (
         <div className="mt-4">
@@ -161,9 +215,87 @@ function QuestionCard() {
                     <div className="w-[100%] p-6 bg-[#ffffff] border border-gray-200 rounded-xl relative">
                         {/* Can it be Edit/Delete ? */}
                         {question.name === user &&
-                            <div className="mt-[2.5px] absolute right-5">
+                            <div className="mt-[2.5px] absolute right-5 cursor-pointer" onClick={() => toggleEditOrDelete(index)}>
                                 <Icon icon="prime:ellipsis-h" color="#151c38" width="19" height="19" />
                             </div>}
+                        {openEditOrDelete === index && (
+                            <div className="absolute bg-[#ffffff] border border-gray-200 shadow-md rounded-xl right-4 top-14">
+                                <ul className="py-2 text-sm text-gray-700">
+                                    <li className="hover:bg-gray-200 cursor-pointer" onClick={() => toggleEdit(question, 'open')}><div className="flex item-center py-3 px-4">
+                                        <Icon
+                                            icon="fluent:edit-24-regular"
+                                            color="#727272"
+                                            width="15"
+                                            height="15"
+                                        />
+                                        <p className="px-3">Edit Question</p>
+                                    </div></li>
+                                    <li className="hover:bg-gray-200 cursor-pointer"><div className="flex item-center py-3 px-4">
+                                        <Icon
+                                            icon="mingcute:delete-3-line"
+                                            color="#727272"
+                                            width="15"
+                                            height="15"
+                                        />
+                                        <p className="px-3">Delete Question</p>
+                                    </div></li>
+                                </ul>
+                            </div>
+                        )}
+                        {openEdit && (
+                            <div className="fixed inset-0 overflow-y-auto">
+                                <div className="flex justify-center text-center">
+                                    <div className="bg-white rounded-[20px] text-left shadow-xl ">
+                                        {/* header */}
+                                        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                                            <h5 className="text-[27px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-transparent bg-clip-text text-center w-full">
+                                                Edit Question
+                                            </h5>
+                                            {/* close */}
+                                            <button type="button" onClick={() => toggleEdit('', 'close')} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center hover:bg-gray-300 hover:text-white">
+                                                <svg
+                                                    className="w-3 h-3"
+                                                    aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 14 14"
+                                                >
+                                                    <path
+                                                        stroke="currentColor"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        {/* body */}
+                                        <div className="p-4 md:p-5 space-y-4">
+                                            <textarea
+                                                rows="4"
+                                                cols="50"
+                                                placeholder="Text to something ..."
+                                                className="border-none outline-none p-2 mb-4 w-full resize-none focus:ring-0 text-base font-normal"
+                                                value={textQues}
+                                                onChange={handleInputQuestionChange}
+                                            />
+                                        </div>
+                                        {/* footer */}
+                                        <div className="flex items-center p-4 md:p-5 rounded-b mt-[-20px]">
+                                            <button
+                                                onClick={() => toggleEdit('', 'save')}
+                                                type="button"
+                                                className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-[15px] px-10 py-2 text-center w-full"
+                                            >
+                                                Post
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {/* profile */}
                         <div className="mt-2 flex flex-row">
                             <div className="w-[50px] h-[50px] flex-shrink-0 rounded-full bg-[#151C38]"></div>
@@ -180,10 +312,10 @@ function QuestionCard() {
                             {/* emotion */}
                             <div className="mt-3 flex items-start">
                                 {/* Did you like it ? */}
-                                {question.like.filter(user_id => user_id === user).length > 0 ?
+                                {question.like.filter(user_id => user_id === user).length === 1 ?
                                     (
                                         // กรณี มีชื่อ user ใน 'like'
-                                        <div name="like" className="rotate-0" onClick={() => handleToggleLike(index)}>
+                                        <div name="like" className="rotate-0 cursor-pointer" onClick={() => handleToggleLike(index)}>
                                             <Icon
                                                 icon="streamline:like-1-solid"
                                                 color="#D91818"
@@ -193,7 +325,7 @@ function QuestionCard() {
                                         </div>
                                     ) : (
                                         // กรณี ไม่มีชื่อ user ใน 'like'
-                                        <div name="like" className="rotate-0" onClick={() => handleToggleLike(index)}>
+                                        <div name="like" className="rotate-0 cursor-pointer" onClick={() => handleToggleLike(index)}>
                                             <Icon
                                                 icon="streamline:like-1"
                                                 color="#151c38"
@@ -207,10 +339,10 @@ function QuestionCard() {
                                 </div>
 
                                 {/* Did you dislike it ? */}
-                                {question.dislike.filter(user_id => user_id === user).length > 0 ?
+                                {question.dislike.filter(user_id => user_id === user).length === 1 ?
                                     (
                                         // กรณี มีชื่อ user ใน 'dislike'
-                                        <div name="dislike" className="rotate-180" onClick={() => handleToggleDislike(index)}>
+                                        <div name="dislike" className="rotate-180 cursor-pointer" onClick={() => handleToggleDislike(index)}>
                                             <Icon
                                                 icon="streamline:like-1-solid"
                                                 color="#151c38"
@@ -220,7 +352,7 @@ function QuestionCard() {
                                         </div>
                                     ) : (
                                         // กรณี ไม่มีชื่อ user ใน 'dislike'
-                                        <div name="dislike" className="rotate-180" onClick={() => handleToggleDislike(index)}>
+                                        <div name="dislike" className="rotate-180 cursor-pointer" onClick={() => handleToggleDislike(index)}>
                                             <Icon
                                                 icon="streamline:like-1"
                                                 color="#151c38"
@@ -241,13 +373,13 @@ function QuestionCard() {
                                 </div>
                             </div>
                             {/* openCardComment */}
-                            <div className="border-b-2 border-[#000] py-2 w-[97%]" onClick={() => toggleOpen(index)}>
-                                <div className={`rotate-0 absolute right-5 mt-[-2px] ${openIndex === index ? 'rotate-0': 'rotate-180'}`}>
+                            <div className="border-b-2 border-[#000] py-2 w-[97%] cursor-pointer" onClick={() => toggleComment(index)}>
+                                <div className={`rotate-0 absolute right-5 mt-[-2px] ${openComment === index ? 'rotate-0' : 'rotate-180'}`}>
                                     <Icon icon="mingcute:down-line" color="#151c38" width="19" height="19" />
                                 </div>
                             </div>
                             <div>
-                                {openIndex === index && <CommentCard data={question} />}
+                                {openComment === index && <CommentCard data={question} />}
                             </div>
                         </div>
 
