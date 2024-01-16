@@ -15,9 +15,7 @@ function Layout() {
     };
 
     return (
-        <div className={`flex flex-raw ${location.pathname === '/howToRegister' && 'bg-no-repeat bg-[#181754] text-white'}`}
-            style={location.pathname === '/howToRegister' ? { backgroundImage: `url(${BG01})` } : { backgroundImage: '' }}
-        >
+        <div className={`flex flex-raw`}>
             <div className={`layout ${isOpen === true ? 'active' : ''}`}>
                 <SideNavBar toggle={toggle} isOpen={isOpen} setIsOpen={setIsOpen} location={location} />
             </div>

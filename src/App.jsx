@@ -34,8 +34,9 @@ function App() {
             <Route index element={<StudyPlanForm />} />
             <Route path="result" element={<StudyPlanTable />} />
           </Route>
-          <Route path="howToRegister" element={<HowToRegister />} />
+          {/* <Route path="howToRegister" element={<HowToRegister />} /> */}
         </Route>
+        <Route path="howToRegister" element={<HowToRegister />} />
       </Routes>
     </BrowserRouter>
   );

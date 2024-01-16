@@ -16,11 +16,11 @@ function SideNavBar({ toggle, isOpen, setIsOpen }) {
         <div className='fixed h-screen p-2'>
             {location.pathname === '/howToRegister' ? (
                 <>
-                    <div className='w-[90px] max-2xl:w-[80px] h-[90px] max-2xl:h-[80px] bg-[#181754] rounded-[30px] py-10 max-2xl:py-8 flex justify-center items-center'>
+                    {/* <div className='w-[90px] max-2xl:w-[80px] h-[90px] max-2xl:h-[80px] bg-[#181754] rounded-[30px] py-10 max-2xl:py-8 flex justify-center items-center'>
                         <button onClick={() => { navigate(-1); setIsOpen(true) }}>
                             <img className='w-[40px] max-2xl:w-[35px]' src="https://img.icons8.com/sf-black/FFFFFF/back.png" alt="back" />
                         </button>
-                    </div>
+                    </div> */}
                 </>
             ) : (
                 <>
@@ -54,7 +54,9 @@ function SideNavBar({ toggle, isOpen, setIsOpen }) {
                                 </Link>
                             </li>
                             <li className={location.pathname === '/howToRegister' && 'active'}>
-                                <Link to='/howToRegister' onClick={() => { setIsOpen(false) }}>
+                                <Link to='/howToRegister' onClick={() => {
+                                    // setIsOpen(false)
+                                }}>
                                     <img src={`https://img.icons8.com/material-rounded/${location.pathname === '/howToRegister' ? '181754' : 'FFFFFF'}/idea--v1.png`} alt="idea--v1" />
                                     <span>How To Register</span>
                                 </Link>
