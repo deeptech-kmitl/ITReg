@@ -150,7 +150,7 @@ function QuestionCard() {
     }
 
     return (
-        <div className="overflow-y-scroll static h-[38dvh]">
+        <div>
             {database.map((question, index) => (
                 <div key={index} className="pt-[20px]">
                     <div className="w-[100%] border-2 rounded-[10px] bg-[#ffffff] p-[20px] relative ">
