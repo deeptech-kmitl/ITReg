@@ -29,18 +29,18 @@ function Review() {
         <div className='w-[70%] pr-5'>
           <div className='flex flex-row gap-3'>
             <h1 className='text-[26px] font-medium text-[#151C38]'>รายวิชาเรียน</h1>
-            <select className="text-white bg-[#151C38] rounded-lg text-lg pl-2" name='selectYear'>
+            <select className="text-white bg-[#151C38] rounded-lg text-lg px-2" name='selectYear'>
               <option value="year" disabled selected>ชั้นปี</option>
               <option value="year1">1</option>
               <option value="year2">2</option>
               <option value="year3">3</option>
               <option value="year4">4</option>
             </select>
-            <select className="text-white bg-[#151C38] rounded-lg text-lg pl-2" name='selectType'>
+            <select className="text-white bg-[#151C38] rounded-lg text-lg px-2" name='selectType'>
               <option value="type" disabled selected>ประเภทวิชา</option>
-              <option value="type1">วิชาหมวดบังคับ</option>
-              <option value="type2">วิชาหมวดเสรีทั่วไป</option>
-              <option value="Type3">วิชาหมวดเสรีคณะ</option>
+              <option value="type1">วิชาบังคับ</option>
+              <option value="type2">วิชาเสรีทั่วไป</option>
+              <option value="Type3">วิชาเสรีคณะ</option>
               <option value="Type4">ทั้งหมด</option>
             </select>
           </div>
