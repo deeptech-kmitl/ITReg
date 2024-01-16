@@ -20,7 +20,7 @@ function StudyPlan() {
           )}
         </p>
       </header>
-      <div className="flex p-10 items-center justify-center">
+      <div className="flex items-center justify-center">
         <Outlet />
       </div >
     </>
