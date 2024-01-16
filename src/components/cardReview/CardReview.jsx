@@ -76,12 +76,22 @@ function CardReview() {
     //         }
     //     )
     // }
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen);
+    // Modal edit open
+    const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+
+    const toggleModalEdit = () => {
+        setIsModalEditOpen(!isModalEditOpen);
     };
-    console.log(isModalOpen)
+
+    // Modal delete open
+
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+
+    const toggleModalDelete = () => {
+        setIsModalDeleteOpen(!isModalEditOpen);
+    };
+
     return (
         <div className="mt-4">
             {data.map((review, index) => (
@@ -95,7 +105,7 @@ function CardReview() {
                                 </div>
                             </MenuHandler>
                             <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
-                                <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" data-modal-target="popup-modal" data-modal-toggle="popup-modal" onClick={toggleModal} >
+                                <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={toggleModalEdit} >
                                     <div className="flex item-center py-3">
                                         <Icon
                                             icon="fluent:edit-24-regular"
@@ -106,7 +116,7 @@ function CardReview() {
                                         <span className="pl-3 text-gray-700">Edit Review</span>
                                     </div>
                                 </MenuItem>
-                                <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl">
+                                <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={toggleModalDelete}>
                                     <div className="hover:bg-gray-200 cursor-pointer">
                                         <div className="flex item-center py-3">
                                             <Icon
@@ -122,9 +132,9 @@ function CardReview() {
                         </Menu>
 
                         {/* Modal edit Review */}
-                        {isModalOpen && (
+                        {isModalEditOpen && (
                             <div
-                                id="default-modal"
+                                id="modal-edit"
                                 tabIndex="-1"
                                 aria-hidden="true"
                                 className="fixed inset-0 overflow-y-auto"
@@ -154,7 +164,7 @@ function CardReview() {
                                                     Edit Review
                                                 </h5>
                                                 {/* close */}
-                                                <button type="button" class="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal" onClick={() => setIsModalOpen(false)}>
+                                                <button type="button" class="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal" onClick={() => setIsModalEditOpen(false)}>
                                                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                                     </svg>
@@ -167,7 +177,7 @@ function CardReview() {
                                                     cols="50"
                                                     placeholder="Text to something ..."
                                                     className="border-none outline-none p-2 mb-4 w-full resize-none focus:ring-0 text-base font-normal"
-                                                    // value="eiei"
+                                                // value="eiei"
                                                 />
                                             </div>
                                             <div className="flex flex-row">
@@ -206,7 +216,7 @@ function CardReview() {
                                             {/* footer */}
                                             <div className="flex items-center p-4 md:p-5 rounded-b mt-[-20px] mb-2">
                                                 <button
-                                                    onClick={() => setIsModalOpen(false)}
+                                                    onClick={() => setIsModalEditOpen(false)}
                                                     type="button"
                                                     className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
                                                 >
@@ -217,28 +227,76 @@ function CardReview() {
                                     </div>
                                 </div>
                             </div>
-                            // <div id="popup-modal" tabindex="-1" aria-hidden="true" className="fixed inset-0 overflow-y-auto justify-center items-center"  style={{ zIndex: 1001, borderRadius: "30px" }}  onClick={() => setIsModalOpen(false)}>
-                            //     <div class="relative p-4 w-full max-w-md max-h-full">
-                            //         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                            //             <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
-                            //                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            //                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            //                 </svg>
-                            //                 <span class="sr-only">Close modal</span>
-                            //             </button>
-                            //             <div class="p-4 md:p-5 text-center">
-                            //                 <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            //                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            //                 </svg>
-                            //                 <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this product?</h3>
-                            //                 <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
-                            //                     Yes, I'm sure
-                            //                 </button>
-                            //                 <button data-modal-hide="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
-                            //             </div>
-                            //         </div>
-                            //     </div>
-                            // </div>
+                        )}
+
+                        {isModalDeleteOpen && (
+                            <div
+                                id="modal-delete"
+                                tabIndex="-1"
+                                aria-hidden="true"
+                                className="fixed inset-0 overflow-y-auto"
+                                style={{ zIndex: 1001, borderRadius: "30px" }}
+                            // onClick={() => setIsModalOpen(false)}
+                            >
+                                <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                    <div
+                                        className="fixed inset-0 transition-opacity"
+                                        aria-hidden="true"
+                                    >
+                                        <div className="absolute inset-0 bg-gray-500 opacity-25"></div>
+                                    </div>
+
+                                    <span
+                                        className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                                        aria-hidden="true"
+                                    >
+                                        &#8203;
+                                    </span>
+                                    <div className="inline-block align-bottom bg-white rounded-[20px] text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                        <div className="bg-white rounded-[30px]">
+
+                                            {/* header */}
+                                            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                                                <h5 className="text-[27px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-transparent bg-clip-text text-center w-full">
+                                                    Delete Review
+                                                </h5>
+                                                {/* close */}
+                                                <button type="button" class="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal" onClick={() => setIsModalDeleteOpen(false)}>
+                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            {/* body */}
+                                            <div className="flex flex-col p-4 md:p-5 justify-center items-center text-2xl font-normal">
+                                                <p>Are you sure you want to</p>
+                                                <p>delete your review?</p>
+                                            </div>
+                                            {/* footer */}
+                                            <div className="flex flex-row gap-4 mb-2 mt-6">
+                                                <div className="flex items-center pl-6 rounded-b mt-[-20px] mb-2 w-full">
+                                                    <button
+                                                        onClick={() => setIsModalDeleteOpen(false)}
+                                                        type="button"
+                                                        className="text-gray-500 bg-white hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full border-2 border-[#D9D9D9]"
+                                                    >
+                                                        Cancle
+                                                    </button>
+                                                </div>
+                                                <div className="flex items-center pr-6 rounded-b mt-[-20px] mb-2 w-full">
+                                                    <button
+                                                        onClick={() => setIsModalDeleteOpen(false)}
+                                                        type="button"
+                                                        className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         )}
 
                         <div className="ml-4">
