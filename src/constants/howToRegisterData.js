@@ -4,8 +4,8 @@ export const howToRegisterData = [
         title: 'Login',
         detail: 'เข้าสู่ระบบได้ 2 ช่องทาง',
         step: [
-            '1.ยืนยันตัวตนด้วยบริการของ Google',
-            '2.ยืนยันตัวตนด้วยบริการของสถาบันฯ',
+            'ยืนยันตัวตนด้วยบริการของ Google',
+            'ยืนยันตัวตนด้วยบริการของสถาบันฯ',
             'ใช้อีเมล @kmitl.ac.th'
         ],
         image: 'HowToRegister01.png'

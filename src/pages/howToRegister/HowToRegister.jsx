@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-// import './HowToRegisterStyle.css';
 import { TypeAnimation } from 'react-type-animation';
 import Plx from "react-plx";
 import { howToRegisterData } from '../../constants/howToRegisterData';
-// import '../../assets/register/HowToRegister01.png'
 
 import {
   BG01,
@@ -33,13 +31,13 @@ function HowToRegister() {
       <div className='px-28 relative h-auto'>
         <div className='absolute left-0 z-0 bg-auto bg-no-repeat bg-[#181754] w-full'>
           <img src={BG01} alt="BG01" />
-          <img className='pt-[15rem] max-2xl:w-[75%]' src={BG02} alt="BG02" />
-          <img className='animTitle pt-[25rem] max-2xl:pt-[15rem] pl-[36rem] max-2xl:pl-[25rem] max-2xl:w-[55rem]' src={BG03} alt="BG03" />
-          <img className='' src={BG04} alt="BG04" />
-          <img className='pl-[36rem] max-2xl:pl-[20rem] max-2xl:w-[60rem]' src={BG05} alt="BG05" />
-          <img className='pt-[5rem]' src={BG06} alt="BG06" />
-          <img className='pt-[16rem] pl-[36rem] max-2xl:pl-[20rem] max-2xl:w-[60rem]' src={BG07} alt="BG07" />
-          <img className='pt-[5rem]' src={BG08} alt="BG08" />
+          <img className='pt-[12rem] max-2xl:pt-[6rem] max-2xl:w-[75%]' src={BG02} alt="BG02" />
+          <img className='pt-[10rem] max-2xl:pt-[5rem] pl-[36rem] max-2xl:pl-[25rem] max-2xl:w-[55rem]' src={BG03} alt="BG03" />
+          <img className='mt-[-20rem] max-2xl:mt-[-12rem]' src={BG04} alt="BG04" />
+          <img className='pl-[36rem] max-2xl:pl-[25rem] max-2xl:w-[60rem] mt-[-10rem] max-2xl:mt-[-16rem]' src={BG05} alt="BG05" />
+          <img className='pt-[8rem] max-2xl:pt-[0rem] max-2xl:w-[75rem]' src={BG06} alt="BG06" />
+          <img className='pt-[13rem] max-2xl:pt-[5rem] pl-[36rem] max-2xl:pl-[25rem] max-2xl:w-[50rem]' src={BG07} alt="BG07" />
+          <img className='pt-[15rem] max-2xl:pt-[8rem] max-2xl:w-[70rem]' src={BG08} alt="BG08" />
         </div>
 
         <Plx
@@ -82,103 +80,64 @@ function HowToRegister() {
           </span>
         </Plx>
 
-        <div>
+        <div className='mt-52'>
           {howToRegisterData.map((item, index) => {
             const isOdd = index % 2 === 0;
             console.log(item.image);
 
             if (index === 0 || isOdd) {
               return (
-                <div className='h-auto z-10 relative flex justify-between pt-52'>
-                  <span className='text-white'>
-                    <h1>{item.title}</h1>
-                    <p>{item.detail}</p>
-                    {item.step.map((step, _) => {
-                      return (
-                        <p>{step}</p>
-                      );
-                    })}
+                <div className='h-auto relative z-20 flex justify-around max-2xl:justify-between pb-52 max-2xl:pb-24'>
+                  <span className='text-white ml-20 max-2xl:ml-2 mt-10'>
+                    <div className='flex items-center gap-10'>
+                      <div className='w-36 max-2xl:w-24 h-[4px] max-2xl:h-[3px] bg-white'></div>
+                      <h1 className='text-[80px] max-2xl:text-[55px] font-semibold bg-gradient-to-b from-[#029FE2] from-[29.69%] to-[#FFFFFF] to-[100%] inline-block text-transparent bg-clip-text'>{item.title}</h1>
+                    </div>
+                    <div className='flex flex-col gap-5 max-2xl:gap-2'>
+                      <h2 className='text-[38px] max-2xl:text-[26px] font-medium tracking-[2px] my-5 max-2xl:my-4'>{item.detail}</h2>
+                      {item.step.map((step, _) => {
+                        return (
+                          <li className='text-[24px] max-2xl:text-[18px] font-light'>{step}</li>
+                        );
+                      })}
+                    </div>
+                    <div className='flex flex-col w-5 items-center gap-2 mt-40 max-2xl:mt-12'>
+                      <p className='text-[30px] max-2xl:text-[24px] font-semibold bg-gradient-to-b from-[#029FE2] from-[29.69%] to-[#FFFFFF] to-[100%] inline-block text-transparent bg-clip-text'>0{item.id}.</p>
+                      <div className='h-12 max-2xl:h-8 w-[3px] bg-white'></div>
+                    </div>
                   </span>
-                  <img className='w-[50%]' src={`/register/${item.image}`} alt={`HowToRegister0${index + 1}`} />
+                  <img className='w-[55%]' src={`/register/${item.image}`} alt={`HowToRegister0${index + 1}`} />
                 </div>
               );
             } else {
               return (
-                <div className='h-auto z-10 relative flex justify-between pt-52'>
-                  <img className='w-[50%]' src={`/register/${item.image}`} alt={item.image} />
-                  <span className='text-white'>
-                    <h1>{item.title}</h1>
-                    <p>{item.detail}</p>
-                    {item.step.map((step, index) => {
-                      return (
-                        <p>{step}</p>
-                      );
-                    })}
+                <div className='h-auto z-10 relative flex justify-around max-2xl:justify-between pb-52 max-2xl:pb-24'>
+                  <img className='w-[55%]' src={`/register/${item.image}`} alt={`HowToRegister0${index + 1}`} />
+                  <span className='text-white mx-10 max-2xl:mx-5 mt-10'>
+                    <div className='flex items-center gap-10'>
+                      <h1 className='text-[80px] max-2xl:text-[55px] font-semibold bg-gradient-to-b from-[#029FE2] from-[29.69%] to-[#FFFFFF] to-[100%] inline-block text-transparent bg-clip-text'>{item.title}</h1>
+                      <div className='w-36 max-2xl:w-24 h-[4px] max-2xl:h-[3px] bg-white'></div>
+                    </div>
+                    <div className='flex flex-col gap-5 max-2xl:gap-2'>
+                      <h2 className='text-[38px] max-2xl:text-[26px] font-medium tracking-[2px] my-5 max-2xl:my-4'>{item.detail}</h2>
+                      {item.step.map((step, _) => {
+                        return (
+                          <li className='text-[24px] max-2xl:text-[18px] font-light'>{step}</li>
+                        );
+                      })}
+                    </div>
+                    <div className='w-full flex justify-end mt-52 max-2xl:mt-16'>
+                      <span className='flex flex-col items-center w-5 gap-2'>
+                        <p className='text-[30px] max-2xl:text-[24px] font-semibold bg-gradient-to-b from-[#029FE2] from-[29.69%] to-[#FFFFFF] to-[100%] inline-block text-transparent bg-clip-text'>0{item.id}.</p>
+                        <div className='h-12 max-2xl:h-8 w-[3px] bg-white'></div>
+                      </span>
+                    </div>
                   </span>
                 </div>
               );
             }
-
           })}
         </div>
-
-
-        {/* <div className='h-auto z-10 relative flex justify-between pt-52'>
-          <span className='text-white'>
-            <h1>Login</h1>
-            <p>เข้าสู่ระบบได้ 2 ช่องทาง</p>
-            <p>1. ยืนยันตัวตนด้วยบริการของ Google</p>
-            <p>2. ยืนยันตัวตนด้วยบริการของสถาบันฯ</p>
-            <p>ใช้อีเมล @kmitl.ac.th</p>
-          </span>
-          <img className='w-[50%]' src={HowToRegister01} alt="HowToRegister01" />
-        </div> */}
-
-        {/* <div className='h-auto z-10 relative flex justify-between pt-52'>
-          <img className='w-[50%]' src={HowToRegister02} alt="HowToRegister02" />
-          <span className='text-white'>
-            <h1>Login</h1>
-            <p>เข้าสู่ระบบได้ 2 ช่องทาง</p>
-            <p>1. ยืนยันตัวตนด้วยบริการของ Google</p>
-            <p>2. ยืนยันตัวตนด้วยบริการของสถาบันฯ</p>
-            <p>ใช้อีเมล @kmitl.ac.th</p>
-          </span>
-        </div>
-      </div> */}
-
-        {/* <div className='px-28 relative h-auto bg-[#181754] w-full'>
-        <Plx
-          className='absolute left-0 z-0 bg-auto bg-no-repeat'
-          tagName={'div'}
-          parallaxData={[
-            {
-              start: 0,
-              end: 2000,
-              properties: [
-                {
-                  startValue: 0,
-                  endValue: 1,
-                  property: "opacity",
-                },
-              ],
-            },
-          ]}
-        >
-          <img src={BG02} alt="BG02" />
-        </Plx>
-
-        <div className='h-auto z-10 relative flex justify-between pt-80'>
-          <img className='w-[50%]' src={HowToRegister02} alt="HowToRegister02" />
-          <span className='text-white'>
-            <h1>Login</h1>
-            <p>เข้าสู่ระบบได้ 2 ช่องทาง</p>
-            <p>1. ยืนยันตัวตนด้วยบริการของ Google</p>
-            <p>2. ยืนยันตัวตนด้วยบริการของสถาบันฯ</p>
-            <p>ใช้อีเมล @kmitl.ac.th</p>
-          </span>
-        </div>
-      </div> */}
-
       </div >
     </div >
   )
