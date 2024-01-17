@@ -3,8 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 // import './HowToRegisterStyle.css';
 import { TypeAnimation } from 'react-type-animation';
 import Plx from "react-plx";
+import { howToRegisterData } from '../../constants/howToRegisterData';
+// import '../../assets/register/HowToRegister01.png'
 
-import HowToRegister01 from '../../assets/register/HowToRegister01.png';
 import {
   BG01,
   BG02,
@@ -13,7 +14,7 @@ import {
   BG05,
   BG06,
   BG07,
-  BG08
+  BG08,
 } from '../../assets/register/index';
 
 function HowToRegister() {
@@ -81,7 +82,48 @@ function HowToRegister() {
           </span>
         </Plx>
 
-        <div className='h-auto z-10 relative flex justify-between pt-52'>
+        <div>
+          {howToRegisterData.map((item, index) => {
+            const isOdd = index % 2 === 0;
+            console.log(item.image);
+
+            if (index === 0 || isOdd) {
+              return (
+                <div className='h-auto z-10 relative flex justify-between pt-52'>
+                  <span className='text-white'>
+                    <h1>{item.title}</h1>
+                    <p>{item.detail}</p>
+                    {item.step.map((step, _) => {
+                      return (
+                        <p>{step}</p>
+                      );
+                    })}
+                  </span>
+                  <img className='w-[50%]' src={`/register/${item.image}`} alt={`HowToRegister0${index + 1}`} />
+                </div>
+              );
+            } else {
+              return (
+                <div className='h-auto z-10 relative flex justify-between pt-52'>
+                  <img className='w-[50%]' src={`/register/${item.image}`} alt={item.image} />
+                  <span className='text-white'>
+                    <h1>{item.title}</h1>
+                    <p>{item.detail}</p>
+                    {item.step.map((step, index) => {
+                      return (
+                        <p>{step}</p>
+                      );
+                    })}
+                  </span>
+                </div>
+              );
+            }
+
+          })}
+        </div>
+
+
+        {/* <div className='h-auto z-10 relative flex justify-between pt-52'>
           <span className='text-white'>
             <h1>Login</h1>
             <p>เข้าสู่ระบบได้ 2 ช่องทาง</p>
@@ -90,10 +132,21 @@ function HowToRegister() {
             <p>ใช้อีเมล @kmitl.ac.th</p>
           </span>
           <img className='w-[50%]' src={HowToRegister01} alt="HowToRegister01" />
-        </div>
-      </div>
+        </div> */}
 
-      {/* <div className='px-28 relative h-auto bg-[#181754] w-full'>
+        {/* <div className='h-auto z-10 relative flex justify-between pt-52'>
+          <img className='w-[50%]' src={HowToRegister02} alt="HowToRegister02" />
+          <span className='text-white'>
+            <h1>Login</h1>
+            <p>เข้าสู่ระบบได้ 2 ช่องทาง</p>
+            <p>1. ยืนยันตัวตนด้วยบริการของ Google</p>
+            <p>2. ยืนยันตัวตนด้วยบริการของสถาบันฯ</p>
+            <p>ใช้อีเมล @kmitl.ac.th</p>
+          </span>
+        </div>
+      </div> */}
+
+        {/* <div className='px-28 relative h-auto bg-[#181754] w-full'>
         <Plx
           className='absolute left-0 z-0 bg-auto bg-no-repeat'
           tagName={'div'}
@@ -126,8 +179,9 @@ function HowToRegister() {
         </div>
       </div> */}
 
+      </div >
     </div >
   )
 }
 
-export default HowToRegister
+export default HowToRegister;

@@ -8,7 +8,7 @@ export const howToRegisterData = [
             '2.ยืนยันตัวตนด้วยบริการของสถาบันฯ',
             'ใช้อีเมล @kmitl.ac.th'
         ],
-        image: '../assets/register/HowToRegister01.png'
+        image: 'HowToRegister01.png'
     },
     {
         id: 2,
@@ -18,7 +18,7 @@ export const howToRegisterData = [
             'ลงทะเบียนล่วงหน้า เป็นการขอสิทธิเท่านั้น!',
             'ลงทะเบียนปกติ / เพิ่ม เปลี่ยน ถอน',
         ],
-        image: '../assets/register/HowToRegister02.png'
+        image: 'HowToRegister02.png'
     },
     {
         id: 3,
@@ -29,7 +29,7 @@ export const howToRegisterData = [
             'ถ้าไม่ได้รับสิทธิ์ ก็ต้องรอคิวต่อไป',
             'หากมีคนสละสิทธิระบบจะทำการเรียกคิวลำดับถัดไป'
         ],
-        image: '../assets/register/HowToRegister03.png'
+        image: 'HowToRegister03.png'
     },
     {
         id: 4,
@@ -40,7 +40,7 @@ export const howToRegisterData = [
             'กดที่ปุ่ม “เพิ่ม” สีเขียว แล้วกรอกรหัสวิชาที่ต้องการ (ต้องลงรายวิชาให้อยู่ในระหว่างหน่วยกิต 9 ถึง 22)',
             'กดปุ่ม “ดําเนินการต่อ” และ “ยืนยัน”'
         ],
-        image: '../assets/register/HowToRegister04.png'
+        image: 'HowToRegister04.png'
     },
     {
         id: 5,
@@ -51,7 +51,7 @@ export const howToRegisterData = [
             'เลือกรายวิชาที่ต้องการเปลี่ยนออกและกรอกรหัสวิชาที่ต้องการเปลี่ยนเขามาแทนที่วิชาที่เลือก',
             'กดปุ่ม “ดําเนินการต่อ” และ “ยืนยัน”'
         ],
-        image: '../assets/register/HowToRegister05.png'
+        image: 'HowToRegister05.png'
     },
     {
         id: 6,
@@ -62,7 +62,7 @@ export const howToRegisterData = [
             'เลือกรายวิชาที่ต้องการถอนออก',
             'กดปุ่ม “ดําเนินการต่อ + ยืนยัน”'
         ],
-        image: '../assets/register/HowToRegister06.png'
+        image: 'HowToRegister06.png'
     },
     {
         id: 7,
@@ -75,7 +75,7 @@ export const howToRegisterData = [
             'วิชาที่ได้สิทธิ์จะย้ายขึ้นไปอยู่ในตารางสีเขียว',
             'กดปุ่ม “เพิ่ม” จากนั้นกรอกรหัสวิชาที่ได้สิทธิ์ เพื่อลงทะเบียน'
         ],
-        image: '../assets/register/HowToRegister07.png'
+        image: 'HowToRegister07.png'
     },
     {
         id: 8,
@@ -84,7 +84,7 @@ export const howToRegisterData = [
         step: [
             'กดปุ่ม “ดูรายการแถวคอยย้อนหลัง” เพื่อ แสดงรายการแถวคอยย้อนหลัง'
         ],
-        image: '../assets/register/HowToRegister08.png'
+        image: 'HowToRegister08.png'
     },
     {
         id: 9,
@@ -93,6 +93,6 @@ export const howToRegisterData = [
         step: [
             'กดที่ปุ่ม “ดูประวัติการลงทะเบียน / เพิ่ม / เปลี่ยน / ถอน” เพื่อดูประวัติ'
         ],
-        image: '../assets/register/HowToRegister09.png',
+        image: 'HowToRegister09.png',
     },
 ]

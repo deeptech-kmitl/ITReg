@@ -15,5 +15,5 @@ export {
     BG05,
     BG06,
     BG07,
-    BG08
+    BG08,
 }
