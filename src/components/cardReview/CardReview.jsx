@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
+import { Menu, MenuHandler, MenuItem, MenuList, rating } from "@material-tailwind/react";
 
 function CardReview() {
     const user = "Anonymous1";
@@ -28,6 +28,32 @@ function CardReview() {
             dislike: ["Anonymous5",],
         }
     ])
+
+    // แสดงผลดาวตรง rating
+    function DisplayRating(rate) {
+        const arrayRate = [];
+        console.log(rate.rate)
+        for (let i = 0; i < rate.rate; i++) {
+            if (i === 0) {
+                arrayRate.push(
+                    <img
+                        className="w-[24px] h-[24px] ml-2"
+                        src="https://img.icons8.com/fluency/48/star--v1.png"
+                    />
+                );
+            } else {
+                arrayRate.push(
+                    <img
+                        className="w-[24px] h-[24px]"
+                        src="https://img.icons8.com/fluency/48/star--v1.png"
+                    />
+                );
+            }
+        }
+        console.log(arrayRate)
+        return <div className="flex flex-row">{arrayRate}</div>
+    }
+
     // const toggleEditOrDelete = (index) => {
     //     setOpenEditOrDelete((prevIndex) => (prevIndex === index ? null : index));
     // }
@@ -309,9 +335,24 @@ function CardReview() {
                     </div>
                     <div className="flex flex-row mt-2">
                         <p className="font-medium text-[#A4A4A4]">Rating</p>
-                        <img className="w-[24px] h-[24px] ml-2" src="https://img.icons8.com/fluency/48/star--v1.png"></img>
+                        <DisplayRating rate={review.rating} />
                         <p className="font-medium text-[#A4A4A4] ml-2">Grade</p>
-                        <img className="ml-2 w-[24px] h-[24px]" src="https://img.icons8.com/color/48/dryclean-with-any-solvent.png"></img>
+                        {review.grade === "A" ? (
+                            <img className="ml-2 w-[24px] h-[24px]" src="https://cdn.discordapp.com/attachments/867056877895286806/1200823655245037688/image.png?ex=65c7952d&is=65b5202d&hm=35e0b93485f56dd7b08fa524534769d48f753802b33ec8d33beebd2487af60d1&"></img>
+                        ) : review.grade === "B+" ? (
+                            <img className="ml-2 w-[24px] h-[24px]" src="https://cdn.discordapp.com/attachments/867056877895286806/1200826488577077348/image.png?ex=65c797d1&is=65b522d1&hm=6047d554bd1ae7fb42a67e17d47d18d6949cba80d476e9befea31e1e0a7d01ab&"></img>
+                        ) : review.grade === "B" ? (
+                            <img className="ml-2 w-[24px] h-[24px]" src="https://cdn.discordapp.com/attachments/867056877895286806/1200826543350480956/image.png?ex=65c797de&is=65b522de&hm=fc793844e178ab3239e2803e3f321f25947a9700d20681a67f9b358566a8be87&"></img>
+                        ) : review.grade === "C+" ? (
+                            <img className="ml-2 w-[24px] h-[24px]" src="https://cdn.discordapp.com/attachments/867056877895286806/1200826586904154244/image.png?ex=65c797e8&is=65b522e8&hm=60bbe4f282d3daaa544216407d7bb82eb6ccff3e1a8356d52455609f7f05713a&"></img>
+                        ) : review.grade === "C" ? (
+                            <img className="ml-2 w-[24px] h-[24px]" src="https://cdn.discordapp.com/attachments/867056877895286806/1200826642122145832/image.png?ex=65c797f5&is=65b522f5&hm=ae2abd1142ef97a395ae67f4b0a3f89038d874b20f64bafcda2460fdb6eb3245&"></img>
+                        ) : review.grade === "D+" ? (
+                            <img className="ml-2 w-[24px] h-[24px]" src="https://cdn.discordapp.com/attachments/867056877895286806/1200826690713161881/image.png?ex=65c79801&is=65b52301&hm=237aa858af6385f223756aeb0126aee91c249af44679440622b1e0b7a89cee33&"></img>
+                        ) : (
+                            <img className="ml-2 w-[24px] h-[24px]" src="https://cdn.discordapp.com/attachments/867056877895286806/1200826726968733808/image.png?ex=65c79809&is=65b52309&hm=6494ecd7d9feb8560ba209a7d09dfbff1eb7a48fed6273946f9a5867885bc2b1&"></img>
+                        )}
+
                     </div>
                     <div className="mt-2">
                         <p className="text-[#151C38] font-normal">{review.reviewDetails}</p>
