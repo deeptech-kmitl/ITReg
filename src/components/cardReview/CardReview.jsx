@@ -34,24 +34,15 @@ function CardReview() {
         const arrayRate = [];
         console.log(rate.rate)
         for (let i = 0; i < rate.rate; i++) {
-            if (i === 0) {
-                arrayRate.push(
-                    <img
-                        className="w-[24px] h-[24px] ml-2"
-                        src="https://img.icons8.com/fluency/48/star--v1.png"
-                    />
-                );
-            } else {
-                arrayRate.push(
-                    <img
-                        className="w-[24px] h-[24px]"
-                        src="https://img.icons8.com/fluency/48/star--v1.png"
-                    />
-                );
-            }
+            arrayRate.push(
+                <img
+                    className="w-[24px] h-[24px]"
+                    src="https://img.icons8.com/fluency/48/star--v1.png"
+                />
+            );
         }
         console.log(arrayRate)
-        return <div className="flex flex-row">{arrayRate}</div>
+        return <div className="flex flex-row ml-2">{arrayRate}</div>
     }
 
     // const toggleEditOrDelete = (index) => {
