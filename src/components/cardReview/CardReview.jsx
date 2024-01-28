@@ -197,7 +197,7 @@ function CardReview({id}) {
                                                     cols="50"
                                                     placeholder="Text to something ..."
                                                     className="border-none outline-none p-2 mb-4 w-full resize-none focus:ring-0 text-base font-normal"
-                                                // value="eiei"
+                                                    // value="eiei"
                                                 />
                                             </div>
                                             <div className="flex flex-row">
