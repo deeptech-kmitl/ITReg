@@ -3,7 +3,8 @@ import { Icon } from "@iconify/react";
 
 function CommentCard({ data }) {
 
-    console.log(data)
+    console.log("CommentCard.jsx >>> ",data)
+    //data = ข้อมูลคำถาม 1 คำถาม
     return (
         <div>
             {data.answer.map((answer, index) => (

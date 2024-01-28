@@ -388,7 +388,7 @@ function QuestionCard() {
                                         <div className="ml-1 mt-[1px]">
                                             <p className="text-[#151C38] text-sm mr-3">{question.dislike.length}</p>
                                         </div>
-                                        <div className="mt-[2.5px]">
+                                        <div className="mt-[2.5px]" onClick={() => toggleComment(index)}>
                                             <Icon icon="iconamoon:comment" color="#151c38" width="19" height="19" />
                                         </div>
                                         <div className="ml-1 mt-[1px]">
@@ -396,9 +396,9 @@ function QuestionCard() {
                                         </div>
                                     </div>
                                     {/* openCardComment */}
-                                    <div className="border-b-2 border-[#000] py-2 w-[97%] cursor-pointer" onClick={() => toggleComment(index)}>
-                                        <div className={`rotate-0 absolute right-5 mt-[-2px] ${openComment === index ? 'rotate-0' : 'rotate-180'}`}>
-                                            <Icon icon="mingcute:down-line" color="#151c38" width="19" height="19" />
+                                    <div className={`border-b-2 border-[#000] py-2 w-[97%] cursor-pointer ${openComment === index ? 'border-[#0002]'  : 'border-[#0000] '}`} onClick={() => toggleComment(index)}>
+                                        <div className={`rotate-180 absolute right-5 mt-[-2px]`}>
+                                            <Icon icon="mingcute:down-line" color={`${openComment === index ? '#151c38'  : '#0000'}`} width="19" height="19" />
                                         </div>
                                     </div>
                                     <div>
