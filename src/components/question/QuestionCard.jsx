@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import CommentCard from "./CommentCard";
+import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
 
 function QuestionCard() {
 
@@ -168,31 +169,17 @@ function QuestionCard() {
         setOpenComment((prevIndex) => (prevIndex === index ? null : index));
     };
 
-    // เปิด-ปิด edit/delete Question
-    const [openEditOrDelete, setOpenEditOrDelete] = useState(null);
-    const toggleEditOrDelete = (index) => {
-        setOpenEditOrDelete((prevIndex) => (prevIndex === index ? null : index));
-    }
-
-    // เปิด-ปิด edit
-    const [openEdit, setOpenEdit] = useState(false);
+    // Modal edit open
     const [textQues, setTextQues] = useState('');
     const [cloneQuestion, setCloneQuestion] = useState('');
     const handleInputQuestionChange = (e) => {
         setTextQues(e.target.value);
     };
-    const toggleEdit = (question, type) => {
-        if (openEdit === false && type === 'open') {
-            console.log("Open toggle Edit")
-            setOpenEdit(true)
-            setCloneQuestion(question)
-            setTextQues(question.details)
-        }
-        else if (openEdit === true && type === 'close') {
-            console.log("Close toggle Edit")
-            setOpenEdit(false)
-        }
-        else if (openEdit === true && type === 'save') {
+
+    const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+    const toggleModalEdit = (question) => {
+        console.log(question)
+        if (question == "save") {
             console.log("Save toggle Edit")
             // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
             const dataIndex = database.findIndex((item) => item.id === cloneQuestion.id);
@@ -201,216 +188,285 @@ function QuestionCard() {
                 updatedDatabase[dataIndex].details = textQues;
                 return updatedDatabase;
             })
-            setOpenEdit(false)
-            setOpenEditOrDelete(null)
             setCloneQuestion('')
             setTextQues('')
         }
-    }
+        else {
+            setCloneQuestion(question)
+            setTextQues(question.details)
+        }
+        setIsModalEditOpen(!isModalEditOpen);
+    };
+
+    // Modal delete open
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    const toggleModalDelete = () => {
+        setIsModalDeleteOpen(!isModalDeleteOpen);
+    };
 
     return (
         <div className="mt-4">
             {database.map((question, index) => (
                 <div key={index} className="mt-4">
-                    <div className="w-[100%] p-6 bg-[#ffffff] border border-gray-200 rounded-xl relative">
-                        {/* Can it be Edit/Delete ? */}
-                        {question.name === user &&
-                            <div className="mt-[2.5px] absolute right-5 cursor-pointer" onClick={() => toggleEditOrDelete(index)}>
-                                <Icon icon="prime:ellipsis-h" color="#151c38" width="19" height="19" />
-                            </div>}
-                        {openEditOrDelete === index && (
-                            <div className="absolute bg-[#ffffff] border border-gray-200 shadow-md rounded-xl right-4 top-14">
-                                <ul className="py-2 text-sm text-gray-700">
-                                    <li className="hover:bg-gray-200 cursor-pointer" onClick={() => toggleEdit(question, 'open')}><div className="flex item-center py-3 px-4">
-                                        <Icon
-                                            icon="fluent:edit-24-regular"
-                                            color="#727272"
-                                            width="15"
-                                            height="15"
-                                        />
-                                        <p className="px-3">Edit Question</p>
-                                    </div></li>
-                                    <li className="hover:bg-gray-200 cursor-pointer"><div className="flex item-center py-3 px-4">
-                                        <Icon
-                                            icon="mingcute:delete-3-line"
-                                            color="#727272"
-                                            width="15"
-                                            height="15"
-                                        />
-                                        <p className="px-3">Delete Question</p>
-                                    </div></li>
-                                </ul>
-                            </div>
-                        )}
-                        {openEdit && (
-                            <div
-                                id="default-modal"
-                                tabIndex="-1"
-                                aria-hidden="true"
-                                className="fixed inset-0 overflow-y-auto"
-                                style={{ zIndex: 1001, borderRadius: "30px" }}
-                            >
-                                <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                    <div
-                                        className="fixed inset-0 transition-opacity"
-                                        aria-hidden="true"
-                                    >
-                                        <div className="absolute inset-0 bg-gray-500 opacity-25"></div>
-                                    </div>
-
-                                    <span
-                                        className="hidden sm:inline-block sm:align-middle sm:h-screen"
-                                        aria-hidden="true"
-                                    >
-                                        &#8203;
-                                    </span>
-
-                                    <div className="inline-block align-bottom bg-white rounded-[20px] text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                        <div className="bg-white rounded-[30px]">
-
-                                            {/* header */}
-                                            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                                                <h5 className="text-[27px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-transparent bg-clip-text text-center w-full">
-                                                    Edit Question
-                                                </h5>
-                                                {/* close */}
-                                                <button type="button" onClick={() => toggleEdit('', 'close')} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center hover:bg-gray-300 hover:text-white">
-                                                    <svg
-                                                        className="w-3 h-3"
-                                                        aria-hidden="true"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 14 14"
-                                                    >
-                                                        <path
-                                                            stroke="currentColor"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth="2"
-                                                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                                                        />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            {/* body */}
-                                            <div className="p-4 md:p-5 space-y-4">
-                                                <textarea
-                                                    rows="4"
-                                                    cols="50"
-                                                    placeholder="Text to something ..."
-                                                    className="border-none outline-none p-2 mb-4 w-full resize-none focus:ring-0 text-base font-normal"
-                                                    value={textQues}
-                                                    onChange={handleInputQuestionChange}
+                    <div className="max-w p-6 bg-white border border-gray-200 rounded-xl mt-4">
+                        {/* profile */}
+                        <div className="mt-2 flex flex-row">
+                            <div className="w-[50px] h-[50px] flex-shrink-0 rounded-full bg-[#151C38]"></div>
+                            {/* Can it be Edit/Delete ? */}
+                            {question.name === user &&
+                                <Menu placement="bottom-end">
+                                    <MenuHandler>
+                                        <div className="absolute right-20 cursor-pointer">
+                                            <Icon icon="prime:ellipsis-h" color="#151c38" width="19" height="19" />
+                                        </div>
+                                    </MenuHandler>
+                                    <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
+                                        <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalEdit(question)} >
+                                            <div className="flex item-center py-3">
+                                                <Icon
+                                                    icon="fluent:edit-24-regular"
+                                                    color="#727272"
+                                                    width="15"
+                                                    height="15"
                                                 />
+                                                <span className="pl-3 text-gray-700">Edit Review</span>
                                             </div>
-                                            {/* footer */}
-                                            <div className="flex items-center p-4 md:p-5 rounded-b mt-[-20px]">
-                                                <button
-                                                    onClick={() => toggleEdit('', 'save')}
-                                                    type="button"
-                                                    className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-[15px] px-10 py-2 text-center w-full"
-                                                >
-                                                    Post
-                                                </button>
+                                        </MenuItem>
+                                        <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={toggleModalDelete}>
+                                            <div className="hover:bg-gray-200 cursor-pointer">
+                                                <div className="flex item-center py-3">
+                                                    <Icon
+                                                        icon="mingcute:delete-3-line"
+                                                        color="#727272"
+                                                        width="15"
+                                                        height="15"
+                                                    />
+                                                    <p className="pl-3 text-gray-700">Delete Review</p>
+                                                </div></div>
+                                        </MenuItem>
+                                    </MenuList>
+                                </Menu>
+                            }
+                            {/* Modal edit Review */}
+                            {isModalEditOpen && (
+                                <div
+                                    id="modal-edit"
+                                    tabIndex="-1"
+                                    aria-hidden="true"
+                                    className="fixed inset-0 overflow-y-auto"
+                                    style={{ zIndex: 1001, borderRadius: "30px" }}
+                                >
+                                    <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                        <div
+                                            className="fixed inset-0 transition-opacity"
+                                            aria-hidden="true"
+                                        >
+                                            <div className="absolute inset-0 bg-gray-500 opacity-25"></div>
+                                        </div>
+                                        <span
+                                            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                                            aria-hidden="true"
+                                        >
+                                            &#8203;
+                                        </span>
+                                        <div className="inline-block align-bottom bg-white rounded-[20px] text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                            <div className="bg-white rounded-[30px]">
+                                                {/* header */}
+                                                <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                                                    <h5 className="text-[27px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-transparent bg-clip-text text-center w-full">
+                                                        Edit Question
+                                                    </h5>
+                                                    {/* close */}
+                                                    <button type="button" class="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsModalEditOpen(false)}>
+                                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                {/* body */}
+                                                <div className="p-4 md:p-5 space-y-4">
+                                                    <textarea
+                                                        rows="4"
+                                                        cols="50"
+                                                        placeholder="Text to something ..."
+                                                        className="border-none outline-none p-2 mb-4 w-full resize-none focus:ring-0 text-base font-normal"
+                                                        value={textQues}
+                                                        onChange={handleInputQuestionChange}
+                                                    />
+                                                </div>
+                                                {/* footer */}
+                                                <div className="flex items-center p-4 md:p-5 rounded-b mt-[-20px] mb-2">
+                                                    <button
+                                                        onClick={() => toggleModalEdit("save")}
+                                                        type="button"
+                                                        className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
+                                                    >
+                                                        SAVE
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                </div>
-                        )}
+                            )}
+                            {/* modal delete */}
+                            {isModalDeleteOpen && (
+                                <div
+                                    id="modal-delete"
+                                    tabIndex="-1"
+                                    aria-hidden="true"
+                                    className="fixed inset-0 overflow-y-auto"
+                                    style={{ zIndex: 1001, borderRadius: "30px" }}
+                                >
+                                    <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                        <div
+                                            className="fixed inset-0 transition-opacity"
+                                            aria-hidden="true"
+                                        >
+                                            <div className="absolute inset-0 bg-gray-500 opacity-25"></div>
+                                        </div>
 
-                                {/* profile */}
-                                <div className="mt-2 flex flex-row">
-                                    <div className="w-[50px] h-[50px] flex-shrink-0 rounded-full bg-[#151C38]"></div>
-                                    <div className="ml-4">
-                                        <p className="text-[#151C38] text-l font-[400]">{question.name}</p>
-                                        <p className="text-[#A4A4A4] text-l font-[350]">
-                                            {question.date}, {question.time}
-                                        </p>
+                                        <span
+                                            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                                            aria-hidden="true"
+                                        >
+                                            &#8203;
+                                        </span>
+                                        <div className="inline-block align-bottom bg-white rounded-[20px] text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                            <div className="bg-white rounded-[30px]">
+
+                                                {/* header */}
+                                                <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                                                    <h5 className="text-[27px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-transparent bg-clip-text text-center w-full">
+                                                        Delete Review
+                                                    </h5>
+                                                    {/* close */}
+                                                    <button type="button" class="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsModalDeleteOpen(false)}>
+                                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                {/* body */}
+                                                <div className="flex flex-col p-4 md:p-5 justify-center items-center text-2xl font-normal">
+                                                    <p>Are you sure you want to</p>
+                                                    <p>delete your Question?</p>
+                                                </div>
+                                                {/* footer */}
+                                                <div className="flex flex-row gap-4 mb-2 mt-6">
+                                                    <div className="flex items-center pl-6 rounded-b mt-[-20px] mb-2 w-full">
+                                                        <button
+                                                            onClick={() => setIsModalDeleteOpen(false)}
+                                                            type="button"
+                                                            className="text-gray-500 bg-white hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full border-2 border-[#D9D9D9]"
+                                                        >
+                                                            Cancle
+                                                        </button>
+                                                    </div>
+                                                    <div className="flex items-center pr-6 rounded-b mt-[-20px] mb-2 w-full">
+                                                        <button
+                                                            onClick={() => setIsModalDeleteOpen(false)}
+                                                            type="button"
+                                                            className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                {/* detail question */}
-                                <div className="mt-5">
-                                    <div className="text-black text-l font-light">{question.details}</div>
-                                    {/* emotion */}
-                                    <div className="mt-3 flex items-start">
-                                        {/* Did you like it ? */}
-                                        {question.like.filter(user_id => user_id === user).length === 1 ?
-                                            (
-                                                // กรณี มีชื่อ user ใน 'like'
-                                                <div name="like" className="rotate-0 cursor-pointer" onClick={() => handleToggleLike(index)}>
-                                                    <Icon
-                                                        icon="streamline:like-1-solid"
-                                                        color="#D91818"
-                                                        width="22"
-                                                        height="22"
-                                                    />
-                                                </div>
-                                            ) : (
-                                                // กรณี ไม่มีชื่อ user ใน 'like'
-                                                <div name="like" className="rotate-0 cursor-pointer" onClick={() => handleToggleLike(index)}>
-                                                    <Icon
-                                                        icon="streamline:like-1"
-                                                        color="#151c38"
-                                                        width="22"
-                                                        height="22"
-                                                    />
-                                                </div>
-                                            )}
-                                        <div className="ml-1 mt-[1px]">
-                                            <p className="text-[#151C38] text-sm mr-3">{question.like.length}</p>
-                                        </div>
-
-                                        {/* Did you dislike it ? */}
-                                        {question.dislike.filter(user_id => user_id === user).length === 1 ?
-                                            (
-                                                // กรณี มีชื่อ user ใน 'dislike'
-                                                <div name="dislike" className="rotate-180 cursor-pointer" onClick={() => handleToggleDislike(index)}>
-                                                    <Icon
-                                                        icon="streamline:like-1-solid"
-                                                        color="#151c38"
-                                                        width="22"
-                                                        height="22"
-                                                    />
-                                                </div>
-                                            ) : (
-                                                // กรณี ไม่มีชื่อ user ใน 'dislike'
-                                                <div name="dislike" className="rotate-180 cursor-pointer" onClick={() => handleToggleDislike(index)}>
-                                                    <Icon
-                                                        icon="streamline:like-1"
-                                                        color="#151c38"
-                                                        width="22"
-                                                        height="22"
-                                                    />
-                                                </div>
-                                            )}
-
-                                        <div className="ml-1 mt-[1px]">
-                                            <p className="text-[#151C38] text-sm mr-3">{question.dislike.length}</p>
-                                        </div>
-                                        <div className="mt-[2.5px]" onClick={() => toggleComment(index)}>
-                                            <Icon icon="iconamoon:comment" color="#151c38" width="19" height="19" />
-                                        </div>
-                                        <div className="ml-1 mt-[1px]">
-                                            <p className="text-[#151C38] text-sm">{question.answer.length}</p>
-                                        </div>
-                                    </div>
-                                    {/* openCardComment */}
-                                    <div className={`border-b-2 border-[#000] py-2 w-[97%] cursor-pointer ${openComment === index ? 'border-[#0002]'  : 'border-[#0000] '}`} onClick={() => toggleComment(index)}>
-                                        <div className={`rotate-180 absolute right-5 mt-[-2px]`}>
-                                            <Icon icon="mingcute:down-line" color={`${openComment === index ? '#151c38'  : '#0000'}`} width="19" height="19" />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        {openComment === index && <CommentCard data={question} />}
-                                    </div>
-                                </div>
-
+                            )}
+                            <div className="ml-4">
+                                <p className="text-[#151C38] text-l font-[400]">{question.name}</p>
+                                <p className="text-[#A4A4A4] text-l font-[350]">
+                                    {question.date}, {question.time}
+                                </p>
                             </div>
+                        </div>
+                        {/* detail question */}
+                        <div className="mt-5">
+                            <div className="text-black text-l font-light">{question.details}</div>
+                            {/* emotion */}
+                            <div className="mt-3 flex items-start">
+                                {/* Did you like it ? */}
+                                {question.like.filter(user_id => user_id === user).length === 1 ?
+                                    (
+                                        // กรณี มีชื่อ user ใน 'like'
+                                        <div name="like" className="rotate-0 cursor-pointer" onClick={() => handleToggleLike(index)}>
+                                            <Icon
+                                                icon="streamline:like-1-solid"
+                                                color="#D91818"
+                                                width="22"
+                                                height="22"
+                                            />
+                                        </div>
+                                    ) : (
+                                        // กรณี ไม่มีชื่อ user ใน 'like'
+                                        <div name="like" className="rotate-0 cursor-pointer" onClick={() => handleToggleLike(index)}>
+                                            <Icon
+                                                icon="streamline:like-1"
+                                                color="#151c38"
+                                                width="22"
+                                                height="22"
+                                            />
+                                        </div>
+                                    )}
+                                <div className="ml-1 mt-[1px]">
+                                    <p className="text-[#151C38] text-sm mr-3">{question.like.length}</p>
+                                </div>
+
+                                {/* Did you dislike it ? */}
+                                {question.dislike.filter(user_id => user_id === user).length === 1 ?
+                                    (
+                                        // กรณี มีชื่อ user ใน 'dislike'
+                                        <div name="dislike" className="rotate-180 cursor-pointer" onClick={() => handleToggleDislike(index)}>
+                                            <Icon
+                                                icon="streamline:like-1-solid"
+                                                color="#151c38"
+                                                width="22"
+                                                height="22"
+                                            />
+                                        </div>
+                                    ) : (
+                                        // กรณี ไม่มีชื่อ user ใน 'dislike'
+                                        <div name="dislike" className="rotate-180 cursor-pointer" onClick={() => handleToggleDislike(index)}>
+                                            <Icon
+                                                icon="streamline:like-1"
+                                                color="#151c38"
+                                                width="22"
+                                                height="22"
+                                            />
+                                        </div>
+                                    )}
+
+                                <div className="ml-1 mt-[1px]">
+                                    <p className="text-[#151C38] text-sm mr-3">{question.dislike.length}</p>
+                                </div>
+                                <div className="mt-[2.5px]" onClick={() => toggleComment(index)}>
+                                    <Icon icon="iconamoon:comment" color="#151c38" width="19" height="19" />
+                                </div>
+                                <div className="ml-1 mt-[1px]">
+                                    <p className="text-[#151C38] text-sm">{question.answer.length}</p>
+                                </div>
+                            </div>
+                            {/* openCardComment */}
+                            <div className={`border-b-2 border-[#000] py-2 w-[97%] cursor-pointer ${openComment === index ? 'border-[#0002]' : 'border-[#0000] '}`} onClick={() => toggleComment(index)}>
+                                <div className={`rotate-180 absolute right-5 mt-[-2px]`}>
+                                    <Icon icon="mingcute:down-line" color={`${openComment === index ? '#151c38' : '#0000'}`} width="19" height="19" />
+                                </div>
+                            </div>
+                            <div>
+                                {openComment === index && <CommentCard data={question} />}
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             ))}
-                </div>
-            )
+        </div>
+    )
 }
 
-            export default QuestionCard;
+export default QuestionCard;
