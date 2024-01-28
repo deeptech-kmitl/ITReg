@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import CardDetailSubject from '../components/cardReview/CardDetailSubject'
 import CardReview from '../components/cardReview/CardReview'
 import QuestionCard from '../components/question/QuestionCard'
+import { Outlet, useLocation, Link, useParams } from 'react-router-dom'
 
 function ReviewSubjectDetail() {
-
+  let {reviewId} = useParams();
+  console.log(reviewId)
   const [activeTab, setActiveTab] = useState("review")
   
   // Modal create open
@@ -19,7 +21,7 @@ function ReviewSubjectDetail() {
     <div className='w-full'>
       {/* ReviewDetail */}
       <div name="ReviewDetail">
-        <CardDetailSubject />
+        <CardDetailSubject id={reviewId} />
       </div>
 
       {/* ReviewOrQuestion */}
@@ -53,7 +55,7 @@ function ReviewSubjectDetail() {
                       <img src='https://img.icons8.com/ios-filled/20/FFFFFF/plus-math.png'></img>
                     </button>
                   </div>
-                  <CardReview />
+                  <CardReview id={reviewId}/>
                   {/* Modal create Review */}
                   {isModalCreateOpen && (
                     <div

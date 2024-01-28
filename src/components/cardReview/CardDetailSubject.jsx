@@ -19,22 +19,23 @@ const ContentSubjectDetailCard = [
     },
 ];
 
-const CardDetailSubject = () => {
+const CardDetailSubject = ({ id }) => {
     return (
         <div>
-        {/* {ContentSubjectCard.map((detail, index) => ( */}
-            <div className="max-w p-6 bg-white border border-gray-200 rounded-xl">
-                <div className="flex flex-row">
-                    <h5 className="mb-2 text-xl font-bold text-[#151C38]">{ContentSubjectDetailCard[0].subjectId}</h5>
-                    <div>
-                        <h5 className="mb-2 text-xl font-bold text-[#151C38] ml-10">{ContentSubjectDetailCard[0].subjectNameEn} ({ContentSubjectDetailCard[0].subjectName})</h5>
-                        <p className="ml-10 text-sm font-medium text-[#151C38]">{ContentSubjectDetailCard[0].subjectContent}</p>
+            {ContentSubjectDetailCard.map((detail, index) => (
+                detail.subjectId === id && (
+                    <div className="max-w p-6 bg-white border border-gray-200 rounded-xl" key={index}>
+                        <div className="flex flex-row">
+                            <h5 className="mb-2 text-xl font-bold text-[#151C38]">{detail.subjectId}</h5>
+                            <div>
+                                <h5 className="mb-2 text-xl font-bold text-[#151C38] ml-10">{detail.subjectNameEn} ({detail.subjectName})</h5>
+                                <p className="ml-10 text-sm font-medium text-[#151C38]">{detail.subjectContent}</p>
+                            </div>
+                        </div>
+                        <p className="mt-4 text-sm font-light text-[#151C38]">หน่วยกิต(ทฤษฎี - ปฎิบัติ - ค้นคว้า) {detail.subjectCredit}</p>
                     </div>
-                    
-                </div>
-                <p className="mt-2 text-sm font-light text-[#151C38]">หน่วยกิต(ทฤษฎี - ปฎิบัติ - ค้นคว้า) {ContentSubjectDetailCard[0].subjectCredit}</p>    
-            </div>
-        {/* ))} */}
+                )
+            ))}
         </div>
     );
 };

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { Menu, MenuHandler, MenuItem, MenuList, rating } from "@material-tailwind/react";
 
-function CardReview() {
+function CardReview({id}) {
     const user = "Anonymous1";
     const [data, setData] = useState([
         {
@@ -10,6 +10,7 @@ function CardReview() {
             name: "Anonymous1",
             date: "10/01/2024",
             time: "11.30 PM",
+            subjectId: "06016321",
             reviewDetails: "สนุกมากๆค่ะ อาจารย์สอนดีมาก เริ่ดอันดับ1",
             rating: 5,
             grade: "A",
@@ -21,6 +22,7 @@ function CardReview() {
             name: "Anonymous2",
             date: "11/01/2024",
             time: "10.30 PM",
+            subjectId: "06016366",
             reviewDetails: "เรียนได้เรื่อยๆแต่ก้สนุกดีค้าบ ให้เกรดยากมากงง",
             rating: 3,
             grade: "C",
@@ -112,7 +114,8 @@ function CardReview() {
     return (
         <div className="mt-4">
             {data.map((review, index) => (
-                <div className="max-w p-6 bg-white border border-gray-200 rounded-xl mt-4">
+                review.subjectId === id && (
+                    <div className="max-w p-6 bg-white border border-gray-200 rounded-xl mt-4">
                     <div className="mt-2 flex flex-row">
                         <div className="w-[50px] h-[50px] flex-shrink-0 rounded-full bg-[#151C38]"></div>
                         <Menu placement="bottom-end">
@@ -355,6 +358,7 @@ function CardReview() {
                         <p className="ml-2 text-[#151C38]">{review.dislike.length}</p>
                     </div>
                 </div>
+                )
             ))}
         </div>
     );
