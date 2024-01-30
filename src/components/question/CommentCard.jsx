@@ -1,12 +1,18 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 
-function CommentCard({ data }) {
+function CommentCard({ data, openComment, index, toggleComment }) {
 
-    console.log("CommentCard.jsx >>> ",data)
+    console.log("CommentCard.jsx >>> ", data)
     //data = ข้อมูลคำถาม 1 คำถาม
     return (
-        <div>
+        <div className="">
+            <div className="flex items-center gap-2">
+                <div className="border-gray-300 border-b-[1.5px] w-full"></div>
+                <button className={`rotate-180`}>
+                    <Icon icon="mingcute:down-line" color='#00000080' width="19" height="19" onClick={() => toggleComment(index)} />
+                </button>
+            </div>
             {data.answer.map((answer, index) => (
                 <div>
                     {/* profile */}

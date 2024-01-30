@@ -452,13 +452,13 @@ function QuestionCard() {
                                 </div>
                             </div>
                             {/* openCardComment */}
-                            <div className={`border-b-2 border-[#000] py-2 w-[97%] cursor-pointer ${openComment === index ? 'border-[#0002]' : 'border-[#0000] '}`} onClick={() => toggleComment(index)}>
-                                <div className={`rotate-180 absolute right-5 mt-[-2px]`}>
+                            <div className={`py-2 w-[97%] cursor-pointer ${openComment === index && ''}`} onClick={() => toggleComment(index)}>
+                                {/* <div className={`rotate-180`}>
                                     <Icon icon="mingcute:down-line" color={`${openComment === index ? '#151c38' : '#0000'}`} width="19" height="19" />
-                                </div>
+                                </div> */}
                             </div>
-                            <div>
-                                {openComment === index && <CommentCard data={question} />}
+                            <div className="">
+                                {openComment === index && <CommentCard data={question} openComment={openComment} index={index} toggleComment={toggleComment} />}
                             </div>
                         </div>
 
