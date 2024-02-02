@@ -19,13 +19,13 @@ function QuestionCard() {
             answer: [
                 {
                     name: "Anonymous6",
-                    detail: "ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ",
+                    detail: "ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ",
                     date: "13/1/2567",
                     time: "20.30 PM",
                 },
                 {
                     name: "Anonymous3",
-                    detail: "ยากมากกกก ยากสุดดดดๆ",
+                    detail: "ยากมากกกก ยากสุดดดดๆ ยากมากกกก ยากสุดดดดๆ ยากมากกกก ยากสุดดดดๆ ยากมากกกก ยากสุดดดดๆ ยากมากกกก ยากสุดดดดๆ ยากมากกกก ยากสุดดดดๆ",
                     date: "15/1/2567",
                     time: "11.45 PM",
                 },
@@ -42,7 +42,7 @@ function QuestionCard() {
             answer: [
                 {
                     name: "Anonymous13",
-                    detail: "กดดัน",
+                    detail: "กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน",
                     date: "11/1/2567",
                     time: "11.30 PM",
                 },
@@ -109,7 +109,7 @@ function QuestionCard() {
     ]);
 
     const handleToggleLike = (index) => {
-        console.log("กด like")
+        console.log("กด like", index)
         setDatabase(
             (dumyDatabase) => {
                 const updatedDatabase = [...dumyDatabase];
@@ -130,7 +130,7 @@ function QuestionCard() {
                 else {
                     updatedDatabase[index].like = updatedDatabase[index].like.filter(user_id => user_id !== user);
                 }
-                return updatedDatabase;
+                return [...updatedDatabase];;
             }
         )
     }
@@ -208,7 +208,7 @@ function QuestionCard() {
         <div className="mt-4">
             {database.map((question, index) => (
                 <div key={index} className="mt-4">
-                    <div className="max-w p-6 bg-white border border-gray-200 rounded-xl mt-4">
+                    <div className="p-6 bg-white border border-gray-200 rounded-xl mt-4">
                         {/* profile */}
                         <div className="mt-2 flex flex-row">
                             <div className="w-[50px] h-[50px] flex-shrink-0 rounded-full bg-[#151C38]"></div>
@@ -379,39 +379,39 @@ function QuestionCard() {
                                 </div>
                             )}
                             <div className="ml-4">
-                                <p className="text-[#151C38] text-l font-[400]">{question.name}</p>
-                                <p className="text-[#A4A4A4] text-l font-[350]">
+                                <p className="text-[#151C38] font-[400]">{question.name}</p>
+                                <p className="text-[#A4A4A4] font-[350]">
                                     {question.date}, {question.time}
                                 </p>
                             </div>
                         </div>
                         {/* detail question */}
                         <div className="mt-5">
-                            <div className="text-black text-l font-light">{question.details}</div>
+                            <div className="text-black font-normal">{question.details}</div>
                             {/* emotion */}
                             <div className="mt-3 flex items-start">
                                 {/* Did you like it ? */}
                                 {question.like.filter(user_id => user_id === user).length === 1 ?
                                     (
                                         // กรณี มีชื่อ user ใน 'like'
-                                        <div name="like" className="rotate-0 cursor-pointer" onClick={() => handleToggleLike(index)}>
+                                        <button name="like" className="rotate-0" onClick={() => handleToggleLike(index)}>
                                             <Icon
                                                 icon="streamline:like-1-solid"
                                                 color="#D91818"
                                                 width="22"
                                                 height="22"
                                             />
-                                        </div>
+                                        </button>
                                     ) : (
                                         // กรณี ไม่มีชื่อ user ใน 'like'
-                                        <div name="like" className="rotate-0 cursor-pointer" onClick={() => handleToggleLike(index)}>
+                                        <button name="like" className="rotate-0" onClick={() => handleToggleLike(index)}>
                                             <Icon
                                                 icon="streamline:like-1"
                                                 color="#151c38"
                                                 width="22"
                                                 height="22"
                                             />
-                                        </div>
+                                        </button>
                                     )}
                                 <div className="ml-1 mt-[1px]">
                                     <p className="text-[#151C38] text-sm mr-3">{question.like.length}</p>
@@ -421,51 +421,46 @@ function QuestionCard() {
                                 {question.dislike.filter(user_id => user_id === user).length === 1 ?
                                     (
                                         // กรณี มีชื่อ user ใน 'dislike'
-                                        <div name="dislike" className="rotate-180 cursor-pointer" onClick={() => handleToggleDislike(index)}>
+                                        <button name="dislike" className="rotate-180 mt-1" onClick={() => handleToggleDislike(index)}>
                                             <Icon
                                                 icon="streamline:like-1-solid"
                                                 color="#151c38"
                                                 width="22"
                                                 height="22"
                                             />
-                                        </div>
+                                        </button>
                                     ) : (
                                         // กรณี ไม่มีชื่อ user ใน 'dislike'
-                                        <div name="dislike" className="rotate-180 cursor-pointer" onClick={() => handleToggleDislike(index)}>
+                                        <button name="dislike" className="rotate-180 mt-1" onClick={() => handleToggleDislike(index)}>
                                             <Icon
                                                 icon="streamline:like-1"
                                                 color="#151c38"
                                                 width="22"
                                                 height="22"
                                             />
-                                        </div>
+                                        </button>
                                     )}
 
                                 <div className="ml-1 mt-[1px]">
                                     <p className="text-[#151C38] text-sm mr-3">{question.dislike.length}</p>
                                 </div>
-                                <div className="mt-[2.5px]" onClick={() => toggleComment(index)}>
+                                <button className="mt-[2.5px]" onClick={() => toggleComment(index)}>
                                     <Icon icon="iconamoon:comment" color="#151c38" width="19" height="19" />
-                                </div>
+                                </button>
                                 <div className="ml-1 mt-[1px]">
                                     <p className="text-[#151C38] text-sm">{question.answer.length}</p>
                                 </div>
                             </div>
                             {/* openCardComment */}
-                            <div className={`py-2 w-[97%] cursor-pointer ${openComment === index && ''}`} onClick={() => toggleComment(index)}>
-                                {/* <div className={`rotate-180`}>
-                                    <Icon icon="mingcute:down-line" color={`${openComment === index ? '#151c38' : '#0000'}`} width="19" height="19" />
-                                </div> */}
-                            </div>
                             <div className="">
                                 {openComment === index && <CommentCard data={question} openComment={openComment} index={index} toggleComment={toggleComment} />}
                             </div>
                         </div>
-
                     </div>
                 </div>
-            ))}
-        </div>
+            ))
+            }
+        </div >
     )
 }
 

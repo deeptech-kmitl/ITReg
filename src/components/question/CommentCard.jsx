@@ -1,10 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 
 function CommentCard({ data, openComment, index, toggleComment }) {
 
     console.log("CommentCard.jsx >>> ", data)
     //data = ข้อมูลคำถาม 1 คำถาม
+
+    // เปิด-ปิด showMore
+    const [showMore, setShowmore] = useState(null);
+    const toggleShowmore = (index) => {
+        setShowmore((prevIndex) => (prevIndex === index ? null : index));
+        console.log(index, showMore)
+    };
+
+    // test
+    const [thresholdValue, setThresholdValue] = useState(window.innerWidth / 14); // ค่าเริ่มต้น 1/14 ของความกว้างหน้าจอ
+
+    useEffect(() => {
+        const handleResize = () => {
+            setThresholdValue(window.innerWidth / 14);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+
     return (
         <div className="">
             <div className="flex items-center gap-2">
@@ -18,7 +42,27 @@ function CommentCard({ data, openComment, index, toggleComment }) {
                     {/* profile */}
                     <div className="my-5 mx-2 bg-[#E3F3FF] rounded-[10px]">
                         <p className="text-[#A4A4A4] text-l font-[400] p-3">Answer by {answer.name}</p>
-                        <p className="text-[#000000] text-l pl-5 pb-3">{answer.detail}</p>
+                        <div className="flex px-5 pb-3">
+                            <p className="text-[#000000] w-11/12 pl-5 pb-3 ">
+                                <span style={{ ...(!(showMore === index) ? { display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden', WebkitLineClamp: 1 } : {}) }}>
+                                    {answer.detail}
+                                </span>
+                                {answer.detail.length > thresholdValue && (
+                                    <span>
+                                        {!(showMore === index) && (
+                                            <button className="text-[#A7A7A7] text-sm ml-2" onClick={() => toggleShowmore(index)}>
+                                                ...show more
+                                            </button>
+                                        )}
+                                        {showMore === index && (
+                                            <button className="text-[#A7A7A7] text-sm ml-2" onClick={() => toggleShowmore(null)}>
+                                                ...show less
+                                            </button>
+                                        )}
+                                    </span>
+                                )}
+                            </p>
+                        </div>
                     </div>
                 </div>
             ))}
