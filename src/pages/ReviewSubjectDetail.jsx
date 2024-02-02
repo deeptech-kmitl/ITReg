@@ -3,12 +3,13 @@ import CardDetailSubject from '../components/cardReview/CardDetailSubject'
 import CardReview from '../components/cardReview/CardReview'
 import QuestionCard from '../components/question/QuestionCard'
 import { Outlet, useLocation, Link, useParams } from 'react-router-dom'
+import QuestionDetail from '../dummyData/QuestionDetail'
 
 function ReviewSubjectDetail() {
-  let {reviewId} = useParams();
+  let { reviewId } = useParams();
   console.log(reviewId)
   const [activeTab, setActiveTab] = useState("review")
-  
+
   // Modal create open
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
 
@@ -16,6 +17,32 @@ function ReviewSubjectDetail() {
     setIsModalCreateOpen(!isModalCreateOpen);
   };
   console.log(isModalCreateOpen)
+
+  // แสดงตัวตน ปัจจุบัน
+  const user = "Anonymous1";
+  // import data จาก QuestionDetail
+  const [database, setDatabase] = useState(QuestionDetail);
+
+  const [question, setQuestion] = useState('');
+
+  // เพิ่มข้อมูลลงฐานข้อมูล
+  const postQuestion = () => {
+    const currentDate = new Date();
+    const newQuestion = {
+      id: database[database.length - 1].id + 1,
+      name: user,
+      date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()+543}`,
+      time: currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
+      details: question,
+      like: [],
+      dislike: [],
+      answer: []
+    };
+    const newDatabase = [...database, newQuestion];
+    // Update the state with the new array
+    setDatabase(newDatabase);
+    setQuestion('')
+  }
 
   return (
     <div className='w-full'>
@@ -55,7 +82,7 @@ function ReviewSubjectDetail() {
                       <img src='https://img.icons8.com/ios-filled/20/FFFFFF/plus-math.png'></img>
                     </button>
                   </div>
-                  <CardReview id={reviewId}/>
+                  <CardReview id={reviewId} />
                   {/* Modal create Review */}
                   {isModalCreateOpen && (
                     <div
@@ -159,19 +186,23 @@ function ReviewSubjectDetail() {
               <div className="w-full mt-4 border-2 rounded-[30px] bg-[#ffffff] p-[20px]">
                 {/* สร้างคำถาม */}
                 <div className='inputReview flex flex-row gap-3 drop-shadow-sm'>
-                  <input type='text' placeholder="Question" className="w-full h-[50px] font-light pr-[80px]"></input>
+                  <input type='text' placeholder="Question" className="w-full h-[50px] font-light pr-[80px]"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}>
+                  </input>
                   <button
                     className="py-[6px] px-[12px] rounded-[10px] bg-gradient-to-br 
                     from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-[#ffffff]  
                     hover:from-[#029BE0] hover:to-[#0D0B5F]
                     absolute right-2 top-2 text-[16px]"
+                    onClick={postQuestion}
                   >
                     POST
                   </button>
                 </div>
 
                 {/* QuestionCard */}
-                <QuestionCard />
+                <QuestionCard database={database} setDatabase={setDatabase} />
               </div>}
           </div>
         </div>

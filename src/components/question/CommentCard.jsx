@@ -13,7 +13,7 @@ function CommentCard({ data, openComment, index, toggleComment }) {
         console.log(index, showMore)
     };
 
-    // test
+    //ให้แสดง show less/show more โดยปรับตามขนาดจอ
     const [thresholdValue, setThresholdValue] = useState(window.innerWidth / 14); // ค่าเริ่มต้น 1/14 ของความกว้างหน้าจอ
 
     useEffect(() => {
