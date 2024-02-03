@@ -83,6 +83,7 @@ function ReviewSubjectDetail() {
                     </button>
                   </div>
                   <CardReview id={reviewId} />
+                  
                   {/* Modal create Review */}
                   {isModalCreateOpen && (
                     <div
