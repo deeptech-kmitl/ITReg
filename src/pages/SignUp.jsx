@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import SignUpBG from '../assets/SignUpBG.png'
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Logo from '../assets/Logo.png'
 import SignUpImage from '../assets/SignUpImage.png'
-
+import { UserAuth } from '../context/AuthContext';
 function SignUp() {
+    const { user } = UserAuth();
+    if (user) {
+        return <Navigate to='/dashboard' />;
+    }
     return (
         <div style={{ backgroundImage: `url(${SignUpBG})` }}
             className='bg-no-repeat bg-cover bg-center h-screen px-40 py-16 bg-[#181754] text-white'
