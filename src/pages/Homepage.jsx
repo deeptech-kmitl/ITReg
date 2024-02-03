@@ -2,10 +2,10 @@ import React from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import HomepageBG from '../assets/HomepageBG.png'
 import Logo from '../assets/Logo.png'
+import { UserAuth } from '../context/AuthContext';
 
 function Homepage() {
-    const navigate = useNavigate()
-
+    const navigate = useNavigate();
     return (
         <div style={{ backgroundImage: `url(${HomepageBG})` }}
             className='bg-no-repeat bg-cover bg-center h-screen px-40 max-2xl:px-28 py-16 max-2xl:py-12 bg-[#181754] text-white'>
