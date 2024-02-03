@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
+import { v4 as uuidv4 } from 'uuid';
 
 function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, user, database, setDatabase }) {
     const [showMore, setShowmore] = useState([]);
@@ -88,7 +89,7 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
     const postAnswer = () => {
         const currentDate = new Date();
         const newAnswer = {
-            id: 1, //สร้าง รก ไม่ซ้ำกัน
+            id: uuidv4(), //สร้าง รก ไม่ซ้ำกัน
             name: user,
             detail: answer,
             date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear() + 543}`,
