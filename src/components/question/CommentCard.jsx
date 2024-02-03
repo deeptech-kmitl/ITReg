@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
-import { v4 as uuidv4 } from 'uuid';
 
 function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, user, database, setDatabase }) {
     const [showMore, setShowmore] = useState([]);
@@ -36,6 +35,7 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
     };
 
     const toggleModalEdit = (answer) => {
+        const currentDate = new Date();
         if (answer == "save") {
             console.log("Save toggle Edit")
             // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
@@ -43,6 +43,9 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
             setDatabase((prevDatabase) => {
                 const updatedDatabase = [...prevDatabase];
                 updatedDatabase[indexQuestion].answer[dataIndex].detail = textAnswer;
+                updatedDatabase[indexQuestion].answer[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()+543}`;
+                updatedDatabase[indexQuestion].answer[dataIndex].time = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+                updatedDatabase[indexQuestion].answer[dataIndex].edit = true;
                 return updatedDatabase;
             })
             setCloneAnswer('')
@@ -59,7 +62,6 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [answerIdDelete, setAnswerIdDelete] = useState(null)
     const toggleModalDelete = (command, answerId) => {
-        console.log("Delete >>> ", 'command: ', command, 'answer: ', answerId)
         if (command === 'X' || command === 'cancle') {
             setAnswerIdDelete(null)
             setIsModalDeleteOpen(false);
@@ -77,7 +79,6 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
                 return question;
             })
             setDatabase(newDatabase)
-            console.log('newDatabase', newDatabase)
             setAnswerIdDelete(null)
             setIsModalDeleteOpen(false);
         }
@@ -89,7 +90,7 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
     const postAnswer = () => {
         const currentDate = new Date();
         const newAnswer = {
-            id: uuidv4(), //สร้าง รก ไม่ซ้ำกัน
+            id: data.answer[data.answer.length-1].id + 5, //สร้าง ID ไม่ซ้ำกัน
             name: user,
             detail: answer,
             date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear() + 543}`,
@@ -313,7 +314,7 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
                             </p>
                         </div>
                     </div>
-                    <p className="text-[#A4A4A4] text-l font-[350] px-3">{answer.date}, {answer.time} </p>
+                    <p className="text-[#A4A4A4] text-l font-[350] px-3">{answer.date}, {answer.time}  {answer.edit && <> (edit)</>}</p>
                 </div>
             ))}
             <div name="post" className="relative mx-2">

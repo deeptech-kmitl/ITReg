@@ -4,7 +4,6 @@ import CardReview from '../components/cardReview/CardReview'
 import QuestionCard from '../components/question/QuestionCard'
 import { Outlet, useLocation, Link, useParams } from 'react-router-dom'
 import QuestionDetail from '../dummyData/QuestionDetail'
-import { v4 as uuidv4 } from 'uuid';
 
 function ReviewSubjectDetail() {
   let { reviewId } = useParams();
@@ -29,8 +28,7 @@ function ReviewSubjectDetail() {
   const postQuestion = () => {
     const currentDate = new Date();
     const newQuestion = {
-      // id: database[database.length - 1].id + 1,
-      id: uuidv4(),
+      id: database[database.length - 1].id + 1,
       name: user,
       date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()+543}`,
       time: currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
