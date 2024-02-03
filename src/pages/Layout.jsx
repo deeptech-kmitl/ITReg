@@ -17,7 +17,7 @@ function Layout() {
         setIsOpen(!isOpen);
     };
     if (!user) {
-        return <Navigate to='/' />;
+        return <Navigate to='/signin' />;
     }
     else
     return (
