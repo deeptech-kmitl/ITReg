@@ -7,107 +7,6 @@ function QuestionCard({ database, setDatabase }) {
 
     const user = "Anonymous1";
 
-    // const [database, setDatabase] = useState([
-    //     {
-    //         id: '1',
-    //         name: "Anonymous1",
-    //         date: "11/1/2567",
-    //         time: "11.30 PM",
-    //         details: "ให้คะแนนยากไหม...",
-    //         like: ["Anonymous1", "Anonymous6"],
-    //         dislike: ["Anonymous5",],
-    //         answer: [
-    //             {
-    //                 name: "Anonymous6",
-    //                 detail: "ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ",
-    //                 date: "13/1/2567",
-    //                 time: "20.30 PM",
-    //             },
-    //             {
-    //                 name: "Anonymous3",
-    //                 detail: "ยากมากกกก ยากสุดดดดๆ ยากมากกกก ยากสุดดดดๆ ยากมากกกก ยากสุดดดดๆ ยากมากกกก ยากสุดดดดๆ ยากมากกกก ยากสุดดดดๆ ยากมากกกก ยากสุดดดดๆ",
-    //                 date: "15/1/2567",
-    //                 time: "11.45 PM",
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         id: '2',
-    //         name: "Anonymous3",
-    //         date: "14/1/2567",
-    //         time: "15.30 PM",
-    //         details: "อาจารย์กดเกรดไหม",
-    //         like: ["Anonymous6", "Anonymous8"],
-    //         dislike: ["Anonymous5", "Anonymous11", "Anonymous12"],
-    //         answer: [
-    //             {
-    //                 name: "Anonymous13",
-    //                 detail: "กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน กดดัน",
-    //                 date: "11/1/2567",
-    //                 time: "11.30 PM",
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         id: '3',
-    //         name: "Anonymous1",
-    //         date: "11/1/2567",
-    //         time: "11.30 PM",
-    //         details: "Going to you like Vroom vroom vroom Vroom vroom vroom ฉันจะเหยียบให้มิดไมล์ Going to you like Vroom vroom vroom Vroom vroom vroom ให้เธอรักฉันหมดใจ Coming to you like",
-    //         like: ["Anonymous1", "Anonymous6"],
-    //         dislike: ["Anonymous5",],
-    //         answer: [
-    //             {
-    //                 name: "Anonymous7",
-    //                 detail: "ohhhhhhhhhhhh",
-    //                 date: "11/1/2567",
-    //                 time: "11.30 PM",
-    //             },
-    //             {
-    //                 name: "Anonymous3",
-    //                 detail: "hiiiiiiiiiii",
-    //                 date: "11/1/2567",
-    //                 time: "11.30 PM",
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         id: '4',
-    //         name: "Anonymous3",
-    //         date: "14/1/2567",
-    //         time: "15.30 PM",
-    //         details: "ถ้าไม่มีฉัน อยากจะรู้จริง ๆ ว่าเธอจะอยู่ได้หรือเปล่า ก่อนเคยผ่านเรื่องราว ที่มีความสุขและทุกข์ใจ",
-    //         like: ["Anonymous19", "Anonymous6", "Anonymous8"],
-    //         dislike: ["Anonymous5", "Anonymous11", "Anonymous12"],
-    //         answer: [
-    //             {
-    //                 name: "Anonymous12",
-    //                 detail: "ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ",
-    //                 date: "11/1/2567",
-    //                 time: "11.30 PM",
-    //             },
-    //             {
-    //                 name: "Anonymous1",
-    //                 detail: "ยากมากกกก ยากสุดดดดๆ",
-    //                 date: "11/1/2567",
-    //                 time: "11.30 PM",
-    //             },
-    //             {
-    //                 name: "Anonymous36",
-    //                 detail: "ไม่รู้ ไม่รู้ ไม่รู้ ไม่เข้าใจ",
-    //                 date: "11/1/2567",
-    //                 time: "11.30 PM",
-    //             },
-    //             {
-    //                 name: "Anonymous1",
-    //                 detail: "ยากมากกกก ยากสุดดดดๆ",
-    //                 date: "11/1/2567",
-    //                 time: "11.30 PM",
-    //             },
-    //         ],
-    //     },
-    // ]);
-
     const handleToggleLike = (index) => {
         console.log("กด like", index)
         setDatabase(
@@ -134,7 +33,6 @@ function QuestionCard({ database, setDatabase }) {
             }
         )
     }
-
     const handleToggleDislike = (index) => {
         console.log("กด dislike")
         setDatabase(
@@ -163,20 +61,21 @@ function QuestionCard({ database, setDatabase }) {
         )
     }
 
-    // เปิด-ปิด Comment
+    // เปิด-ปิด Commentทั้งหมด/คำถาม
     const [openComment, setOpenComment] = useState(null);
     const toggleComment = (index) => {
         setOpenComment((prevIndex) => (prevIndex === index ? null : index));
     };
 
     // Modal edit open
+    const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+    // ดึงคำถามที่เลือกจะแก้ไข
     const [textQues, setTextQues] = useState('');
     const [cloneQuestion, setCloneQuestion] = useState('');
     const handleInputQuestionChange = (e) => {
         setTextQues(e.target.value);
     };
 
-    const [isModalEditOpen, setIsModalEditOpen] = useState(false);
     const toggleModalEdit = (question) => {
         console.log(question)
         if (question == "save") {
@@ -200,9 +99,24 @@ function QuestionCard({ database, setDatabase }) {
 
     // Modal delete open
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
-    const toggleModalDelete = () => {
-        setIsModalDeleteOpen(!isModalDeleteOpen);
+    const [isIndexDelete, setIsIndexDelete] = useState(null)
+    const toggleModalDelete = (command, index) => {
+        console.log(command,index)
+
+        if(command === 'X' || command === 'cancle'){
+            setIsIndexDelete(null)
+            setIsModalDeleteOpen(false);
+        }else if(command === 'openModal'){
+            setIsIndexDelete(index)
+            setIsModalDeleteOpen(true);
+        }else if(command === 'delete'){
+            const newDatabase = database.filter(question => question.id !== isIndexDelete);
+            setDatabase(newDatabase)
+            setIsIndexDelete(null)
+            setIsModalDeleteOpen(false);
+        }
     };
+
 
     return (
         <div className="mt-4">
@@ -232,7 +146,7 @@ function QuestionCard({ database, setDatabase }) {
                                                 <span className="pl-3 text-gray-700">Edit Review</span>
                                             </div>
                                         </MenuItem>
-                                        <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={toggleModalDelete}>
+                                        <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', question.id)}>
                                             <div className="hover:bg-gray-200 cursor-pointer">
                                                 <div className="flex item-center py-3">
                                                     <Icon
@@ -341,8 +255,8 @@ function QuestionCard({ database, setDatabase }) {
                                                         Delete Review
                                                     </h5>
                                                     {/* close */}
-                                                    <button type="button" class="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsModalDeleteOpen(false)}>
-                                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                    <button type="button" class="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => toggleModalDelete('X')}>
+                                                        <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                                         </svg>
                                                     </button>
@@ -356,7 +270,7 @@ function QuestionCard({ database, setDatabase }) {
                                                 <div className="flex flex-row gap-4 mb-2 mt-6">
                                                     <div className="flex items-center pl-6 rounded-b mt-[-20px] mb-2 w-full">
                                                         <button
-                                                            onClick={() => setIsModalDeleteOpen(false)}
+                                                            onClick={() => toggleModalDelete('cancle')}
                                                             type="button"
                                                             className="text-gray-500 bg-white hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full border-2 border-[#D9D9D9]"
                                                         >
@@ -365,7 +279,7 @@ function QuestionCard({ database, setDatabase }) {
                                                     </div>
                                                     <div className="flex items-center pr-6 rounded-b mt-[-20px] mb-2 w-full">
                                                         <button
-                                                            onClick={() => setIsModalDeleteOpen(false)}
+                                                            onClick={() => toggleModalDelete('delete')}
                                                             type="button"
                                                             className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
                                                         >

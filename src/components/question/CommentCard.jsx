@@ -30,7 +30,7 @@ function CommentCard({ data, openComment, index, toggleComment }) {
 
 
     return (
-        <div className="">
+        <div>
             <div className="flex items-center gap-2">
                 <div className="border-gray-300 border-b-[1.5px] w-full"></div>
                 <button className={`rotate-180`}>
@@ -38,7 +38,7 @@ function CommentCard({ data, openComment, index, toggleComment }) {
                 </button>
             </div>
             {data.answer.map((answer, index) => (
-                <div>
+                <div key={index}>
                     {/* profile */}
                     <div className="my-5 mx-2 bg-[#E3F3FF] rounded-[10px]">
                         <p className="text-[#A4A4A4] text-l font-[400] p-3">Answer by {answer.name}</p>

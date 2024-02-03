@@ -22,7 +22,6 @@ function ReviewSubjectDetail() {
   const user = "Anonymous1";
   // import data จาก QuestionDetail
   const [database, setDatabase] = useState(QuestionDetail);
-
   const [question, setQuestion] = useState('');
 
   // เพิ่มข้อมูลลงฐานข้อมูล
