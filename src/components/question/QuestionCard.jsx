@@ -55,7 +55,6 @@ function QuestionCard({ database, setDatabase, user}) {
                 else {
                     updatedDatabase[indexQuestion].dislike = updatedDatabase[indexQuestion].dislike.filter(user_id => user_id !== user);
                 }
-                console.log(updatedDatabase)
                 return updatedDatabase;
             }
         )
@@ -82,7 +81,7 @@ function QuestionCard({ database, setDatabase, user}) {
     };
 
     const toggleModalEdit = (question) => {
-        console.log(question)
+        const currentDate = new Date();
         if (question == "save") {
             console.log("Save toggle Edit")
             // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
@@ -90,6 +89,9 @@ function QuestionCard({ database, setDatabase, user}) {
             setDatabase((prevDatabase) => {
                 const updatedDatabase = [...prevDatabase];
                 updatedDatabase[dataIndex].detail = textQues;
+                updatedDatabase[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()+543}`;
+                updatedDatabase[dataIndex].time = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+                updatedDatabase[dataIndex].edit = true;
                 return updatedDatabase;
             })
             setCloneQuestion('')
@@ -106,8 +108,7 @@ function QuestionCard({ database, setDatabase, user}) {
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [isIndexDelete, setIsIndexDelete] = useState(null)
     const toggleModalDelete = (command, index) => {
-        console.log(command, index)
-
+        // console.log(command, index)
         if (command === 'X' || command === 'cancle') {
             setIsIndexDelete(null)
             setIsModalDeleteOpen(false);
@@ -299,7 +300,8 @@ function QuestionCard({ database, setDatabase, user}) {
                             <div className="ml-4">
                                 <p className="text-[#151C38] font-[400]">{question.name}</p>
                                 <p className="text-[#A4A4A4] font-[350]">
-                                    {question.date}, {question.time}
+                                    {question.date}, {question.time} 
+                                    {question.edit && <> (edit)</>}
                                 </p>
                             </div>
                         </div>
