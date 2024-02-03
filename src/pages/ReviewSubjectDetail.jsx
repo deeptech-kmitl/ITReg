@@ -142,11 +142,11 @@ function ReviewSubjectDetail() {
                                 <select
                                   className='bg-[#F4F4F4] border border-gray-200 rounded-[10px] text-gray-500 mt-2 text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
                                   name="selectedPoint">
-                                  <option value="point1">1 point</option>
-                                  <option value="point2">2 point</option>
-                                  <option value="point3">3 point</option>
-                                  <option value="point4">4 point</option>
-                                  <option value="point5">5 point</option>
+                                  <option value="1">1 point</option>
+                                  <option value="2">2 point</option>
+                                  <option value="3">3 point</option>
+                                  <option value="4">4 point</option>
+                                  <option value="5">5 point</option>
 
                                 </select>
                               </div>
@@ -157,13 +157,13 @@ function ReviewSubjectDetail() {
                                 <select
                                   className='bg-[#F4F4F4] border border-gray-200 text-gray-500 rounded-[10px] mt-2 text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
                                   name="selectedGrade">
-                                  <option value="GradeA">A</option>
-                                  <option value="GradeB+">B+</option>
-                                  <option value="GradeB">B</option>
-                                  <option value="GradeC+">C+</option>
-                                  <option value="GradeC">C</option>
-                                  <option value="GradeD+">D+</option>
-                                  <option value="GradeD">D</option>
+                                  <option value="A">A</option>
+                                  <option value="B+">B+</option>
+                                  <option value="B">B</option>
+                                  <option value="C+">C+</option>
+                                  <option value="C">C</option>
+                                  <option value="D+">D+</option>
+                                  <option value="D">D</option>
                                 </select>
                               </div>
                             </div>

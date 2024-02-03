@@ -96,10 +96,19 @@ function CardReview({id}) {
     //     )
     // }
 
+    const [textReview, setTextReview] = useState('');
+    const [rating, setRating] = useState('');
+    const [grade, setGrade] = useState('');
+
+
     // Modal edit open
     const [isModalEditOpen, setIsModalEditOpen] = useState(false);
 
-    const toggleModalEdit = () => {
+    const toggleModalEdit = (review) => {
+        // นำค่ามาแสดงผลตอน edit
+        setTextReview(review.reviewDetails)
+        setRating(review.rating.toString())
+        setGrade(review.grade)
         setIsModalEditOpen(!isModalEditOpen);
     };
 
@@ -125,7 +134,7 @@ function CardReview({id}) {
                                 </div>
                             </MenuHandler>
                             <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
-                                <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={toggleModalEdit} >
+                                <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalEdit(review)} >
                                     <div className="flex item-center py-3">
                                         <Icon
                                             icon="fluent:edit-24-regular"
@@ -197,7 +206,8 @@ function CardReview({id}) {
                                                     cols="50"
                                                     placeholder="Text to something ..."
                                                     className="border-none outline-none p-2 mb-4 w-full resize-none focus:ring-0 text-base font-normal"
-                                                    // value="eiei"
+                                                    value={textReview}
+                                                    onChange={(e) =>  setTextReview(e.target.value) }
                                                 />
                                             </div>
                                             <div className="flex flex-row">
@@ -207,12 +217,12 @@ function CardReview({id}) {
                                                     </label>
                                                     <select
                                                         className='bg-[#F4F4F4] border border-gray-200 rounded-[10px] text-gray-500 mt-2 text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
-                                                        name="selectedPoint">
-                                                        <option value="point1">1 point</option>
-                                                        <option value="point2">2 point</option>
-                                                        <option value="point3">3 point</option>
-                                                        <option value="point4">4 point</option>
-                                                        <option value="point5">5 point</option>
+                                                        name="selectedPoint" defaultValue={rating}>
+                                                        <option value="1">1 point</option>
+                                                        <option value="2">2 point</option>
+                                                        <option value="3">3 point</option>
+                                                        <option value="4">4 point</option>
+                                                        <option value="5">5 point</option>
 
                                                     </select>
                                                 </div>
@@ -222,14 +232,14 @@ function CardReview({id}) {
                                                     </label>
                                                     <select
                                                         className='bg-[#F4F4F4] border border-gray-200 text-gray-500 rounded-[10px] mt-2 text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
-                                                        name="selectedGrade">
-                                                        <option value="GradeA">A</option>
-                                                        <option value="GradeB+">B+</option>
-                                                        <option value="GradeB">B</option>
-                                                        <option value="GradeC+">C+</option>
-                                                        <option value="GradeC">C</option>
-                                                        <option value="GradeD+">D+</option>
-                                                        <option value="GradeD">D</option>
+                                                        name="selectedGrade" defaultValue={grade}>
+                                                        <option value="A">A</option>
+                                                        <option value="B+">B+</option>
+                                                        <option value="B">B</option>
+                                                        <option value="C+">C+</option>
+                                                        <option value="C">C</option>
+                                                        <option value="D+">D+</option>
+                                                        <option value="D">D</option>
                                                     </select>
                                                 </div>
                                             </div>
