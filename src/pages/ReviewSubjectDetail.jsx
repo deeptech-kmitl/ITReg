@@ -22,9 +22,9 @@ function ReviewSubjectDetail() {
   const user = "Anonymous1";
   // import data จาก QuestionDetail
   const [database, setDatabase] = useState(QuestionDetail);
-  const [question, setQuestion] = useState('');
 
   // เพิ่มข้อมูลลงฐานข้อมูล
+  const [question, setQuestion] = useState('');
   const postQuestion = () => {
     const currentDate = new Date();
     const newQuestion = {
@@ -32,7 +32,7 @@ function ReviewSubjectDetail() {
       name: user,
       date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()+543}`,
       time: currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
-      details: question,
+      detail: question,
       like: [],
       dislike: [],
       answer: []
@@ -115,8 +115,8 @@ function ReviewSubjectDetail() {
                                 Create Review
                               </h5>
                               {/* close */}
-                              <button type="button" class="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsModalCreateOpen(false)}>
-                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <button type="button" className="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsModalCreateOpen(false)}>
+                                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                 </svg>
                               </button>
@@ -201,7 +201,7 @@ function ReviewSubjectDetail() {
                 </div>
 
                 {/* QuestionCard */}
-                <QuestionCard database={database} setDatabase={setDatabase} />
+                <QuestionCard database={database} setDatabase={setDatabase} user={user}/>
               </div>}
           </div>
         </div>

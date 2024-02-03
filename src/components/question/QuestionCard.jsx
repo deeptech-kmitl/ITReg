@@ -3,57 +3,57 @@ import { Icon } from "@iconify/react";
 import CommentCard from "./CommentCard";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
 
-function QuestionCard({ database, setDatabase }) {
+function QuestionCard({ database, setDatabase, user}) {
 
-    const user = "Anonymous1";
-
-    const handleToggleLike = (index) => {
-        console.log("กด like", index)
+    const handleToggleLike = (questionId) => {
+        console.log("กด like",questionId)
         setDatabase(
             (dumyDatabase) => {
                 const updatedDatabase = [...dumyDatabase];
-                const likeByUser = updatedDatabase[index].like.includes(user);
+                const indexQuestion = updatedDatabase.findIndex(question => question.id === questionId)
+                const likeByUser = updatedDatabase[indexQuestion].like.includes(user);
                 console.log('user มีข้อมูลใน like >>> ', likeByUser)
 
                 // user ไม่มีข้อมูลใน like >>> จะใส่สี
                 if (!likeByUser) {
-                    const dislikeByUser = updatedDatabase[index].dislike.includes(user);
+                    const dislikeByUser = updatedDatabase[indexQuestion].dislike.includes(user);
                     if (dislikeByUser) {
                         // ถ้า user กด'dislike'ในข้อมูลเดิม แล้วกด'like' ข้อมูล'dislike'เดิมจะถูกนำออก
-                        updatedDatabase[index].dislike = updatedDatabase[index].dislike.filter(user_id => user_id !== user);
+                        updatedDatabase[indexQuestion].dislike = updatedDatabase[indexQuestion].dislike.filter(user_id => user_id !== user);
                     }
                     // เพิ่ม user ลง 'like'
-                    updatedDatabase[index].like.push(user);
+                    updatedDatabase[indexQuestion].like.push(user);
                 }
                 // user มีข้อมูลใน like >>> จะลบสี
                 else {
-                    updatedDatabase[index].like = updatedDatabase[index].like.filter(user_id => user_id !== user);
+                    updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user);
                 }
                 return [...updatedDatabase];;
             }
         )
     }
-    const handleToggleDislike = (index) => {
+    const handleToggleDislike = (questionId) => {
         console.log("กด dislike")
         setDatabase(
             (dumyDatabase) => {
                 const updatedDatabase = [...dumyDatabase];
-                const dislikeByUser = updatedDatabase[index].dislike.includes(user);
+                const indexQuestion = updatedDatabase.findIndex(question => question.id === questionId)
+                const dislikeByUser = updatedDatabase[indexQuestion].dislike.includes(user);
                 console.log('user มีข้อมูลใน dislike >>> ', dislikeByUser)
 
                 // user ไม่มีข้อมูลใน dislike >>> จะใส่สี
                 if (!dislikeByUser) {
-                    const likeByUser = updatedDatabase[index].like.includes(user);
+                    const likeByUser = updatedDatabase[indexQuestion].like.includes(user);
                     if (likeByUser) {
                         // ถ้า user กด'like'ในข้อมูลเดิม แล้วกด'dislike' ข้อมูล'like'เดิมจะถูกนำออก
-                        updatedDatabase[index].like = updatedDatabase[index].like.filter(user_id => user_id !== user);
+                        updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user);
                     }
                     // เพิ่ม user ลง 'dislike'
-                    updatedDatabase[index].dislike.push(user);
+                    updatedDatabase[indexQuestion].dislike.push(user);
                 }
                 // user มีข้อมูลใน dislike >>> จะลบสี
                 else {
-                    updatedDatabase[index].dislike = updatedDatabase[index].dislike.filter(user_id => user_id !== user);
+                    updatedDatabase[indexQuestion].dislike = updatedDatabase[indexQuestion].dislike.filter(user_id => user_id !== user);
                 }
                 console.log(updatedDatabase)
                 return updatedDatabase;
@@ -62,9 +62,14 @@ function QuestionCard({ database, setDatabase }) {
     }
 
     // เปิด-ปิด Commentทั้งหมด/คำถาม
-    const [openComment, setOpenComment] = useState(null);
-    const toggleComment = (index) => {
-        setOpenComment((prevIndex) => (prevIndex === index ? null : index));
+    const [openComment, setOpenComment] = useState([]);
+    const toggleComment = (questionId) => {
+        const indexQuestion = database.findIndex(question => question.id === questionId)
+        setOpenComment((prevIndex) => {
+            const newOpenComments = [...prevIndex];
+            newOpenComments[indexQuestion] = !newOpenComments[indexQuestion];
+            return newOpenComments
+        });
     };
 
     // Modal edit open
@@ -84,7 +89,7 @@ function QuestionCard({ database, setDatabase }) {
             const dataIndex = database.findIndex((item) => item.id === cloneQuestion.id);
             setDatabase((prevDatabase) => {
                 const updatedDatabase = [...prevDatabase];
-                updatedDatabase[dataIndex].details = textQues;
+                updatedDatabase[dataIndex].detail = textQues;
                 return updatedDatabase;
             })
             setCloneQuestion('')
@@ -92,7 +97,7 @@ function QuestionCard({ database, setDatabase }) {
         }
         else {
             setCloneQuestion(question)
-            setTextQues(question.details)
+            setTextQues(question.detail)
         }
         setIsModalEditOpen(!isModalEditOpen);
     };
@@ -101,22 +106,21 @@ function QuestionCard({ database, setDatabase }) {
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [isIndexDelete, setIsIndexDelete] = useState(null)
     const toggleModalDelete = (command, index) => {
-        console.log(command,index)
+        console.log(command, index)
 
-        if(command === 'X' || command === 'cancle'){
+        if (command === 'X' || command === 'cancle') {
             setIsIndexDelete(null)
             setIsModalDeleteOpen(false);
-        }else if(command === 'openModal'){
+        } else if (command === 'openModal') {
             setIsIndexDelete(index)
             setIsModalDeleteOpen(true);
-        }else if(command === 'delete'){
+        } else if (command === 'delete') {
             const newDatabase = database.filter(question => question.id !== isIndexDelete);
             setDatabase(newDatabase)
             setIsIndexDelete(null)
             setIsModalDeleteOpen(false);
         }
     };
-
 
     return (
         <div className="mt-4">
@@ -191,9 +195,9 @@ function QuestionCard({ database, setDatabase }) {
                                                         Edit Question
                                                     </h5>
                                                     {/* close */}
-                                                    <button type="button" class="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsModalEditOpen(false)}>
-                                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                    <button type="button" className="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsModalEditOpen(false)}>
+                                                        <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                                         </svg>
                                                     </button>
                                                 </div>
@@ -255,9 +259,9 @@ function QuestionCard({ database, setDatabase }) {
                                                         Delete Review
                                                     </h5>
                                                     {/* close */}
-                                                    <button type="button" class="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => toggleModalDelete('X')}>
+                                                    <button type="button" className="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => toggleModalDelete('X')}>
                                                         <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                                         </svg>
                                                     </button>
                                                 </div>
@@ -301,14 +305,14 @@ function QuestionCard({ database, setDatabase }) {
                         </div>
                         {/* detail question */}
                         <div className="mt-5">
-                            <div className="text-black font-normal">{question.details}</div>
+                            <div className="text-black font-normal">{question.detail}</div>
                             {/* emotion */}
                             <div className="mt-3 flex items-start">
                                 {/* Did you like it ? */}
                                 {question.like.filter(user_id => user_id === user).length === 1 ?
                                     (
                                         // กรณี มีชื่อ user ใน 'like'
-                                        <button name="like" className="rotate-0" onClick={() => handleToggleLike(index)}>
+                                        <button name="like" className="rotate-0" onClick={() => handleToggleLike(question.id)}>
                                             <Icon
                                                 icon="streamline:like-1-solid"
                                                 color="#D91818"
@@ -318,7 +322,7 @@ function QuestionCard({ database, setDatabase }) {
                                         </button>
                                     ) : (
                                         // กรณี ไม่มีชื่อ user ใน 'like'
-                                        <button name="like" className="rotate-0" onClick={() => handleToggleLike(index)}>
+                                        <button name="like" className="rotate-0" onClick={() => handleToggleLike(question.id)}>
                                             <Icon
                                                 icon="streamline:like-1"
                                                 color="#151c38"
@@ -335,7 +339,7 @@ function QuestionCard({ database, setDatabase }) {
                                 {question.dislike.filter(user_id => user_id === user).length === 1 ?
                                     (
                                         // กรณี มีชื่อ user ใน 'dislike'
-                                        <button name="dislike" className="rotate-180 mt-1" onClick={() => handleToggleDislike(index)}>
+                                        <button name="dislike" className="rotate-180 mt-1" onClick={() => handleToggleDislike(question.id)}>
                                             <Icon
                                                 icon="streamline:like-1-solid"
                                                 color="#151c38"
@@ -345,7 +349,7 @@ function QuestionCard({ database, setDatabase }) {
                                         </button>
                                     ) : (
                                         // กรณี ไม่มีชื่อ user ใน 'dislike'
-                                        <button name="dislike" className="rotate-180 mt-1" onClick={() => handleToggleDislike(index)}>
+                                        <button name="dislike" className="rotate-180 mt-1" onClick={() => handleToggleDislike(question.id)}>
                                             <Icon
                                                 icon="streamline:like-1"
                                                 color="#151c38"
@@ -358,8 +362,8 @@ function QuestionCard({ database, setDatabase }) {
                                 <div className="ml-1 mt-[1px]">
                                     <p className="text-[#151C38] text-sm mr-3">{question.dislike.length}</p>
                                 </div>
-                                <button className="mt-[2.5px]" onClick={() => toggleComment(index)}>
-                                    <Icon icon="iconamoon:comment" color="#151c38" width="19" height="19" />
+                                <button className="mt-[2.5px]" onClick={() => toggleComment(question.id)}>
+                                    <Icon icon={openComment[index] ? "iconamoon:comment-fill" : "iconamoon:comment"} color="#151c38" width="19" height="19" />
                                 </button>
                                 <div className="ml-1 mt-[1px]">
                                     <p className="text-[#151C38] text-sm">{question.answer.length}</p>
@@ -367,7 +371,7 @@ function QuestionCard({ database, setDatabase }) {
                             </div>
                             {/* openCardComment */}
                             <div className="">
-                                {openComment === index && <CommentCard data={question} openComment={openComment} index={index} toggleComment={toggleComment} />}
+                                {openComment[index] && <CommentCard data={question} indexQuestion={index} questionId={question.id} toggleCommentQuestion={toggleComment} user={user} database={database} setDatabase={setDatabase}/>}
                             </div>
                         </div>
                     </div>
