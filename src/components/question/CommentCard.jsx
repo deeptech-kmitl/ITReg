@@ -83,6 +83,32 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
         setIsModalDeleteOpen(!isModalDeleteOpen);
     };
 
+    // เพิ่มข้อมูลลงฐานข้อมูล
+    const [answer, setAnswer] = useState('');
+    const postAnswer = () => {
+        const currentDate = new Date();
+        const newAnswer = {
+            id: 1, //สร้าง รก ไม่ซ้ำกัน
+            name: user,
+            detail: answer,
+            date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear() + 543}`,
+            time: currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
+        };
+        const newDatabase = database.map(question => {
+            if (question.id === questionId) {
+                return {
+                    ...question,
+                    //เอาคำตอบเก่าของคำถามตามid และต่อด้วย คำตอบใหม่
+                    answer: [...question.answer, newAnswer],
+                };
+            }
+            return question;
+        });
+        // Update the state with the new array
+        setDatabase(newDatabase);
+        setAnswer('')
+    }
+
     return (
         <div>
             <div className="flex items-center gap-2">
@@ -265,7 +291,7 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
                             )}
                         </div>
                         <div className="flex px-5 pb-3">
-                            <p className="text-[#000000] w-11/12 pl-5 pb-3 ">
+                            <p className="text-[#000000] w-full px-5 py-3">
                                 <span style={{ ...(!(showMore[index]) ? { display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden', WebkitLineClamp: 1 } : {}) }}>
                                     {answer.detail}
                                 </span>
@@ -292,10 +318,12 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
             <div name="post" className="relative mx-2">
                 <input
                     className="w-full h-[50px] rounded-[10px] border-0 py-5 pl-7 pr-20 text-[16px] text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1.5 focus:ring-inset focus:ring-[#0D0B5F] "
-                    placeholder="Answer"
+                    placeholder="Answer" value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
                 ></input>
                 <button
-                    className="py-[6px] px-[12px] rounded-[10px] bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-[#ffffff] hover:from-[#029BE0] hover:to-[#0D0B5F] absolute right-4 top-3 text-[16px]">
+                    className="py-[6px] px-[12px] rounded-[10px] bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-[#ffffff] hover:from-[#029BE0] hover:to-[#0D0B5F] absolute right-4 top-3 text-[16px]"
+                    onClick={postAnswer}>
                     <Icon icon="wpf:sent" color="#fff" className="py-0.1" />
                 </button>
             </div>

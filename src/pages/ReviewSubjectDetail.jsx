@@ -37,6 +37,7 @@ function ReviewSubjectDetail() {
       dislike: [],
       answer: []
     };
+    // เอาข้อมูลเก่า + ข้อมูลใหม่
     const newDatabase = [...database, newQuestion];
     // Update the state with the new array
     setDatabase(newDatabase);
