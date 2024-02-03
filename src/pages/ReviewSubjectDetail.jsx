@@ -72,7 +72,7 @@ function ReviewSubjectDetail() {
                 <div className="w-full mt-4 border-2 rounded-[30px] bg-[#ffffff] p-[20px]">
                   {/* สร้างรีวิว */}
                   <div className='inputReview flex flex-row gap-3 drop-shadow-sm'>
-                    <input type='text' name='review' placeholder='Add review ...' className='w-full h-[50px] font-light pr-[65px]' onClick={toggleModalCreate}></input>
+                    <input type='text' name='review' placeholder='Add review ...' className='w-full h-[50px] font-light pr-[65px]' onClick={toggleModalCreate} readOnly></input>
                     <button
                       className="py-[6px] px-[12px] rounded-[10px] bg-gradient-to-br 
                     from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-[#ffffff]  
