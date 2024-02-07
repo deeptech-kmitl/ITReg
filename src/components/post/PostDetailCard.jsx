@@ -67,6 +67,7 @@ function PostDetailCard({ database, setDatabase, user }) {
   };
 
   const handleToggleComments = (index) => {
+    console.log("eeeee")
     setShowComments((prev) => {
       const newShowComments = [...prev];
       newShowComments[index] = !newShowComments[index];
@@ -136,10 +137,10 @@ function PostDetailCard({ database, setDatabase, user }) {
           <div className="flex-shrink-0 border-[1px] border-solid border-gray-300 rounded-[30px] p-6 bg-white">
             <div className="text-[#151C38] text-2xl font-[500] leading-normal flex justify-between">
               <span>{detail.titlename}</span>
-              <div className="relative mt-3">
+              <div className="relative">
                 <Menu placement="bottom-end">
                   <MenuHandler>
-                    <div className="absolute right-4 cursor-pointer">
+                    <div className="flex items-center cursor-pointer">
                       <Icon icon="prime:ellipsis-h" color="#151c38" width="22" height="22" />
                     </div>
                   </MenuHandler>
@@ -156,16 +157,15 @@ function PostDetailCard({ database, setDatabase, user }) {
                       </div>
                     </MenuItem>
                     <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', detail.id)} >
-                      <div className="hover:bg-gray-200 cursor-pointer">
-                        <div className="flex item-center py-3">
-                          <Icon
-                            icon="mingcute:delete-3-line"
-                            color="#727272"
-                            width="15"
-                            height="15"
-                          />
-                          <p className="pl-3 text-gray-700">Delete Review</p>
-                        </div></div>
+                      <div className="flex item-center py-3">
+                        <Icon
+                          icon="mingcute:delete-3-line"
+                          color="#727272"
+                          width="15"
+                          height="15"
+                        />
+                        <span className="pl-3 text-gray-700">Delete Review</span>
+                      </div>
                     </MenuItem>
                   </MenuList>
                 </Menu>
@@ -426,13 +426,12 @@ function PostDetailCard({ database, setDatabase, user }) {
                 />
               </div>
               <div className="ml-1 mt-[1px]">
-                <p className="text-[#151C38] text-sm">{detail.comment}</p>
+                <p className="text-[#151C38] text-sm">{detail.comment.length}</p>
               </div>
             </div>
             {showComments[index] && (
               <div>
-                <CommentBox />
-                <CommentInput />
+                <CommentBox data={detail} user={user} indexPost={index} database={database} setDatabase={setDatabase} postId={detail.id} />
               </div>
             )}
           </div>

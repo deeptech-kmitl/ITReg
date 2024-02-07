@@ -43,7 +43,7 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
             setDatabase((prevDatabase) => {
                 const updatedDatabase = [...prevDatabase];
                 updatedDatabase[indexQuestion].answer[dataIndex].detail = textAnswer;
-                updatedDatabase[indexQuestion].answer[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()+543}`;
+                updatedDatabase[indexQuestion].answer[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear() + 543}`;
                 updatedDatabase[indexQuestion].answer[dataIndex].time = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
                 updatedDatabase[indexQuestion].answer[dataIndex].edit = true;
                 return updatedDatabase;
@@ -90,7 +90,7 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
     const postAnswer = () => {
         const currentDate = new Date();
         const newAnswer = {
-            id: data.answer[data.answer.length-1].id + 5, //สร้าง ID ไม่ซ้ำกัน
+            id: data.answer[data.answer.length - 1].id + 5, //สร้าง ID ไม่ซ้ำกัน
             name: user,
             detail: answer,
             date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear() + 543}`,
