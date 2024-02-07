@@ -1,84 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import "./PostDetailCard.css";
-import { Carousel } from "@material-tailwind/react";
-import DropdownDots from "./DropdownDots";
 import CommentBox from "./CommentBox";
 import CommentInput from "./CommentInput";
 import { parse, compareDesc } from "date-fns";
+import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
+// import PostDetail from "../../dummyData/PostDetail";
 
 
-const DetailCard = [
-  {
-    titlename: "Admission dek63",
-    name: "Punimmiki",
-    date: "21/12/2023",
-    time: "08.20",
-    message:
-      "คณะเทคโนโลยีสารสนเทศ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง เปิดรับสมัครเข้าศึกษาต่อระดับปริญญาตรี ประจำปีการศึกษา 2563 TCAS 63 รอบที่ 4 (Admission) 2 หลักสูตร 1) เทคโนโลยีสารสนเทศ (Information Technology : IT) รับจำนวน 15 คน 2) ข้อมูลและการวิเคราะห์เชิงธุรกิจ (Data Science and Business Analytics : DSBA) รับจำนวน 6 คน ยกเลิกการสอบสัมภาษณ์ เนื่องจากสถานการณ์เชื้อ COVID -19 ระบาด",
-    image: [
-      "https://www.it.kmitl.ac.th/wp-content/uploads/2020/05/1300x867pix-%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B8%AA%E0%B8%A1%E0%B8%B1%E0%B8%84%E0%B8%A3-TCAS63-4-Admission.jpg",
-      "https://osda.kmitl.ac.th/storage/cover_image/qecgcbzJO7u35tV60AAcF5ihBI3M2n8wIJcVVlcb.jpeg","https://www.aad.kmitl.ac.th/wp-content/uploads/2021/12/20211203-913x547.jpg",
-      "https://www.aad.kmitl.ac.th/wp-content/uploads/2019/02/%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B8%AA%E0%B8%A1%E0%B8%B1%E0%B8%84%E0%B8%A3-%E0%B9%82%E0%B8%97-%E0%B9%80%E0%B8%AD%E0%B8%81.jpg",
-    ],
-    like: 145,
-    comment: 76,
-  },
-  {
-    titlename: "ชำระค่าเทอม",
-    name: "Punimmiki",
-    date: "21/12/2023",
-    time: "06.30",
-    message: 
-      "ขั้นตอนการพิมพ์ใบชำระค่าธรรมเนียมการศึกษา นักศึกษาทุกชั้นปี (ป.ตรี/โท/เอก) สามารถพิมพ์ใบแจ้งชําระเงินจากระบบ แล้วนําไปยื่นชําระเงินผ่านเคาท์เตอร์ธนาคาร (หรือในนักศึกษาระดับป.ตรี สแกนบาร์โค้ดผ่านแอพธนาคาร) โดยไม่มีค่าปรับชำระเงินล่าช้า จนถึงวันศุกร์ที่ 7 พฤษภาคม 2564",
-    image: ["https://engineer.kmitl.ac.th/wp-content/uploads/2021/08/4-4.jpg"],
-    like: 235,
-    comment: 91,
-  },
-  {
-    titlename: "ประกาศปิดวันหยุด",
-    name: "Punimmiki",
-    date: "28/12/2023",
-    time: "18.12",
-    message:
-      "ขั้นตอนการพิมพ์ใบชำระค่าธรรมเนียมการศึกษา นักศึกษาทุกชั้นปี (ป.ตรี/โท/เอก) สามารถพิมพ์ใบแจ้งชําระเงินจากระบบ แล้วนําไปยื่นชําระเงินผ่านเคาท์เตอร์ธนาคาร (หรือในนักศึกษาระดับป.ตรี สแกนบาร์โค้ดผ่านแอพธนาคาร) โดยไม่มีค่าปรับชำระเงินล่าช้า จนถึงวันศุกร์ที่ 7 พฤษภาคม 2564",
-    image: [],
-    like: 57,
-    comment: 2,
-  },
-  {
-    titlename: "สอบกลางภาค",
-    name: "Punimmiki",
-    date: "19/12/2023",
-    time: "12.12",
-    message:
-      "สอบปลายภาคเป็นการสรุปว่าคุณเรียนตลอดทั้งปีได้อะไรบ้าง สอบกลางภาคบทเรียนที่คุณเรียนไปแล้วกลางเทอมว่าได้ความรู้",
-    image: [],
-    like: 57,
-    comment: 2,
-  },
-];
-
-const PostDetailCard = () => {
+function PostDetailCard({ database, setDatabase, user }) {
   const [likedPosts, setLikedPosts] = useState([]);
   const [showFullScreen, setShowFullScreen] = useState(false);
   const [imgForFullScreen, setImgForFullScreen] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showComments, setShowComments] = useState([]);
+  // const [database, setDatabase] = useState(PostDetail);
 
-  const sortedDetailCard = DetailCard.slice().sort((a, b) => {
+  const sortedDetailCard = database.slice().sort((a, b) => {
     const dateTimeA = parse(`${a.date} ${a.time}`, "dd/MM/yyyy HH.mm", new Date());
     const dateTimeB = parse(`${b.date} ${b.time}`, "dd/MM/yyyy HH.mm", new Date());
     return compareDesc(dateTimeA, dateTimeB);
   });
 
-  const handleLikeClick = (index) => {
-    if (likedPosts.includes(index)) {
-      setLikedPosts(likedPosts.filter((i) => i !== index));
-    } else {
-      setLikedPosts([...likedPosts, index]);
-    }
-  };
+  const handleToggleLike = (postId) => {
+    console.log("กด like", postId)
+    setDatabase(
+      (dumyDatabase) => {
+        const updatedDatabase = [...dumyDatabase];
+        const indexQuestion = updatedDatabase.findIndex(post => post.id === postId)
+        const likeByUser = updatedDatabase[indexQuestion].like.includes(user);
+        console.log('user มีข้อมูลใน like >>> ', likeByUser)
+
+        // user ไม่มีข้อมูลใน like >>> จะใส่สี
+        if (!likeByUser) {
+
+          // เพิ่ม user ลง 'like'
+          updatedDatabase[indexQuestion].like.push(user);
+        }
+        // user มีข้อมูลใน like >>> จะลบสี
+        else {
+          updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user);
+        }
+        return [...updatedDatabase];;
+      }
+    )
+  }
 
   const handleImageClick = (item, index) => {
     setImgForFullScreen(item);
@@ -87,12 +53,12 @@ const PostDetailCard = () => {
   };
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % DetailCard.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % database.length);
   };
 
   const handlePrevImage = () => {
     setCurrentImageIndex(
-      (prevIndex) => (prevIndex - 1 + DetailCard.length) % DetailCard.length
+      (prevIndex) => (prevIndex - 1 + database.length) % database.length
     );
   };
 
@@ -108,16 +74,232 @@ const PostDetailCard = () => {
     });
   };
 
+  // Modal edit open
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  // ดึงคำถามที่เลือกจะแก้ไข
+  const [textPost, setTextPost] = useState('');
+  const [clonePost, setClonePost] = useState('');
+  const handleInputPostChange = (e) => {
+    setTextPost(e.target.value);
+  };
+
+  const toggleModalEdit = (detail) => {
+    const currentDate = new Date();
+    if (detail == "save") {
+      console.log("Save toggle Edit")
+      // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
+      const dataIndex = database.findIndex((item) => item.id === clonePost.id);
+      setDatabase((prevDatabase) => {
+        const updatedDatabase = [...prevDatabase];
+        updatedDatabase[dataIndex].message = textPost;
+        updatedDatabase[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear() + 543}`;
+        updatedDatabase[dataIndex].time = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        // updatedDatabase[dataIndex].edit = true;
+        return updatedDatabase;
+      })
+      setClonePost('')
+      setTextPost('')
+    }
+    else {
+      setClonePost(detail)
+      setTextPost(detail.message)
+    }
+    setIsModalEditOpen(!isModalEditOpen);
+  };
+
+  // Modal delete open
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+  const [isIndexDelete, setIsIndexDelete] = useState(null)
+  const toggleModalDelete = (command, index) => {
+    // console.log(command, index)
+    if (command === 'X' || command === 'cancle') {
+      setIsIndexDelete(null)
+      setIsModalDeleteOpen(false);
+    } else if (command === 'openModal') {
+      setIsIndexDelete(index)
+      setIsModalDeleteOpen(true);
+    } else if (command === 'delete') {
+      const newDatabase = database.filter(detail => detail.id !== isIndexDelete);
+      setDatabase(newDatabase)
+      setIsIndexDelete(null)
+      setIsModalDeleteOpen(false);
+    }
+  };
 
   return (
     <div className="mt-5">
-     {sortedDetailCard.map((detail, index) => (
+      {sortedDetailCard.map((detail, index) => (
         <div key={index} className="mt-4">
           <div className="flex-shrink-0 border-[1px] border-solid border-gray-300 rounded-[30px] p-6 bg-white">
             <div className="text-[#151C38] text-2xl font-[500] leading-normal flex justify-between">
               <span>{detail.titlename}</span>
-              <DropdownDots />
+              <div className="relative mt-3">
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <div className="absolute right-4 cursor-pointer">
+                      <Icon icon="prime:ellipsis-h" color="#151c38" width="22" height="22" />
+                    </div>
+                  </MenuHandler>
+                  <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
+                    <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalEdit(detail)}>
+                      <div className="flex item-center py-3">
+                        <Icon
+                          icon="fluent:edit-24-regular"
+                          color="#727272"
+                          width="15"
+                          height="15"
+                        />
+                        <span className="pl-3 text-gray-700">Edit Review</span>
+                      </div>
+                    </MenuItem>
+                    <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', detail.id)} >
+                      <div className="hover:bg-gray-200 cursor-pointer">
+                        <div className="flex item-center py-3">
+                          <Icon
+                            icon="mingcute:delete-3-line"
+                            color="#727272"
+                            width="15"
+                            height="15"
+                          />
+                          <p className="pl-3 text-gray-700">Delete Review</p>
+                        </div></div>
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </div>
             </div>
+
+            {/* Modal edit Review */}
+            {isModalEditOpen && (
+              <div
+                id="modal-edit"
+                tabIndex="-1"
+                aria-hidden="true"
+                className="fixed inset-0 overflow-y-auto"
+                style={{ zIndex: 1001, borderRadius: "30px" }}
+              >
+                <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                  <div
+                    className="fixed inset-0 transition-opacity"
+                    aria-hidden="true"
+                  >
+                    <div className="absolute inset-0 bg-gray-500 opacity-25"></div>
+                  </div>
+                  <span
+                    className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                    aria-hidden="true"
+                  >
+                    &#8203;
+                  </span>
+                  <div className="inline-block align-bottom bg-white rounded-[20px] text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div className="bg-white rounded-[30px]">
+                      {/* header */}
+                      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                        <h5 className="text-[27px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-transparent bg-clip-text text-center w-full">
+                          Edit Question
+                        </h5>
+                        {/* close */}
+                        <button type="button" className="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsModalEditOpen(false)}>
+                          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                          </svg>
+                        </button>
+                      </div>
+                      {/* body */}
+                      <div className="p-4 md:p-5 space-y-4">
+                        <textarea
+                          rows="4"
+                          cols="50"
+                          placeholder="Text to something ..."
+                          className="border-none outline-none p-2 mb-4 w-full resize-none focus:ring-0 text-base font-normal"
+                          value={textPost}
+                          onChange={handleInputPostChange}
+                        />
+                      </div>
+                      {/* footer */}
+                      <div className="flex items-center p-4 md:p-5 rounded-b mt-[-20px] mb-2">
+                        <button
+                          onClick={() => toggleModalEdit("save")}
+                          type="button"
+                          className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
+                        >
+                          SAVE
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {/* modal delete */}
+            {isModalDeleteOpen && (
+              <div
+                id="modal-delete"
+                tabIndex="-1"
+                aria-hidden="true"
+                className="fixed inset-0 overflow-y-auto"
+                style={{ zIndex: 1001, borderRadius: "30px" }}
+              >
+                <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                  <div
+                    className="fixed inset-0 transition-opacity"
+                    aria-hidden="true"
+                  >
+                    <div className="absolute inset-0 bg-gray-500 opacity-25"></div>
+                  </div>
+
+                  <span
+                    className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                    aria-hidden="true"
+                  >
+                    &#8203;
+                  </span>
+                  <div className="inline-block align-bottom bg-white rounded-[20px] text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div className="bg-white rounded-[30px]">
+
+                      {/* header */}
+                      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                        <h5 className="text-[27px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-transparent bg-clip-text text-center w-full">
+                          Delete Review
+                        </h5>
+                        {/* close */}
+                        <button type="button" className="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => toggleModalDelete('X')}>
+                          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                          </svg>
+                        </button>
+                      </div>
+                      {/* body */}
+                      <div className="flex flex-col p-4 md:p-5 justify-center items-center text-2xl font-normal">
+                        <p>Are you sure you want to</p>
+                        <p>delete your Question?</p>
+                      </div>
+                      {/* footer */}
+                      <div className="flex flex-row gap-4 mb-2 mt-6">
+                        <div className="flex items-center pl-6 rounded-b mt-[-20px] mb-2 w-full">
+                          <button
+                            onClick={() => toggleModalDelete('cancle')}
+                            type="button"
+                            className="text-gray-500 bg-white hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full border-2 border-[#D9D9D9]"
+                          >
+                            Cancle
+                          </button>
+                        </div>
+                        <div className="flex items-center pr-6 rounded-b mt-[-20px] mb-2 w-full">
+                          <button
+                            onClick={() => toggleModalDelete('delete')}
+                            type="button"
+                            className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="mt-5 flex items-start">
               <div className="w-[50px] h-[50px] flex-shrink-0 rounded-full bg-[#151C38]"></div>
@@ -198,35 +380,51 @@ const PostDetailCard = () => {
             </div>
 
             <div className="mt-3 flex items-start">
-              <Icon
-                icon={likedPosts.includes(index) ? "bxs:heart" : "bx:heart"}
-                color={likedPosts.includes(index) ? "#d91818" : "#151c38"}
-                width="22"
-                height="22"
-                onClick={() => handleLikeClick(index)}
-              />
+              {/* Did you like it ? */}
+              {detail.like.filter(user_id => user_id === user).length === 1 ?
+                (
+                  // กรณี มีชื่อ user ใน 'like'
+                  <button name="like" className="rotate-0" onClick={() => handleToggleLike(detail.id)}>
+                    <Icon
+                      icon="bxs:heart"
+                      color="#D91818"
+                      width="22"
+                      height="22"
+                    />
+                  </button>
+                ) : (
+                  // กรณี ไม่มีชื่อ user ใน 'like'
+                  <button name="like" className="rotate-0" onClick={() => handleToggleLike(detail.id)}>
+                    <Icon
+                      icon="bx:heart"
+                      color="#151c38"
+                      width="22"
+                      height="22"
+                    />
+                  </button>
+                )}
               <div className="ml-1 mt-[1px]">
-                <p className="text-[#151C38] text-sm mr-3">{detail.like}</p>
+                <p className="text-[#151C38] text-sm mr-3">{detail.like.length}</p>
               </div>
               <div className="mt-[1px]">
-              <Icon
-                 icon={showComments[index] ? "iconamoon:comment-fill" : "iconamoon:comment"}
-                color="#151c38"
-                width="20"
-                height="20"
-                onClick={() => handleToggleComments(index)}
-              />
-            </div>
+                <Icon
+                  icon={showComments[index] ? "iconamoon:comment-fill" : "iconamoon:comment"}
+                  color="#151c38"
+                  width="20"
+                  height="20"
+                  onClick={() => handleToggleComments(index)}
+                />
+              </div>
               <div className="ml-1 mt-[1px]">
                 <p className="text-[#151C38] text-sm">{detail.comment}</p>
               </div>
             </div>
-            {showComments[index] && ( 
-            <div>
-              <CommentBox />
-              <CommentInput />
-            </div>
-          )}
+            {showComments[index] && (
+              <div>
+                <CommentBox />
+                <CommentInput />
+              </div>
+            )}
           </div>
         </div>
       ))}
