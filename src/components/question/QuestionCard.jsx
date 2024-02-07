@@ -89,7 +89,7 @@ function QuestionCard({ database, setDatabase, user}) {
             setDatabase((prevDatabase) => {
                 const updatedDatabase = [...prevDatabase];
                 updatedDatabase[dataIndex].detail = textQues;
-                updatedDatabase[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()+543}`;
+                updatedDatabase[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
                 updatedDatabase[dataIndex].time = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
                 updatedDatabase[dataIndex].edit = true;
                 return updatedDatabase;

@@ -30,7 +30,7 @@ function ReviewSubjectDetail() {
     const newQuestion = {
       id: database[database.length - 1].id + 1,
       name: user,
-      date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()+543}`,
+      date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`,
       time: currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
       detail: question,
       like: [],

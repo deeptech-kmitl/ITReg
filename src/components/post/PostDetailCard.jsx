@@ -79,6 +79,7 @@ function PostDetailCard({ database, setDatabase, user }) {
   // ดึงคำถามที่เลือกจะแก้ไข
   const [textPost, setTextPost] = useState('');
   const [clonePost, setClonePost] = useState('');
+  const [newtitle, setNewtitle] = useState('');
   const handleInputPostChange = (e) => {
     setTextPost(e.target.value);
   };
@@ -92,7 +93,8 @@ function PostDetailCard({ database, setDatabase, user }) {
       setDatabase((prevDatabase) => {
         const updatedDatabase = [...prevDatabase];
         updatedDatabase[dataIndex].message = textPost;
-        updatedDatabase[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear() + 543}`;
+        updatedDatabase[dataIndex].titlename = newtitle;
+        updatedDatabase[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
         updatedDatabase[dataIndex].time = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
         // updatedDatabase[dataIndex].edit = true;
         return updatedDatabase;
@@ -103,6 +105,7 @@ function PostDetailCard({ database, setDatabase, user }) {
     else {
       setClonePost(detail)
       setTextPost(detail.message)
+      setNewtitle(detail.titlename)
     }
     setIsModalEditOpen(!isModalEditOpen);
   };
@@ -207,6 +210,13 @@ function PostDetailCard({ database, setDatabase, user }) {
                       </div>
                       {/* body */}
                       <div className="p-4 md:p-5 space-y-4">
+                        <input
+                          type="text"
+                          placeholder="New Title"
+                          className="border-none outline-none p-2  w-full focus:ring-0 text-xl font-semibold"
+                          value={newtitle}
+                          onChange={(e) => setNewtitle(e.target.value)}
+                        />
                         <textarea
                           rows="4"
                           cols="50"
