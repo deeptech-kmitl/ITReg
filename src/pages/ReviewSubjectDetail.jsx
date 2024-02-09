@@ -4,7 +4,7 @@ import CardReview from '../components/cardReview/CardReview'
 import QuestionCard from '../components/question/QuestionCard'
 import { Outlet, useLocation, Link, useParams } from 'react-router-dom'
 import QuestionDetail from '../dummyData/QuestionDetail'
-
+import axios from 'axios'
 function ReviewSubjectDetail() {
   let { reviewId } = useParams();
   console.log(reviewId)

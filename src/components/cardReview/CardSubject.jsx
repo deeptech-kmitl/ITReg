@@ -10,14 +10,15 @@ const CardSubject = ({ item }) => {
                         <div className="grid grid-cols-3">
                             <h5 className="mb-2 text-lg font-bold text-[#151C38]">{detail.subjectId}</h5>
                             <div>
-                                <h5 className="mb-2 text-lg font-bold text-[#151C38]">{detail.subjectName}</h5>
-                                <h5 className="mb-2 text-lg font-bold text-[#151C38]">{detail.subjectNameEn}</h5>
+                                <h5 cla ssName="mb-2 text-lg font-bold text-[#151C38]">{detail.thaiSubjectsName}</h5>
+                                <h5 className="mb-2 text-lg font-bold text-[#151C38]">{detail.engSubjectsName}</h5>
                             </div>
                             <div className="text-right">
-                                <h5 className="mb-2 text-lg font-bold text-[#151C38]">{detail.subjectCredit}</h5>
+                                <h5 className="mb-2 text-lg font-bold text-[#151C38]">{detail.credit}</h5>
                             </div>
                         </div>
-                        <div className="inline-flex items-center px-3 py-1 text-lg font-medium text-center text-white bg-[#151C38] rounded-xl">{detail.subjectType}</div>
+                        {/* <div className="inline-flex items-center px-3 py-1 text-lg font-medium text-center text-white bg-[#151C38] rounded-xl">{detail.subjectType}</div> */}
+                        <div className="inline-flex items-center px-3 py-1 text-lg font-medium text-center text-white bg-[#151C38] rounded-xl">หมวดบังคับ</div>
                     </div>
                 </Link>
             ))}
