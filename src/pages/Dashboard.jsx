@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PostDetailCard from '../components/post/PostDetailCard'
 import PopularSubjectsCard from '../components/popular_subjects/PopularSubjectsCard'
 import AddNewPost from '../components/createpost (admin)/AddNewPost'
@@ -6,6 +6,7 @@ import Layout from './Layout'
 import PostDetail from "../dummyData/PostDetail";
 import { Icon } from "@iconify/react";
 import { UserAuth } from "../context/AuthContext";
+import axios from "axios";
 
 
 function Dashboard() {
@@ -14,7 +15,8 @@ function Dashboard() {
   const { role } = UserAuth();
   const [database, setDatabase] = useState(PostDetail);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [imageFiles, setImageFiles] = useState([]);
+  const [previewImages, setPreviewImages] = useState([]);
   const handleModalToggle = () => {
     setModalVisible(!modalVisible);
   };
@@ -24,12 +26,32 @@ function Dashboard() {
   //   setModalVisible(false); // ปิด Modal
   // };
 
+  useEffect(()=>{
+    axios.get("http://localhost:3001/post")
+      .then((res) => {
+        setDatabase([...PostDetail, ...res.data]);
+      })
+      .catch((err) => console.log(err.message))
+  },[])
   const [newtitle, setNewtitle] = useState('');
   const [message, setMessage] = useState('');
+
+  const handleImageChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    setImageFiles(selectedFiles);
+
+    // Generate preview URLs for selected images
+    const previewURLs = selectedFiles.map((file) => URL.createObjectURL(file));
+    setPreviewImages(previewURLs);
+  };
 
   // เพิ่มข้อมูลลงฐานข้อมูล
   const newPost = () => {
     const currentDate = new Date();
+    const formData = new FormData();
+    for (const file of imageFiles) {
+      formData.append('images', file);
+    }
     const newQuestion = {
       id: database[database.length - 1].id + 1,
       titlename: newtitle,
@@ -37,18 +59,33 @@ function Dashboard() {
       date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`,
       time: currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
       message: message,
-      image: [],
+      image: imageFiles,
       like: [],
-      comment: 0
-
+      comment: []
     };
-    // เอาข้อมูลเก่า + ข้อมูลใหม่
-    const newDatabase = [...database, newQuestion];
-    // Update the state with the new array
-    setDatabase(newDatabase);
-    setModalVisible(false); // ปิด Modal
-    setNewtitle('')
-    setMessage('')
+    Object.entries(newQuestion).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    axios.post(`http://localhost:3001/newPost`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+      .then((res) => {
+        // เอาข้อมูลเก่า + ข้อมูลใหม่
+        const newDatabase = [...database, res.data];
+        // Update the state with the new array
+        setDatabase(newDatabase);
+        setModalVisible(false); // ปิด Modal
+        setImageFiles([]); // Clear the selected image files
+        setPreviewImages([]); // Clear image previews
+        setNewtitle('')
+        setMessage('')
+      })
+      .catch((err) => { 
+        console.log(err);
+        setModalVisible(false); // ปิด Modal
+        setImageFiles([]); // Clear the selected image files
+        setPreviewImages([]); // Clear image previews
+        setNewtitle('')
+        setMessage('')
+      })
   }
 
   return (
@@ -148,22 +185,24 @@ function Dashboard() {
                             onChange={(e) => setMessage(e.target.value)}
                           />
                         </div>
-
                         <div className="flex items-center p-4 md:p-5 rounded-b mt-[-20px]">
-                          <button
-                            type="button"
+                          <input
+                            type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" onChange={handleImageChange}
                             className="flex items-center text-gray-900 bg-white border border-gray-400 focus:outline-none hover:border-[#0D0B5F] font-normal rounded-lg text-sm px-5 py-2 me-2 mb-2"
-                          >
-                            Add image
-                            <Icon
-                              icon="ion:image-outline"
-                              className="ms-2"
-                              width="20"
-                              height="20"
-                            />
-                          </button>
+                            multiple
+                          />
                         </div>
-
+                        {/* Display image previews */}
+                        <div className="flex space-x-2 p-4 md:p-5">
+                          {previewImages.map((previewURL, index) => (
+                            <img
+                              key={index}
+                              src={previewURL}
+                              alt={`Image Preview ${index + 1}`}
+                              className="w-20 h-20 object-cover rounded-lg"
+                            />
+                          ))}
+                        </div>
                         <div className="flex items-center p-4 md:p-5 rounded-b mt-[-20px]">
                           <button
                             onClick={newPost}
