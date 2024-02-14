@@ -5,22 +5,22 @@ import { ReviewDetail } from "../../dummyData/ReviewDetail";
 import axios from "axios";
 import { baseURL } from '../../../baseURL';
 
-function CardReview({ id }) {
+function CardReview({ id , reviewParent }) {
     const [reviews, setReviews] = useState([])
     useEffect(() => {
         // Fetch review data when the component mounts
-        const fetchReview = async () => {
-            try {
-                const response = await axios.get(baseURL + `getReview/${id}`);
-                setReviews(response.data); // Update the review state with the fetched data
-
-            } catch (error) {
-                console.error('Error fetching review:', error);
-            }
-        };
         fetchReview()
-    }, [])
+    }, [reviewParent])
 
+    const fetchReview = async () => {
+        try {
+            const response = await axios.get(baseURL + `getReview/${id}`);
+            setReviews(response.data); // Update the review state with the fetched data
+
+        } catch (error) {
+            console.error('Error fetching review:', error);
+        }
+    };
     // แสดงผลดาวตรง rating
     function DisplayRating(rate) {
         const arrayRate = [];
@@ -37,13 +37,13 @@ function CardReview({ id }) {
     const convertTimestampToTime = (timestamp) => {
         // Convert timestamp to milliseconds
         const milliseconds = timestamp._seconds * 1000 + Math.round(timestamp._nanoseconds / 1000000);
-        
+
         // Create a new Date object
         const date = new Date(milliseconds);
-        
+
         // Format the date and time
         const formattedTime = date.toLocaleString(); // You can customize the format here
-        
+
         return formattedTime;
     };
     // const toggleEditOrDelete = (index) => {
@@ -119,7 +119,20 @@ function CardReview({ id }) {
         setIsModalDeleteOpen(!isModalDeleteOpen);
     };
 
-
+    const delReview = async (reviewId) => {
+        // await axios.delete(baseURL + 'delReview', {
+        //     data: {
+        //         subjectId: id,
+        //         reviewId: reviewId 
+        //     }
+        // }).then((response) => {
+        //     console.log(response);
+        //     fetchReview()
+        // }, (error) => {
+        //     console.log(error);
+        // });
+        console.log(reviewId)
+    };
     return (
         <div className="mt-4">
             <div>
@@ -312,12 +325,12 @@ function CardReview({ id }) {
                                                                 type="button"
                                                                 className="text-gray-500 bg-white hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full border-2 border-[#D9D9D9]"
                                                             >
-                                                                Cancle
+                                                                Cancel
                                                             </button>
                                                         </div>
                                                         <div className="flex items-center pr-6 rounded-b mt-[-20px] mb-2 w-full">
                                                             <button
-                                                                onClick={() => setIsModalDeleteOpen(false)}
+                                                                onClick={() => (setIsModalDeleteOpen(false), delReview(review.id))}
                                                                 type="button"
                                                                 className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
                                                             >
@@ -334,7 +347,7 @@ function CardReview({ id }) {
                                 <div className="ml-4">
                                     <p className="text-[#151C38] text-l font-[400]">User@{review.userId}</p>
                                     <p className="text-[#A4A4A4] text-l font-[350]">
-                                    {convertTimestampToTime(review.time)}
+                                        {convertTimestampToTime(review.time)}
                                     </p>
                                 </div>
                             </div>

@@ -9,6 +9,7 @@ import { getAuth } from 'firebase/auth'
 import { baseURL } from '../../baseURL'
 function ReviewSubjectDetail() {
   let { reviewId } = useParams();
+  const [reviews, setReviews] = useState([])
 
   const [activeTab, setActiveTab] = useState("review")
 
@@ -49,8 +50,8 @@ function ReviewSubjectDetail() {
   const auth = getAuth();
   const user = auth.currentUser;
   const [textReview, setTextReview] = useState('');
-  const [rating, setRating] = useState('');
-  const [grade, setGrade] = useState('');
+  const [rating, setRating] = useState('1');
+  const [grade, setGrade] = useState('A');
 
   const newReview = async () => {
       await axios.post(baseURL + 'newReview', {
@@ -67,10 +68,20 @@ function ReviewSubjectDetail() {
           setTextReview('')
           setRating('')
           setGrade('')
+          fetchReview()
       }, (error) => {
           console.log(error);
       });
   }
+  const fetchReview = async () => {
+      try {
+          const response = await axios.get(baseURL + `getReview/${reviewId}`);
+          setReviews(response.data); // Update the review state with the fetched data
+
+      } catch (error) {
+          console.error('Error fetching review:', error);
+      }
+  };
   return (
     <div className='w-full'>
       {/* ReviewDetail */}
@@ -109,7 +120,7 @@ function ReviewSubjectDetail() {
                       <img src='https://img.icons8.com/ios-filled/20/FFFFFF/plus-math.png'></img>
                     </button>
                   </div>
-                  <CardReview id={reviewId} />
+                  <CardReview id={reviewId} reviewParent={reviews}/>
                   
                   {/* Modal create Review */}
                   {isModalCreateOpen && (
@@ -170,7 +181,7 @@ function ReviewSubjectDetail() {
                                 <select
                                   className='bg-[#F4F4F4] border border-gray-200 rounded-[10px] text-gray-500 mt-2 text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
                                   name="selectedPoint" onChange={(event) => setRating(event.target.value)}>
-                                  <option value="1">1 point</option>
+                                  <option  value="1">1 point</option>
                                   <option value="2">2 point</option>
                                   <option value="3">3 point</option>
                                   <option value="4">4 point</option>
@@ -185,7 +196,7 @@ function ReviewSubjectDetail() {
                                 <select
                                   className='bg-[#F4F4F4] border border-gray-200 text-gray-500 rounded-[10px] mt-2 text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
                                   name="selectedGrade"  onChange={(event) => setGrade(event.target.value)} >
-                                  <option value="A">A</option>
+                                  <option  value="A">A</option>
                                   <option value="B+">B+</option>
                                   <option value="B">B</option>
                                   <option value="C+">C+</option>

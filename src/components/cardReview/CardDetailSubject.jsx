@@ -23,7 +23,7 @@ const CardDetailSubject = ({ id }) => {
     const allSubject = useSelector(state => state.subjects)
     const findSubject = allSubject.find(({ subjectId }) => subjectId === id)
     return (
-        <div>
+        (findSubject && <div>
             <div className="max-w p-6 bg-white border border-gray-200 rounded-xl" >
                 <div className="flex flex-row">
                     <h5 className="mb-2 text-xl font-bold text-[#151C38]">{findSubject.subjectId}</h5>
@@ -48,7 +48,7 @@ const CardDetailSubject = ({ id }) => {
                     </div>
                 )
             ))} */}
-        </div>
+        </div>)
     );
 };
 
