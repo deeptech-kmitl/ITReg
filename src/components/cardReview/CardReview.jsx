@@ -5,8 +5,9 @@ import { ReviewDetail } from "../../dummyData/ReviewDetail";
 import axios from "axios";
 import { baseURL } from '../../../baseURL';
 
-function CardReview({ id , reviewParent }) {
+function CardReview({ id, reviewParent }) {
     const [reviews, setReviews] = useState([])
+    const [reviewId, setReviewId] = useState('')
     useEffect(() => {
         // Fetch review data when the component mounts
         fetchReview()
@@ -119,23 +120,22 @@ function CardReview({ id , reviewParent }) {
         setIsModalDeleteOpen(!isModalDeleteOpen);
     };
 
-    const delReview = async (reviewId) => {
-        // await axios.delete(baseURL + 'delReview', {
-        //     data: {
-        //         subjectId: id,
-        //         reviewId: reviewId 
-        //     }
-        // }).then((response) => {
-        //     console.log(response);
-        //     fetchReview()
-        // }, (error) => {
-        //     console.log(error);
-        // });
-        console.log(reviewId)
+    const delReview = async () => {
+        await axios.delete(baseURL + 'delReview', {
+            data: {
+                subjectId: id,
+                reviewId: reviewId 
+            }
+        }).then((response) => {
+            console.log(response);
+            fetchReview()
+        }, (error) => {
+            console.log(error);
+        });
+   
     };
     return (
         <div className="mt-4">
-            <div>
                 {reviews.map((review, index) => (
                     review.subjectId === id && (
                         <div className="max-w p-6 bg-white border border-gray-200 rounded-xl mt-4" key={index}>
@@ -159,7 +159,7 @@ function CardReview({ id , reviewParent }) {
                                                 <span className="pl-3 text-gray-700">Edit Review</span>
                                             </div>
                                         </MenuItem>
-                                        <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={toggleModalDelete}>
+                                        <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={()=> (toggleModalDelete(),setReviewId(review.id))}>
                                             <div className="hover:bg-gray-200 cursor-pointer">
                                                 <div className="flex item-center py-3">
                                                     <Icon
@@ -330,7 +330,7 @@ function CardReview({ id , reviewParent }) {
                                                         </div>
                                                         <div className="flex items-center pr-6 rounded-b mt-[-20px] mb-2 w-full">
                                                             <button
-                                                                onClick={() => (setIsModalDeleteOpen(false), delReview(review.id))}
+                                                                onClick={() => (setIsModalDeleteOpen(false), delReview())}
                                                                 type="button"
                                                                 className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
                                                             >
@@ -384,8 +384,6 @@ function CardReview({ id , reviewParent }) {
                         </div>
                     )
                 ))}
-            </div>
-
         </div>
     );
 }
