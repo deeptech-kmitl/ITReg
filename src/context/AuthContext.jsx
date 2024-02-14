@@ -5,29 +5,47 @@ import {
   signOut,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { auth } from '../firebase';
-
+import { auth, db } from '../firebase';
+import { doc, getDoc, setDoc } from "firebase/firestore";
 const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
+  const [role, setRole] = useState("");
 
-  const createUser = (email, password) => {
+  const createUser = async (email, password) => {
+    const docRef = doc(db, "users", currentUser.uid);
+    await setDoc(docRef, {
+      role: "student"
+    });
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-   const signIn = (email, password) =>  {
+  const signIn = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password)
-   }
+  }
 
   const logout = () => {
-      return signOut(auth)
+    return signOut(auth)
   }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       console.log(currentUser);
-      setUser(currentUser);
+      if (currentUser != null) {
+        const docRef = doc(db, "users", currentUser.uid);
+        getDoc(docRef)
+          .then(docSnap => {
+            setUser(currentUser);
+            setRole(docSnap.data().role);
+          })
+          .catch(err => console.log(err.message));
+      }
+      else {
+        setUser(currentUser);
+        setRole(null);
+      }
+
     });
     return () => {
       unsubscribe();
@@ -35,7 +53,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ createUser, user, logout, signIn }}>
+    <UserContext.Provider value={{ createUser, user, role, logout, signIn }}>
       {children}
     </UserContext.Provider>
   );

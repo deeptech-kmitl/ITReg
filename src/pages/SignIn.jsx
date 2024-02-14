@@ -9,9 +9,6 @@ import { Button } from '@material-tailwind/react';
 
 function SignIn() {
     const { user } = UserAuth();
-    if (user) {
-        return <Navigate to='/dashboard' />;
-    }
 
     //signin
     const [email, setEmail] = useState('');

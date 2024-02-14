@@ -5,10 +5,12 @@ import CommentBox from "./CommentBox";
 import CommentInput from "./CommentInput";
 import { parse, compareDesc } from "date-fns";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
+import { UserAuth } from "../../context/AuthContext";
 // import PostDetail from "../../dummyData/PostDetail";
 
 
 function PostDetailCard({ database, setDatabase, user }) {
+  const { role } = UserAuth();
   const [likedPosts, setLikedPosts] = useState([]);
   const [showFullScreen, setShowFullScreen] = useState(false);
   const [imgForFullScreen, setImgForFullScreen] = useState("");
@@ -138,37 +140,39 @@ function PostDetailCard({ database, setDatabase, user }) {
             <div className="text-[#151C38] text-2xl font-[500] leading-normal flex justify-between">
               <span>{detail.titlename}</span>
               <div className="relative">
-                <Menu placement="bottom-end">
-                  <MenuHandler>
-                    <div className="flex items-center cursor-pointer">
-                      <Icon icon="prime:ellipsis-h" color="#151c38" width="22" height="22" />
-                    </div>
-                  </MenuHandler>
-                  <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
-                    <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalEdit(detail)}>
-                      <div className="flex item-center py-3">
-                        <Icon
-                          icon="fluent:edit-24-regular"
-                          color="#727272"
-                          width="15"
-                          height="15"
-                        />
-                        <span className="pl-3 text-gray-700">Edit Review</span>
+                {role == "admin" && (
+                  <Menu placement="bottom-end">
+                    <MenuHandler>
+                      <div className="flex items-center cursor-pointer">
+                        <Icon icon="prime:ellipsis-h" color="#151c38" width="22" height="22" />
                       </div>
-                    </MenuItem>
-                    <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', detail.id)} >
-                      <div className="flex item-center py-3">
-                        <Icon
-                          icon="mingcute:delete-3-line"
-                          color="#727272"
-                          width="15"
-                          height="15"
-                        />
-                        <span className="pl-3 text-gray-700">Delete Review</span>
-                      </div>
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
+                    </MenuHandler>
+                    <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
+                      <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalEdit(detail)}>
+                        <div className="flex item-center py-3">
+                          <Icon
+                            icon="fluent:edit-24-regular"
+                            color="#727272"
+                            width="15"
+                            height="15"
+                          />
+                          <span className="pl-3 text-gray-700">Edit Review</span>
+                        </div>
+                      </MenuItem>
+                      <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', detail.id)} >
+                        <div className="flex item-center py-3">
+                          <Icon
+                            icon="mingcute:delete-3-line"
+                            color="#727272"
+                            width="15"
+                            height="15"
+                          />
+                          <span className="pl-3 text-gray-700">Delete Review</span>
+                        </div>
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                )}
               </div>
             </div>
 

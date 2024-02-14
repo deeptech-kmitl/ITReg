@@ -3,7 +3,6 @@ import { Outlet, Link, useNavigate, useLocation, Navigate } from "react-router-d
 import { SideNavBar } from '../components/index'
 import '../index.css'
 import BG01 from '../assets/register/BG01.png'
-import { UserAuth } from '../context/AuthContext';
 import { useDispatch } from "react-redux";
 import { saveAllSubject, show } from '../../redux/subjectSlice';
 import axios from 'axios';
@@ -11,7 +10,7 @@ import { baseURL } from '../../baseURL';
 
 function Layout() {
     const dispatch = useDispatch()
-    
+
     const fecthSubject = async () => {
         try {
             const res = await axios.get(baseURL + "getAllSubjects")
@@ -23,8 +22,6 @@ function Layout() {
     }
     fecthSubject()
 
-    const { user } = UserAuth();
-
 
     const location = useLocation();
     const initialIsOpen = localStorage.getItem('isOpen') === 'false' ? false : true;
@@ -33,20 +30,17 @@ function Layout() {
     const toggle = () => {
         setIsOpen(!isOpen);
     };
-    if (!user) {
-        return <Navigate to='/signin' />;
-    }
-    else
-        return (
-            <div className={`flex flex-raw`}>
-                <div className={`layout ${isOpen === true ? 'active' : ''}`}>
-                    <SideNavBar toggle={toggle} isOpen={isOpen} setIsOpen={setIsOpen} location={location} />
-                </div>
-                <div className={`h-auto w-full m-10`}>
-                    <Outlet />
-                </div>
+
+    return (
+        <div className={`flex flex-raw`}>
+            <div className={`layout ${isOpen === true ? 'active' : ''}`}>
+                <SideNavBar toggle={toggle} isOpen={isOpen} setIsOpen={setIsOpen} location={location} />
             </div>
-        )
+            <div className={`h-auto w-full m-10`}>
+                <Outlet />
+            </div>
+        </div>
+    )
 }
 
 export default Layout
