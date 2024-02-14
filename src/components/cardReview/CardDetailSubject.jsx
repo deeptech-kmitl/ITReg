@@ -29,7 +29,7 @@ const CardDetailSubject = ({ id }) => {
                     <h5 className="mb-2 text-xl font-bold text-[#151C38]">{findSubject.subjectId}</h5>
                     <div>
                         <h5 className="mb-2 text-xl font-bold text-[#151C38] ml-10">{findSubject.engSubjectsName} ({findSubject.thaiSubjectsName})</h5>
-                        <p className="ml-10 text-sm font-medium text-[#151C38]">{findSubject.thaiSubjectfindSubjects}</p>
+                        <p className="ml-10 text-sm font-medium text-[#151C38]">{findSubject.thaiSubjectDetails}</p>
                     </div>
                 </div>
                 <p className="mt-4 text-sm font-light text-[#151C38]">หน่วยกิต(ทฤษฎี - ปฎิบัติ - ค้นคว้า) {findSubject.credit}</p>

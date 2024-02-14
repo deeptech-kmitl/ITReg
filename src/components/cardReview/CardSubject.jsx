@@ -18,7 +18,7 @@ const CardSubject = ({ item }) => {
                             </div>
                         </div>
                         {/* <div className="inline-flex items-center px-3 py-1 text-lg font-medium text-center text-white bg-[#151C38] rounded-xl">{detail.subjectType}</div> */}
-                        <div className="inline-flex items-center px-3 py-1 text-lg font-medium text-center text-white bg-[#151C38] rounded-xl">หมวดบังคับ</div>
+                        <div className="inline-flex items-center px-3 py-1 text-lg font-medium text-center text-white bg-[#151C38] rounded-xl">{detail.category}</div>
                     </div>
                 </Link>
             ))}
