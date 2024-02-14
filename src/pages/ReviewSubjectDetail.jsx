@@ -5,9 +5,11 @@ import QuestionCard from '../components/question/QuestionCard'
 import { Outlet, useLocation, Link, useParams } from 'react-router-dom'
 import QuestionDetail from '../dummyData/QuestionDetail'
 import axios from 'axios'
+import { getAuth } from 'firebase/auth'
+import { baseURL } from '../../baseURL'
 function ReviewSubjectDetail() {
   let { reviewId } = useParams();
-  console.log(reviewId)
+
   const [activeTab, setActiveTab] = useState("review")
 
   // Modal create open
@@ -16,10 +18,9 @@ function ReviewSubjectDetail() {
   const toggleModalCreate = () => {
     setIsModalCreateOpen(!isModalCreateOpen);
   };
-  console.log(isModalCreateOpen)
+
 
   // แสดงตัวตน ปัจจุบัน
-  const user = "Anonymous1";
   // import data จาก QuestionDetail
   const [database, setDatabase] = useState(QuestionDetail);
 
@@ -44,6 +45,32 @@ function ReviewSubjectDetail() {
     setQuestion('')
   }
 
+  
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const [textReview, setTextReview] = useState('');
+  const [rating, setRating] = useState('');
+  const [grade, setGrade] = useState('');
+
+  const newReview = async () => {
+      await axios.post(baseURL + 'newReview', {
+          subjectId: reviewId,
+          userId: user.uid,
+          content: textReview,    
+          rating: rating,
+          grade: grade,
+          like: [],
+          dislike: [],
+          
+      }).then((response) => {
+          console.log(response);
+          setTextReview('')
+          setRating('')
+          setGrade('')
+      }, (error) => {
+          console.log(error);
+      });
+  }
   return (
     <div className='w-full'>
       {/* ReviewDetail */}
@@ -131,6 +158,8 @@ function ReviewSubjectDetail() {
                                 placeholder="Text something review ..."
                                 className="border-none outline-none p-2 mb-4 w-full resize-none focus:ring-0 text-base font-normal"
                               // value="eiei"
+                              value={textReview}
+                              onChange={(e) => setTextReview(e.target.value)}
                               />
                             </div>
                             <div className="flex flex-row">
@@ -140,7 +169,7 @@ function ReviewSubjectDetail() {
                                 </label>
                                 <select
                                   className='bg-[#F4F4F4] border border-gray-200 rounded-[10px] text-gray-500 mt-2 text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
-                                  name="selectedPoint">
+                                  name="selectedPoint" onChange={(event) => setRating(event.target.value)}>
                                   <option value="1">1 point</option>
                                   <option value="2">2 point</option>
                                   <option value="3">3 point</option>
@@ -155,7 +184,7 @@ function ReviewSubjectDetail() {
                                 </label>
                                 <select
                                   className='bg-[#F4F4F4] border border-gray-200 text-gray-500 rounded-[10px] mt-2 text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
-                                  name="selectedGrade">
+                                  name="selectedGrade"  onChange={(event) => setGrade(event.target.value)} >
                                   <option value="A">A</option>
                                   <option value="B+">B+</option>
                                   <option value="B">B</option>
@@ -169,7 +198,7 @@ function ReviewSubjectDetail() {
                             {/* footer */}
                             <div className="flex items-center p-4 md:p-5 rounded-b mt-[-20px] mb-2">
                               <button
-                                onClick={() => setIsModalCreateOpen(false)}
+                                onClick={() => {setIsModalCreateOpen(false),newReview()}}
                                 type="button"
                                 className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
                               >

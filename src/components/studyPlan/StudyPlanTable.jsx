@@ -10,7 +10,7 @@ function StudyPlanTable() {
     return (
         <>
             {StudyPlanData.map(({ courses, yearStudy, semester, year, subjects }, index) => (
-                <div className='w-full'>
+                <div className='w-full' key={index}>
                     <div className='flex justify-center mt-3 max-2xl:mt-4 mb-8 max-2xl:mb-5 tracking-[1px]'>
                         <h1 className='text-[24px] max-2xl:text-[20px] font-semibold'>{courses}, ชั้นปีที่ {yearStudy}, {semester}/{year}</h1>
                     </div>
