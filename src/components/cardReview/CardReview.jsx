@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
-import { ReviewDetail } from "../../dummyData/ReviewDetail";
 import axios from "axios";
 import { baseURL } from '../../../baseURL';
-import { getAuth } from "firebase/auth";
+import { UserAuth } from "../../context/AuthContext";
 
 function CardReview({ id, reviewParent }) {
     const [reviews, setReviews] = useState([])
     const [reviewId, setReviewId] = useState('')
-
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const {user} = UserAuth()
+    const {role} = UserAuth()
     useEffect(() => {
         // Fetch review data when the component mounts
         fetchReview()
@@ -195,7 +193,7 @@ function CardReview({ id, reviewParent }) {
                                         <Icon icon="prime:ellipsis-h" color="#151c38" width="19" height="19" />
                                     </div>
                                 </MenuHandler>
-                                {user.uid == review.userId && <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
+                                {(user.uid == review.userId || role == "admin") && <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
                                     <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => { toggleModalEdit(review), setReviewId(review.id) }} >
                                         <div className="flex item-center py-3">
                                             <Icon
