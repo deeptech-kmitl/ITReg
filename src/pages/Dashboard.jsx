@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PostDetailCard from '../components/post/PostDetailCard'
 import PopularSubjectsCard from '../components/popular_subjects/PopularSubjectsCard'
-import AddNewPost from '../components/createpost (admin)/AddNewPost'
 import Layout from './Layout'
 import PostDetail from "../dummyData/PostDetail";
 import { Icon } from "@iconify/react";

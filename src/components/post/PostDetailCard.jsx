@@ -2,12 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import "./PostDetailCard.css";
 import CommentBox from "./CommentBox";
-import CommentInput from "./CommentInput";
 import { parse, compareDesc } from "date-fns";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
 import { UserAuth } from "../../context/AuthContext";
-// import PostDetail from "../../dummyData/PostDetail";
-
+import Carousel from "./Carousel"
 
 function PostDetailCard({ database, setDatabase, user }) {
   const { role } = UserAuth();
@@ -48,25 +46,15 @@ function PostDetailCard({ database, setDatabase, user }) {
     )
   }
 
-  const handleImageClick = (item, index) => {
-    setImgForFullScreen(item);
-    setCurrentImageIndex(index);
-    setShowFullScreen(true);
-  };
+  // const handleImageClick = (item, index) => {
+  //   setImgForFullScreen(item);
+  //   setCurrentImageIndex(index);
+  //   setShowFullScreen(true);
+  // };
 
-  const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % database.length);
-  };
-
-  const handlePrevImage = () => {
-    setCurrentImageIndex(
-      (prevIndex) => (prevIndex - 1 + database.length) % database.length
-    );
-  };
-
-  const handleCloseFullScreen = () => {
-    setShowFullScreen(false);
-  };
+  // const handleCloseFullScreen = () => {
+  //   setShowFullScreen(false);
+  // };
 
   const handleToggleComments = (index) => {
     console.log("eeeee")
@@ -131,6 +119,8 @@ function PostDetailCard({ database, setDatabase, user }) {
       setIsModalDeleteOpen(false);
     }
   };
+
+  
 
   return (
     <div className="mt-5">
@@ -329,68 +319,15 @@ function PostDetailCard({ database, setDatabase, user }) {
             <div className="mt-5">
               <p className="text-black text-l font-light">{detail.message}</p>
 
-              {detail.image.length === 1 ? (
-                <img
-                  src={detail.image[0]}
-                  className="object-cover w-full rounded-lg cursor-pointer"
-                  alt={`post-${index}`}
-                  onClick={() => handleImageClick(detail.image[0], index)}
-                />
-              ) : (
-                <div className="grid grid-cols-2 gap-4 mt-4">
-                  {detail.image.slice(0, 4).map((item, i) => (
-                    <div key={i}>
-                      <img
-                        src={item}
-                        className="object-cover w-full h-44 rounded-lg cursor-pointer"
-                        alt={`post-${index}-${i}`}
-                        onClick={() => handleImageClick(item, index)}
-                      />
-                    </div>
-                  ))}
-                  {detail.image.length > 4 && (
-                    <div
-                      className="object-cover w-full h-44 rounded-lg cursor-pointer"
-                      onClick={() => handleImageClick(detail.image[4], index)}
-                    >
-                      <p className="text-white text-lg font-bold">
-                        +{detail.image.length - 4}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
+              <Carousel slides={detail.image}/>
 
-              {showFullScreen && (
+              {/* {showFullScreen && (
                 <div
                   className="fullscreen-overlay active"
                   onClick={handleCloseFullScreen}
                 >
-                  <div className="fullscreen-image">
-                    <Icon
-                      icon="fluent:chevron-left-24-filled"
-                      color="white"
-                      width="32"
-                      height="32"
-                      className="absolute top-1/2 left-4 cursor-pointer"
-                      onClick={handlePrevImage}
-                    />
-                    <img
-                      className="centered-image"
-                      src={imgForFullScreen}
-                      alt="Full Screen"
-                    />
-                    <Icon
-                      icon="fluent:chevron-right-24-filled"
-                      color="white"
-                      width="32"
-                      height="32"
-                      className="absolute top-1/2 right-4 cursor-pointer"
-                      onClick={handleNextImage}
-                    />
-                  </div>
                 </div>
-              )}
+              )} */}
             </div>
 
             <div className="mt-3 flex items-start">

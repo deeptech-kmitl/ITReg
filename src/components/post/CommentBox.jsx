@@ -121,7 +121,7 @@ function CommentBox({ data, user, database, setDatabase, indexPost, postId }) {
                          width="15"
                          height="15"
                        />
-                       <span className="pl-3 text-gray-700">Edit Answer</span>
+                       <span className="pl-3 text-gray-700">Edit Comment</span>
                      </div>
                    </MenuItem>
                    <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', comment.id)}>
@@ -133,7 +133,7 @@ function CommentBox({ data, user, database, setDatabase, indexPost, postId }) {
                            width="15"
                            height="15"
                          />
-                         <p className="pl-3 text-gray-700">Delete Answer</p>
+                         <p className="pl-3 text-gray-700">Delete Comment</p>
                        </div>
                      </div>
                    </MenuItem>
@@ -168,7 +168,7 @@ function CommentBox({ data, user, database, setDatabase, indexPost, postId }) {
                         {/* header */}
                         <div className="flex items-center justify-between p-4 border-b border-gray-200">
                           <h5 className="text-[27px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-transparent bg-clip-text text-center w-full">
-                            Edit Question
+                            Edit Comment
                           </h5>
                           {/* close */}
                           <button type="button" className="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsModalEditOpen(false)}>
@@ -233,7 +233,7 @@ function CommentBox({ data, user, database, setDatabase, indexPost, postId }) {
                         {/* header */}
                         <div className="flex items-center justify-between p-4 border-b border-gray-200">
                           <h5 className="text-[27px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-transparent bg-clip-text text-center w-full">
-                            Delete Review
+                            Delete Comment
                           </h5>
                           {/* close */}
                           <button type="button" className="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => toggleModalDelete('X')}>
@@ -245,7 +245,7 @@ function CommentBox({ data, user, database, setDatabase, indexPost, postId }) {
                         {/* body */}
                         <div className="flex flex-col p-4 md:p-5 justify-center items-center text-2xl font-normal">
                           <p>Are you sure you want to</p>
-                          <p>delete your Question?</p>
+                          <p>delete your comment?</p>
                         </div>
                         {/* footer */}
                         <div className="flex flex-row gap-4 mb-2 mt-6">
