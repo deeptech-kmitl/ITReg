@@ -8,8 +8,7 @@ import { UserAuth } from "../../context/AuthContext";
 function CardReview({ id, reviewParent }) {
     const [reviews, setReviews] = useState([])
     const [reviewId, setReviewId] = useState('')
-    const {user} = UserAuth()
-    const {role} = UserAuth()
+    const { user, role } = UserAuth()
     useEffect(() => {
         // Fetch review data when the component mounts
         fetchReview()
@@ -152,7 +151,8 @@ function CardReview({ id, reviewParent }) {
         });
     }
 
-    const newLike = async (type) => {
+    const newLike = async (type, reviewId) => {
+        console.log(reviewId)
         await axios.put(baseURL + 'editReviewLikes', {
             subjectId: id,
             userId: user.uid,
@@ -165,14 +165,14 @@ function CardReview({ id, reviewParent }) {
             console.log(error);
         });
     }
-    const clearLike = async (type) => {
+    const clearLike = async (type, reviewId) => {
+        console.log(reviewId)
         await axios.put(baseURL + 'delReviewLikes', {
-       
-                subjectId: id,
-                userId: user.uid,
-                likeType: type,
-                reviewId: reviewId
-            
+            subjectId: id,
+            userId: user.uid,
+            likeType: type,
+            reviewId: reviewId
+
         }).then((response) => {
             console.log(response);
             fetchReview()
@@ -187,13 +187,13 @@ function CardReview({ id, reviewParent }) {
                     <div className="max-w p-6 bg-white border border-gray-200 rounded-xl mt-4" key={index}>
                         <div className="mt-2 flex flex-row">
                             <div className="w-[50px] h-[50px] flex-shrink-0 rounded-full bg-[#151C38]"></div>
-                            <Menu placement="bottom-end">
+                            {(user.uid == review.userId || role == "admin") && <Menu placement="bottom-end">
                                 <MenuHandler>
                                     <div className="absolute right-20 cursor-pointer">
                                         <Icon icon="prime:ellipsis-h" color="#151c38" width="19" height="19" />
                                     </div>
                                 </MenuHandler>
-                                {(user.uid == review.userId || role == "admin") && <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
+                                <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
                                     <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => { toggleModalEdit(review), setReviewId(review.id) }} >
                                         <div className="flex item-center py-3">
                                             <Icon
@@ -217,8 +217,8 @@ function CardReview({ id, reviewParent }) {
                                                 <p className="pl-3 text-gray-700">Delete Review</p>
                                             </div></div>
                                     </MenuItem>
-                                </MenuList>}
-                            </Menu>
+                                </MenuList>
+                            </Menu>}
 
                             {/* Modal edit Review */}
                             {isModalEditOpen && (
@@ -425,7 +425,8 @@ function CardReview({ id, reviewParent }) {
                             {review.like.includes(user.uid) ?
                                 (
                                     // กรณี มีชื่อ user ใน 'like'
-                                    <button name="like" className="rotate-0" onClick={() => { setReviewId(review.id) , clearLike('like') }}>
+                                    // <button name="like" className="rotate-0" onClick={() => { setReviewId(review.id), clearLike('like') }}>
+                                    <button name="like" className="rotate-0" onClick={() => { clearLike('like', review.id) }}>
                                         <Icon
                                             icon="streamline:like-1-solid"
                                             color="#D91818"
@@ -435,7 +436,8 @@ function CardReview({ id, reviewParent }) {
                                     </button>
                                 ) : (
                                     // กรณี ไม่มีชื่อ user ใน 'like'
-                                    <button name="like" className="rotate-0" onClick={() => { setReviewId(review.id),newLike('like') }}>
+                                    // <button name="like" className="rotate-0" onClick={() => { setReviewId(review.id), newLike('like') }}>
+                                    <button name="like" className="rotate-0" onClick={() => { newLike('like', review.id) }}>
                                         <Icon
                                             icon="streamline:like-1"
                                             color="#151c38"
@@ -452,7 +454,8 @@ function CardReview({ id, reviewParent }) {
                             {review.dislike.includes(user.uid) ?
                                 (
                                     // กรณี มีชื่อ user ใน 'dislike'
-                                    <button name="dislike" className="rotate-180 mt-1" onClick={() => {  setReviewId(review.id),clearLike('dislike') }}>
+                                    // <button name="dislike" className="rotate-180 mt-1" onClick={() => { setReviewId(review.id), clearLike('dislike') }}>
+                                    <button name="dislike" className="rotate-180 mt-1" onClick={() => { clearLike('dislike', review.id) }}>
                                         <Icon
                                             icon="streamline:like-1-solid"
                                             color="#151c38"
@@ -462,7 +465,8 @@ function CardReview({ id, reviewParent }) {
                                     </button>
                                 ) : (
                                     // กรณี ไม่มีชื่อ user ใน 'dislike'
-                                    <button name="dislike" className="rotate-180 mt-1" onClick={() => { setReviewId(review.id), newLike('dislike') }}>
+                                    <button name="dislike" className="rotate-180 mt-1" onClick={() => { newLike('dislike', review.id) }}>
+                                        {/* <button name="dislike" className="rotate-180 mt-1" onClick={() => { setReviewId(review.id), newLike('dislike') }}> */}
                                         <Icon
                                             icon="streamline:like-1"
                                             color="#151c38"
@@ -471,6 +475,9 @@ function CardReview({ id, reviewParent }) {
                                         />
                                     </button>
                                 )}
+                            <div className="ml-1 mt-[1px]">
+                                <p className="text-[#151C38] text-sm mr-3">{review.dislike.length}</p>
+                            </div>
                         </div>
                     </div>
                 )

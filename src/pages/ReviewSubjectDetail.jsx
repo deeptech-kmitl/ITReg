@@ -21,7 +21,7 @@ function ReviewSubjectDetail() {
   };
 
   //Question ใน หน้า Review
-  const [database, setDatabase] = useState([]);
+  const [questions, setQuestions] = useState([]);
   useEffect(() => {
     fetchQuestion();
     fetchReview();
@@ -29,15 +29,13 @@ function ReviewSubjectDetail() {
 
   const [question, setQuestion] = useState("");
   const postQuestion = () => {
-
-
     axios.post(baseURL + "question", {
-        subjectId: reviewId,
-        userId: user.uid,
-        details: question,
-        like: [],
-        dislike: [],
-      })
+      subjectId: reviewId,
+      userId: user.uid,
+      detail: question,
+      like: [],
+      dislike: [],
+    })
       .then(
         (response) => {
           console.log(response);
@@ -47,14 +45,14 @@ function ReviewSubjectDetail() {
         }
       );
     fetchQuestion();
-    
+
     setQuestion("");
   };
   const fetchQuestion = async () => {
     try {
-      const response = await axios.get(baseURL + `getQuestion/${reviewId}`);
-      console.log("question: " + response.data);
-      setDatabase(response.data); 
+      const response = await axios.get(baseURL + `getQuestions/${reviewId}`);
+      console.log("question: " + JSON.stringify(response.data));
+      setQuestions(response.data);
     } catch (error) {
       console.error("Error fetching question:", error);
     }
@@ -115,21 +113,19 @@ function ReviewSubjectDetail() {
           <div name="btnReviewOrQuestion">
             <button
               onClick={() => setActiveTab("review")}
-              className={`${
-                activeTab === "review"
-                  ? "border-[#151C38] text-[#151C38] font-medium text-lg"
-                  : "border-[#00000020] text-[#00000020] font-medium text-lg"
-              } border-b-4 px-5`}
+              className={`${activeTab === "review"
+                ? "border-[#151C38] text-[#151C38] font-medium text-lg"
+                : "border-[#00000020] text-[#00000020] font-medium text-lg"
+                } border-b-4 px-5`}
             >
               Review
             </button>
             <button
               onClick={() => setActiveTab("question")}
-              className={`${
-                activeTab === "question"
-                  ? "border-[#151C38] text-[#151C38] font-medium text-lg"
-                  : "border-[#00000020] text-[#00000020] font-medium text-lg"
-              } border-b-4 px-5`}
+              className={`${activeTab === "question"
+                ? "border-[#151C38] text-[#151C38] font-medium text-lg"
+                : "border-[#00000020] text-[#00000020] font-medium text-lg"
+                } border-b-4 px-5`}
             >
               Question
             </button>
@@ -168,7 +164,7 @@ function ReviewSubjectDetail() {
                       aria-hidden="true"
                       className="fixed inset-0 overflow-y-auto"
                       style={{ zIndex: 1001, borderRadius: "30px" }}
-                      // onClick={() => setIsModalOpen(false)}
+                    // onClick={() => setIsModalOpen(false)}
                     >
                       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                         <div
@@ -316,9 +312,9 @@ function ReviewSubjectDetail() {
 
                 {/* QuestionCard */}
                 <QuestionCard
-                  database={database}
-                  setDatabase={setDatabase}
-                  user={user}
+                  id={reviewId}
+                  questionParent={questions}
+                 
                 />
               </div>
             )}

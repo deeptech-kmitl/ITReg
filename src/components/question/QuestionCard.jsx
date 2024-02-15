@@ -1,64 +1,92 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import CommentCard from "./CommentCard";
+import { baseURL } from "../../../baseURL";
+import axios from "axios";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
+import { UserAuth } from "../../context/AuthContext";
+function QuestionCard({ id, questionParent }) {
+    const { user, role } = UserAuth()
+    const [questions, setQuestions] = useState([])
+    const [questionId, setQuestionId] = useState('')
+    useEffect(() => {
+        fetchQuestions()
+    }, [questionParent])
+    const fetchQuestions = async () => {
+        try {
+            const response = await axios.get(baseURL + `getQuestions/${id}`);
+            setQuestions(response.data); // Update the review state with the fetched data
 
-function QuestionCard({ database, setDatabase, user}) {
+        } catch (error) {
+            console.error('Error fetching review:', error);
+        }
+    };
+    const convertTimestampToTime = (timestamp) => {
+        // Convert timestamp to milliseconds
+        const milliseconds = timestamp._seconds * 1000 + Math.round(timestamp._nanoseconds / 1000000);
 
-    const handleToggleLike = (questionId) => {
-        console.log("กด like",questionId)
-        setDatabase(
-            (database) => {
-                const updatedDatabase = [...database];
-                const indexQuestion = updatedDatabase.findIndex(question => question.id === questionId)
-                const likeByUser = updatedDatabase[indexQuestion].like.includes(user);
-                console.log('user มีข้อมูลใน like >>> ', likeByUser)
+        // Create a new Date object
+        const date = new Date(milliseconds);
 
-                // user ไม่มีข้อมูลใน like >>> จะใส่สี
-                if (!likeByUser) {
-                    const dislikeByUser = updatedDatabase[indexQuestion].dislike.includes(user);
-                    if (dislikeByUser) {
-                        // ถ้า user กด'dislike'ในข้อมูลเดิม แล้วกด'like' ข้อมูล'dislike'เดิมจะถูกนำออก
-                        updatedDatabase[indexQuestion].dislike = updatedDatabase[indexQuestion].dislike.filter(user_id => user_id !== user);
-                    }
-                    // เพิ่ม user ลง 'like'
-                    updatedDatabase[indexQuestion].like.push(user);
-                }
-                // user มีข้อมูลใน like >>> จะลบสี
-                else {
-                    updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user);
-                }
-                return [...updatedDatabase];;
-            }
-        )
-    }
-    const handleToggleDislike = (questionId) => {
-        console.log("กด dislike")
-        setDatabase(
-            (database) => {
-                const updatedDatabase = [...database];
-                const indexQuestion = updatedDatabase.findIndex(question => question.id === questionId)
-                const dislikeByUser = updatedDatabase[indexQuestion].dislike.includes(user);
-                console.log('user มีข้อมูลใน dislike >>> ', dislikeByUser)
+        // Format the date and time
+        const formattedTime = date.toLocaleString(); // You can customize the format here
 
-                // user ไม่มีข้อมูลใน dislike >>> จะใส่สี
-                if (!dislikeByUser) {
-                    const likeByUser = updatedDatabase[indexQuestion].like.includes(user);
-                    if (likeByUser) {
-                        // ถ้า user กด'like'ในข้อมูลเดิม แล้วกด'dislike' ข้อมูล'like'เดิมจะถูกนำออก
-                        updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user);
-                    }
-                    // เพิ่ม user ลง 'dislike'
-                    updatedDatabase[indexQuestion].dislike.push(user);
-                }
-                // user มีข้อมูลใน dislike >>> จะลบสี
-                else {
-                    updatedDatabase[indexQuestion].dislike = updatedDatabase[indexQuestion].dislike.filter(user_id => user_id !== user);
-                }
-                return updatedDatabase;
-            }
-        )
-    }
+        return formattedTime;
+    };
+    // const handleToggleLike = (questionId) => {
+    //     console.log("กด like", questionId)
+    //     setDatabase(
+    //         (database) => {
+    //             const updatedDatabase = [...database];
+    //             const indexQuestion = updatedDatabase.findIndex(question => question.id === questionId)
+    //             const likeByUser = updatedDatabase[indexQuestion].like.includes(user);
+    //             console.log('user มีข้อมูลใน like >>> ', likeByUser)
+
+    //             // user ไม่มีข้อมูลใน like >>> จะใส่สี
+    //             if (!likeByUser) {
+    //                 const dislikeByUser = updatedDatabase[indexQuestion].dislike.includes(user);
+    //                 if (dislikeByUser) {
+    //                     // ถ้า user กด'dislike'ในข้อมูลเดิม แล้วกด'like' ข้อมูล'dislike'เดิมจะถูกนำออก
+    //                     updatedDatabase[indexQuestion].dislike = updatedDatabase[indexQuestion].dislike.filter(userId => userId !== user);
+    //                 }
+    //                 // เพิ่ม user ลง 'like'
+    //                 updatedDatabase[indexQuestion].like.push(user);
+    //             }
+    //             // user มีข้อมูลใน like >>> จะลบสี
+    //             else {
+    //                 updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(userId => userId !== user);
+    //             }
+    //             return [...updatedDatabase];;
+    //         }
+    //     )
+    // }
+    // const handleToggleDislike = (questionId) => {
+    //     console.log("กด dislike")
+    //     setDatabase(
+    //         (database) => {
+    //             const updatedDatabase = [...database];
+    //             const indexQuestion = updatedDatabase.findIndex(question => question.id === questionId)
+    //             const dislikeByUser = updatedDatabase[indexQuestion].dislike.includes(user);
+    //             console.log('user มีข้อมูลใน dislike >>> ', dislikeByUser)
+
+    //             // user ไม่มีข้อมูลใน dislike >>> จะใส่สี
+    //             if (!dislikeByUser) {
+    //                 const likeByUser = updatedDatabase[indexQuestion].like.includes(user);
+    //                 if (likeByUser) {
+    //                     // ถ้า user กด'like'ในข้อมูลเดิม แล้วกด'dislike' ข้อมูล'like'เดิมจะถูกนำออก
+    //                     updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(userId => userId !== user);
+    //                 }
+    //                 // เพิ่ม user ลง 'dislike'
+    //                 updatedDatabase[indexQuestion].dislike.push(user);
+    //             }
+    //             // user มีข้อมูลใน dislike >>> จะลบสี
+    //             else {
+    //                 updatedDatabase[indexQuestion].dislike = updatedDatabase[indexQuestion].dislike.filter(userId => userId !== user);
+    //             }
+    //             return updatedDatabase;
+    //         }
+    //     )
+    // }
 
     // เปิด-ปิด Commentทั้งหมด/คำถาม
     const [openComment, setOpenComment] = useState([]);
@@ -80,22 +108,35 @@ function QuestionCard({ database, setDatabase, user}) {
         setTextQues(e.target.value);
     };
 
-    const toggleModalEdit = (question) => {
-        const currentDate = new Date();
+    const toggleModalEdit = async (question, questionId) => {
+        console.log(question)
+        // const currentDate = new Date();
         if (question == "save") {
+            // GU DO HERE
             console.log("Save toggle Edit")
+            await axios.put(baseURL + 'question', {
+                subjectId: id,
+                userId: user.uid,
+                detail: textQues,
+                questionId: questionId
+            }).then((response) => {
+                console.log(response);
+                fetchQuestions()
+            }, (error) => {
+                console.log(error);
+            });
             // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
-            const dataIndex = database.findIndex((item) => item.id === cloneQuestion.id);
-            setDatabase((prevDatabase) => {
-                const updatedDatabase = [...prevDatabase];
-                updatedDatabase[dataIndex].detail = textQues;
-                updatedDatabase[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
-                updatedDatabase[dataIndex].time = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-                updatedDatabase[dataIndex].edit = true;
-                return updatedDatabase;
-            })
-            setCloneQuestion('')
-            setTextQues('')
+            // const dataIndex = database.findIndex((item) => item.id === cloneQuestion.id);
+            // setDatabase((prevDatabase) => {
+            //     const updatedDatabase = [...prevDatabase];
+            //     updatedDatabase[dataIndex].detail = textQues;
+            //     updatedDatabase[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+            //     updatedDatabase[dataIndex].time = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+            //     updatedDatabase[dataIndex].edit = true;
+            //     return updatedDatabase;
+            // })
+            // setCloneQuestion('')
+            // setTextQues('')
         }
         else {
             setCloneQuestion(question)
@@ -107,32 +148,38 @@ function QuestionCard({ database, setDatabase, user}) {
     // Modal delete open
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [isIndexDelete, setIsIndexDelete] = useState(null)
-    const toggleModalDelete = (command, index) => {
-        // console.log(command, index)
-        if (command === 'X' || command === 'cancle') {
-            setIsIndexDelete(null)
+    const toggleModalDelete = async (command) => {
+        console.log(command)
+        if (command === 'X' || command === 'cancel') {
             setIsModalDeleteOpen(false);
         } else if (command === 'openModal') {
-            setIsIndexDelete(index)
             setIsModalDeleteOpen(true);
         } else if (command === 'delete') {
-            const newDatabase = database.filter(question => question.id !== isIndexDelete);
-            setDatabase(newDatabase)
-            setIsIndexDelete(null)
+            await axios.delete(baseURL + 'question', {
+                data: {
+                    subjectId: id,
+                    questionId: questionId
+                }
+            }).then((response) => {
+                console.log(response);
+                fetchQuestions()
+            }, (error) => {
+                console.log(error);
+            });
             setIsModalDeleteOpen(false);
         }
     };
 
     return (
         <div className="mt-4">
-            {database.map((question, index) => (
+            {questions.map((question, index) => (
                 <div key={index} className="mt-4">
                     <div className="p-6 bg-white border border-gray-200 rounded-xl mt-4">
                         {/* profile */}
                         <div className="mt-2 flex flex-row">
                             <div className="w-[50px] h-[50px] flex-shrink-0 rounded-full bg-[#151C38]"></div>
                             {/* Can it be Edit/Delete ? */}
-                            {question.name === user &&
+                            {question.userId === user.uid &&
                                 <Menu placement="bottom-end">
                                     <MenuHandler>
                                         <div className="absolute right-20 cursor-pointer">
@@ -151,7 +198,7 @@ function QuestionCard({ database, setDatabase, user}) {
                                                 <span className="pl-3 text-gray-700">Edit Review</span>
                                             </div>
                                         </MenuItem>
-                                        <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', question.id)}>
+                                        <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => { setQuestionId(question.id), toggleModalDelete('openModal') }}>
                                             <div className="hover:bg-gray-200 cursor-pointer">
                                                 <div className="flex item-center py-3">
                                                     <Icon
@@ -216,7 +263,7 @@ function QuestionCard({ database, setDatabase, user}) {
                                                 {/* footer */}
                                                 <div className="flex items-center p-4 md:p-5 rounded-b mt-[-20px] mb-2">
                                                     <button
-                                                        onClick={() => toggleModalEdit("save")}
+                                                        onClick={() => toggleModalEdit("save",question.id)}
                                                         type="button"
                                                         className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
                                                     >
@@ -275,11 +322,11 @@ function QuestionCard({ database, setDatabase, user}) {
                                                 <div className="flex flex-row gap-4 mb-2 mt-6">
                                                     <div className="flex items-center pl-6 rounded-b mt-[-20px] mb-2 w-full">
                                                         <button
-                                                            onClick={() => toggleModalDelete('cancle')}
+                                                            onClick={() => toggleModalDelete('cancel')}
                                                             type="button"
                                                             className="text-gray-500 bg-white hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full border-2 border-[#D9D9D9]"
                                                         >
-                                                            Cancle
+                                                            Cancel
                                                         </button>
                                                     </div>
                                                     <div className="flex items-center pr-6 rounded-b mt-[-20px] mb-2 w-full">
@@ -298,9 +345,9 @@ function QuestionCard({ database, setDatabase, user}) {
                                 </div>
                             )}
                             <div className="ml-4">
-                                <p className="text-[#151C38] font-[400]">{question.name}</p>
+                                <p className="text-[#151C38] font-[400]">User@{question.userId}</p>
                                 <p className="text-[#A4A4A4] font-[350]">
-                                    {question.date}, {question.time} 
+                                    {convertTimestampToTime(question.time)}
                                     {question.edit && <> (edit)</>}
                                 </p>
                             </div>
@@ -311,7 +358,7 @@ function QuestionCard({ database, setDatabase, user}) {
                             {/* emotion */}
                             <div className="mt-3 flex items-start">
                                 {/* Did you like it ? */}
-                                {question.like.filter(user_id => user_id === user).length === 1 ?
+                                {question.like.includes(user.uid) ?
                                     (
                                         // กรณี มีชื่อ user ใน 'like'
                                         <button name="like" className="rotate-0" onClick={() => handleToggleLike(question.id)}>
@@ -338,7 +385,7 @@ function QuestionCard({ database, setDatabase, user}) {
                                 </div>
 
                                 {/* Did you dislike it ? */}
-                                {question.dislike.filter(user_id => user_id === user).length === 1 ?
+                                {question.dislike.includes(user.uid) ?
                                     (
                                         // กรณี มีชื่อ user ใน 'dislike'
                                         <button name="dislike" className="rotate-180 mt-1" onClick={() => handleToggleDislike(question.id)}>
@@ -373,7 +420,7 @@ function QuestionCard({ database, setDatabase, user}) {
                             </div>
                             {/* openCardComment */}
                             <div className="">
-                                {openComment[index] && <CommentCard data={question} indexQuestion={index} questionId={question.id} toggleCommentQuestion={toggleComment} user={user} database={database} setDatabase={setDatabase}/>}
+                                {openComment[index] && <CommentCard data={question} indexQuestion={index} questionId={question.id} toggleCommentQuestion={toggleComment} user={user} database={database} setDatabase={setDatabase} />}
                             </div>
                         </div>
                     </div>
