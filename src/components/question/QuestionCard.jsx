@@ -8,8 +8,8 @@ function QuestionCard({ database, setDatabase, user}) {
     const handleToggleLike = (questionId) => {
         console.log("กด like",questionId)
         setDatabase(
-            (dumyDatabase) => {
-                const updatedDatabase = [...dumyDatabase];
+            (database) => {
+                const updatedDatabase = [...database];
                 const indexQuestion = updatedDatabase.findIndex(question => question.id === questionId)
                 const likeByUser = updatedDatabase[indexQuestion].like.includes(user);
                 console.log('user มีข้อมูลใน like >>> ', likeByUser)
@@ -35,8 +35,8 @@ function QuestionCard({ database, setDatabase, user}) {
     const handleToggleDislike = (questionId) => {
         console.log("กด dislike")
         setDatabase(
-            (dumyDatabase) => {
-                const updatedDatabase = [...dumyDatabase];
+            (database) => {
+                const updatedDatabase = [...database];
                 const indexQuestion = updatedDatabase.findIndex(question => question.id === questionId)
                 const dislikeByUser = updatedDatabase[indexQuestion].dislike.includes(user);
                 console.log('user มีข้อมูลใน dislike >>> ', dislikeByUser)
