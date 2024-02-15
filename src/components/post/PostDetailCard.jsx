@@ -146,7 +146,7 @@ function PostDetailCard({ database, setDatabase, user }) {
                             width="15"
                             height="15"
                           />
-                          <span className="pl-3 text-gray-700">Edit Review</span>
+                          <span className="pl-3 text-gray-700">Edit Post</span>
                         </div>
                       </MenuItem>
                       <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', detail.id)} >
@@ -157,7 +157,7 @@ function PostDetailCard({ database, setDatabase, user }) {
                             width="15"
                             height="15"
                           />
-                          <span className="pl-3 text-gray-700">Delete Review</span>
+                          <span className="pl-3 text-gray-700">Delete Post</span>
                         </div>
                       </MenuItem>
                     </MenuList>
@@ -193,7 +193,7 @@ function PostDetailCard({ database, setDatabase, user }) {
                       {/* header */}
                       <div className="flex items-center justify-between p-4 border-b border-gray-200">
                         <h5 className="text-[27px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-transparent bg-clip-text text-center w-full">
-                          Edit Question
+                          Edit Post
                         </h5>
                         {/* close */}
                         <button type="button" className="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsModalEditOpen(false)}>
@@ -264,7 +264,7 @@ function PostDetailCard({ database, setDatabase, user }) {
                       {/* header */}
                       <div className="flex items-center justify-between p-4 border-b border-gray-200">
                         <h5 className="text-[27px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-transparent bg-clip-text text-center w-full">
-                          Delete Review
+                          Delete Post
                         </h5>
                         {/* close */}
                         <button type="button" className="absolute top-5 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => toggleModalDelete('X')}>
@@ -276,7 +276,7 @@ function PostDetailCard({ database, setDatabase, user }) {
                       {/* body */}
                       <div className="flex flex-col p-4 md:p-5 justify-center items-center text-2xl font-normal">
                         <p>Are you sure you want to</p>
-                        <p>delete your Question?</p>
+                        <p>delete your Post?</p>
                       </div>
                       {/* footer */}
                       <div className="flex flex-row gap-4 mb-2 mt-6">
