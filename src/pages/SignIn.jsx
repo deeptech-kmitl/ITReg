@@ -19,13 +19,13 @@ function SignIn() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('')
+        setError('');
         try {
-            await signIn(email, password)
-            navigate('/dashboard')
+            await signIn(email, password);
+            navigate('/dashboard');
         } catch (e) {
-            setError(e.message)
-            console.log(e.message)
+            setError(e.message);
+            alert(e.message);
         }
     };
     //
