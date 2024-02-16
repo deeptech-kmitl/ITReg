@@ -19,17 +19,17 @@ function CommentBox({ data, database, setDatabase, indexPost, postId }) {
     setTextAnswer(e.target.value);
   };
 
-  const toggleModalEdit = (comment) => {
+  const toggleModalEdit = async (comment) => {
     const currentDate = new Date();
     if (comment == "save") {
-      console.log("Save toggle Edit")
+      console.log(cloneAnswer.commentId)
       // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
-      const dataIndex = database[indexPost].comment.findIndex((item) => item.id === cloneAnswer.id);
+      const dataIndex = database[indexPost].comments.findIndex((item) => item.commentId === cloneAnswer.commentId);
+      const response = await axios.put(`http://localhost:3001/editPostComment/${postId}/${cloneAnswer.commentId}`, {detail: textAnswer, userId: user.uid})
       setDatabase((prevDatabase) => {
         const updatedDatabase = [...prevDatabase];
-        updatedDatabase[indexPost].comment[dataIndex].detail = textAnswer;
-        updatedDatabase[indexPost].comment[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear() + 543}`;
-        updatedDatabase[indexPost].comment[dataIndex].time = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        updatedDatabase[indexPost].comments[dataIndex].detail = response.data.detail;
+        updatedDatabase[indexPost].comments[dataIndex].dateTime = response.data.dateTime;
         // updatedDatabase[indexPost].comment[dataIndex].edit = true;
         return updatedDatabase;
       })
@@ -45,13 +45,10 @@ function CommentBox({ data, database, setDatabase, indexPost, postId }) {
 
   // Modal delete open
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
-  const [answerIdDelete, setAnswerIdDelete] = useState(null)
   const toggleModalDelete = async (command, commentId) => {
     if (command === 'X' || command === 'cancle') {
-      setAnswerIdDelete(null)
       setIsModalDeleteOpen(false);
     } else if (command === 'openModal') {
-      setAnswerIdDelete(commentId)
       setIsModalDeleteOpen(true);
     } else if (command === 'delete') {
       const response = await axios.delete(`http://localhost:3001/delCommentPost/${postId}/${commentId}`);
@@ -61,14 +58,12 @@ function CommentBox({ data, database, setDatabase, indexPost, postId }) {
         if (detail.id === postId) {
           return {
             ...detail,
-            comments: detail.comments.filter(comment => comment.commentId !== answerIdDelete),
+            comments: detail.comments.filter(comment => comment.commentId !== commentId),
           }
         }
         return detail;
       })
-      console.log(newDatabase)
       setDatabase(newDatabase)
-      setAnswerIdDelete(null)
       setIsModalDeleteOpen(false);
     }
     setIsModalDeleteOpen(!isModalDeleteOpen);
@@ -125,7 +120,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId }) {
          <div className="ml-3 p-2 bg-[#E3F3FF] relative" style={{ width: '100%', maxWidth: 'calc(100% - 40px)', borderRadius: '10px' }}>
            <div className="flex items-center justify-between mb-1">
              <div className="flex items-center">
-               <p className="text-[#151C38] text-sm font-[400]">user@{comment?.userId}</p>
+               <p className="text-[#151C38] text-sm font-[400]">{role == "Admin" ? "admin": "user"}@{comment?.userId}</p>
                <p className="text-[#A4A4A4] text-[10px] font-[350] ml-2 mt-[2px]">{convertTimestampToTime(comment?.dateTime)}</p>
              </div>
              <div className="relative">
