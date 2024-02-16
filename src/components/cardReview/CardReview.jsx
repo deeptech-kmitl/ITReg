@@ -5,10 +5,10 @@ import axios from "axios";
 import { baseURL } from '../../../baseURL';
 import { UserAuth } from "../../context/AuthContext";
 
-function CardReview({ id, reviews ,setReviews}) {
+function CardReview({ id, reviews, setReviews }) {
     const [reviewId, setReviewId] = useState('')
     const { user, role } = UserAuth()
- 
+
     // แสดงผลดาวตรง rating
     function DisplayRating(rate) {
         const arrayRate = [];
@@ -114,12 +114,13 @@ function CardReview({ id, reviews ,setReviews}) {
                 reviewId: reviewId
             }
         }).then((response) => {
-            setReviews(reviews.filter((item)=> item.id != reviewId))
+            setReviews(reviews.filter((item) => item.id != reviewId))
         }, (error) => {
             console.log(error);
         });
 
     };
+
     const editReview = async () => {
         await axios.put(baseURL + 'editReview', {
             subjectId: id,
@@ -129,52 +130,86 @@ function CardReview({ id, reviews ,setReviews}) {
             grade: grade,
             reviewId: reviewId
         }).then((response) => {
-            console.log(response.data)
-         const indexRe = reviews.findIndex((item)=>item.id == reviewId)
-         setReviews(() => {
-            const updatedDatabase = [...reviews];
-            updatedDatabase[indexRe].content = textReview;
-            updatedDatabase[indexRe].rating = rating;
-            updatedDatabase[indexRe].grade = grade
-            updatedDatabase[indexRe].time = convertTimestampToTime(response.data.time)
-            // updatedDatabase[dataIndex].edit = true;
-            return updatedDatabase;
-          })
+            const indexRe = reviews.findIndex((item) => item.id == reviewId)
+            setReviews(() => {
+                const updatedDatabase = [...reviews];
+                updatedDatabase[indexRe].content = textReview;
+                updatedDatabase[indexRe].rating = rating;
+                updatedDatabase[indexRe].grade = grade
+                updatedDatabase[indexRe].time = response.data.time
+                return updatedDatabase;
+            })
 
         }, (error) => {
             console.log(error);
         });
     }
 
-    const newLike = async (type, reviewId) => {
-        console.log(reviewId)
+    const newLike = async (reviewId) => {
+        const indexRe = reviews.findIndex((item) => item.id == reviewId)
+        const likeByUser = reviews[indexRe].like.includes(user.uid);
         await axios.put(baseURL + 'editReviewLikes', {
             subjectId: id,
             userId: user.uid,
-            likeType: type,
+            likeType: likeByUser,
             reviewId: reviewId
         }).then((response) => {
-            console.log(response);
-            fetchReview()
-        }, (error) => {
-            console.log(error);
+
+            setReviews(
+                () => {
+                    const updatedDatabase = [...reviews];
+
+                    // user ไม่มีข้อมูลใน like >>> จะใส่สี
+                    if (!likeByUser) {
+                        const dislikeByUser = updatedDatabase[indexRe].dislike.includes(user.uid);
+                        if (dislikeByUser) {
+                            // ถ้า user กด'dislike'ในข้อมูลเดิม แล้วกด'like' ข้อมูล'dislike'เดิมจะถูกนำออก
+                            updatedDatabase[indexRe].dislike = updatedDatabase[indexRe].dislike.filter(userId => userId !== user.uid);
+                        }
+                        // เพิ่ม user ลง 'like'
+                        updatedDatabase[indexRe].like.push(user.uid);
+                    }
+                    // user มีข้อมูลใน like >>> จะลบสี
+                    else {
+                        updatedDatabase[indexRe].like = updatedDatabase[indexRe].like.filter(userId => userId !== user.uid);
+                    }
+                    return [...updatedDatabase];
+                }
+            )
         });
     }
-    const clearLike = async (type, reviewId) => {
-        console.log(reviewId)
+    const dislike = async (reviewId) => {
+        const indexRe = reviews.findIndex((item) => item.id == reviewId)
+        const dislikeByUser = reviews[indexRe].dislike.includes(user.uid);
         await axios.put(baseURL + 'delReviewLikes', {
             subjectId: id,
             userId: user.uid,
-            likeType: type,
+            likeType: dislikeByUser,
             reviewId: reviewId
-
         }).then((response) => {
-            console.log(response);
-            fetchReview()
-        }, (error) => {
-            console.log(error);
+            setReviews(
+                () => {
+                    const updatedDatabase = [...reviews];
+                    // user ไม่มีข้อมูลใน dislike >>> จะใส่สี
+                    if (!dislikeByUser) {
+                        const likeByUser = updatedDatabase[indexRe].like.includes(user.uid);
+                        if (likeByUser) {
+                            // ถ้า user กด'like'ในข้อมูลเดิม แล้วกด'dislike' ข้อมูล'like'เดิมจะถูกนำออก
+                            updatedDatabase[indexRe].like = updatedDatabase[indexRe].like.filter(userId => userId !== user.uid);
+                        }
+                        // เพิ่ม user ลง 'dislike'
+                        updatedDatabase[indexRe].dislike.push(user.uid);
+                    }
+                    // user มีข้อมูลใน dislike >>> จะลบสี
+                    else {
+                        updatedDatabase[indexRe].dislike = updatedDatabase[indexRe].dislike.filter(userId => userId !== user.uid);
+                    }
+                    return updatedDatabase;
+                }
+            )
         });
     }
+
     return (
         <div className="mt-4">
             {reviews.map((review, index) => (
@@ -421,7 +456,7 @@ function CardReview({ id, reviews ,setReviews}) {
                                 (
                                     // กรณี มีชื่อ user ใน 'like'
                                     // <button name="like" className="rotate-0" onClick={() => { setReviewId(review.id), clearLike('like') }}>
-                                    <button name="like" className="rotate-0" onClick={() => { clearLike('like', review.id) }}>
+                                    <button name="like" className="rotate-0" onClick={() => { newLike(review.id) }}>
                                         <Icon
                                             icon="streamline:like-1-solid"
                                             color="#D91818"
@@ -432,7 +467,7 @@ function CardReview({ id, reviews ,setReviews}) {
                                 ) : (
                                     // กรณี ไม่มีชื่อ user ใน 'like'
                                     // <button name="like" className="rotate-0" onClick={() => { setReviewId(review.id), newLike('like') }}>
-                                    <button name="like" className="rotate-0" onClick={() => { newLike('like', review.id) }}>
+                                    <button name="like" className="rotate-0" onClick={() => { newLike(review.id) }}>
                                         <Icon
                                             icon="streamline:like-1"
                                             color="#151c38"
@@ -450,7 +485,7 @@ function CardReview({ id, reviews ,setReviews}) {
                                 (
                                     // กรณี มีชื่อ user ใน 'dislike'
                                     // <button name="dislike" className="rotate-180 mt-1" onClick={() => { setReviewId(review.id), clearLike('dislike') }}>
-                                    <button name="dislike" className="rotate-180 mt-1" onClick={() => { clearLike('dislike', review.id) }}>
+                                    <button name="dislike" className="rotate-180 mt-1" onClick={() => { dislike(review.id) }}>
                                         <Icon
                                             icon="streamline:like-1-solid"
                                             color="#151c38"
@@ -460,7 +495,7 @@ function CardReview({ id, reviews ,setReviews}) {
                                     </button>
                                 ) : (
                                     // กรณี ไม่มีชื่อ user ใน 'dislike'
-                                    <button name="dislike" className="rotate-180 mt-1" onClick={() => { newLike('dislike', review.id) }}>
+                                    <button name="dislike" className="rotate-180 mt-1" onClick={() => { dislike(review.id) }}>
                                         {/* <button name="dislike" className="rotate-180 mt-1" onClick={() => { setReviewId(review.id), newLike('dislike') }}> */}
                                         <Icon
                                             icon="streamline:like-1"
