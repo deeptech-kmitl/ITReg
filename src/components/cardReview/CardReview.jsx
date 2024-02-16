@@ -8,7 +8,7 @@ import { UserAuth } from "../../context/AuthContext";
 function CardReview({ id, reviews, setReviews }) {
     const [reviewId, setReviewId] = useState('')
     const { user, role } = UserAuth()
-
+ 
     // แสดงผลดาวตรง rating
     function DisplayRating(rate) {
         const arrayRate = [];
@@ -114,7 +114,7 @@ function CardReview({ id, reviews, setReviews }) {
                 reviewId: reviewId
             }
         }).then((response) => {
-            setReviews(reviews.filter((item) => item.id != reviewId))
+            setReviews(reviews.filter((item)  => item.id != reviewId))
         }, (error) => {
             console.log(error);
         });

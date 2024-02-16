@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
-
-function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, user, database, setDatabase }) {
+import axios from "axios";
+import { baseURL } from "../../../baseURL";
+function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, toggleCommentQuestion, user, questions, setQuestions, convertTimestampToTime }) {
     const [showMore, setShowmore] = useState([]);
+    const [answerId, setAnswerId] = useState("")
     const toggleShowmore = (answerId) => {
         const indexAnswer = data.answer.findIndex(answer => answer.id === answerId)
         setShowmore((prevIndex) => {
@@ -34,22 +36,33 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
         setTextAnswer(e.target.value);
     };
 
-    const toggleModalEdit = (answer) => {
-        const currentDate = new Date();
+    const toggleModalEdit = async (answer) => {
+        // const currentDate = new Date();
         if (answer == "save") {
             console.log("Save toggle Edit")
-            // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
-            const dataIndex = database[indexQuestion].answer.findIndex((item) => item.id === cloneAnswer.id);
-            setDatabase((prevDatabase) => {
-                const updatedDatabase = [...prevDatabase];
-                updatedDatabase[indexQuestion].answer[dataIndex].detail = textAnswer;
-                updatedDatabase[indexQuestion].answer[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear() + 543}`;
-                updatedDatabase[indexQuestion].answer[dataIndex].time = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-                updatedDatabase[indexQuestion].answer[dataIndex].edit = true;
-                return updatedDatabase;
+            await axios.put(baseURL + 'answer', {
+                subjectId: subjectId,
+                userId: user.uid,
+                detail: textAnswer,
+                questionId: questionId,
+                answerId: cloneAnswer.id
+            }).then(res => {
+                const dataIndex = questions[indexQuestion].answers.findIndex((item) => item.id === cloneAnswer.id);
+                setQuestions(() => {
+                    const updatedDatabase = [...questions];
+                    updatedDatabase[indexQuestion].answers[dataIndex].detail = textAnswer;
+                    updatedDatabase[indexQuestion].answers[dataIndex].time = res.data.time
+                    updatedDatabase[indexQuestion].answers[dataIndex].edit = true;
+                    return updatedDatabase;
+                })
+                setCloneAnswer('')
+                setTextAnswer('')
+            }).catch(error => {
+                console.log(error);
             })
-            setCloneAnswer('')
-            setTextAnswer('')
+            // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
+
+
         }
         else {
             setCloneAnswer(answer)
@@ -61,54 +74,82 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
     // Modal delete open
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [answerIdDelete, setAnswerIdDelete] = useState(null)
-    const toggleModalDelete = (command, answerId) => {
-        if (command === 'X' || command === 'cancle') {
+    const toggleModalDelete = async (command, answerId) => {
+        if (command === 'X' || command === 'cancel') {
             setAnswerIdDelete(null)
             setIsModalDeleteOpen(false);
         } else if (command === 'openModal') {
             setAnswerIdDelete(answerId)
             setIsModalDeleteOpen(true);
         } else if (command === 'delete') {
-            const newDatabase = database.map(question => {
-                if (question.id === questionId) {
-                    return {
-                        ...question,
-                        answer: question.answer.filter(answer => answer.id !== answerIdDelete),
-                    }
+            await axios.delete(baseURL + 'answer', {
+                data: {
+                    subjectId: subjectId,
+                    questionId: questionId,
+                    answerId: answerIdDelete
                 }
-                return question;
+            }).then(() => {
+                const newDatabase = questions.map(question => {
+                    if (question.id === questionId) {
+                        return {
+                            ...question,
+                            answers: question.answers.filter(answer => answer.id !== answerIdDelete),
+                        }
+                    }
+                    return question;
+                })
+                setQuestions(newDatabase)
+                setAnswerIdDelete(null)
+                setIsModalDeleteOpen(false);
+            }).catch(error => {
+                console.log(error)
             })
-            setDatabase(newDatabase)
-            setAnswerIdDelete(null)
-            setIsModalDeleteOpen(false);
         }
         setIsModalDeleteOpen(!isModalDeleteOpen);
     };
 
     // เพิ่มข้อมูลลงฐานข้อมูล
     const [answer, setAnswer] = useState('');
-    const postAnswer = () => {
-        const currentDate = new Date();
-        const newAnswer = {
-            id: data.answer[data.answer.length - 1].id + 5, //สร้าง ID ไม่ซ้ำกัน
-            name: user,
+
+    const postAnswer = async () => {
+        axios.post(baseURL + "answer", {
+            questionId: questionId,
+            subjectId: subjectId,
+            userId: user.uid,
             detail: answer,
-            date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear() + 543}`,
-            time: currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
-        };
-        const newDatabase = database.map(question => {
-            if (question.id === questionId) {
-                return {
-                    ...question,
-                    //เอาคำตอบเก่าของคำถามตามid และต่อด้วย คำตอบใหม่
-                    answer: [...question.answer, newAnswer],
-                };
-            }
-            return question;
-        });
+        })
+            .then(
+                (response) => {
+                    console.log(response.data)
+                    const newDatabase = questions.map(question => {
+                        if (question.id === questionId) {
+                            return {
+                                ...question,
+                                //เอาคำตอบเก่าของคำถามตามid และต่อด้วย คำตอบใหม่
+                                answers: [...question.answers, response.data].sort(sortByTime),
+                            };
+                        }
+                        return question;
+                    });
+                    console.log(newDatabase)
+                    setQuestions(newDatabase);
+                    setAnswer('')
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        // const currentDate = new Date();
+        // const newAnswer = {
+        //     id: data.answer[data.answer.length - 1].id + 5, //สร้าง ID ไม่ซ้ำกัน
+        //     name: user,
+        //     detail: answer,
+        //     date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear() + 543}`,
+        //     time: currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
+        // };
+
         // Update the state with the new array
-        setDatabase(newDatabase);
-        setAnswer('')
+
     }
 
     return (
@@ -119,14 +160,14 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
                     <Icon icon="mingcute:down-line" color='#00000080' width="19" height="19" onClick={() => toggleCommentQuestion(indexQuestion)} />
                 </button>
             </div>
-            {data.answer.map((answer, index) => (
+            {data.answers.map((answer, index) => (
                 <div key={index} className="my-3">
                     {/* profile */}
                     <div className="mx-2 bg-[#E3F3FF] rounded-[10px]">
                         <div className="flex pt-3 px-3">
-                            <p className="text-[#A4A4A4] text-l font-[400] ">Answer by {answer.name}</p>
+                            <p className="text-[#A4A4A4] text-l font-[400] ">Answer by User@{answer.userId}</p>
                             {/* Can it be Edit/Delete ? */}
-                            {answer.name === user &&
+                            {answer.userId === user.uid &&
                                 <Menu placement="bottom-end">
                                     <MenuHandler>
                                         <div className="absolute right-28 cursor-pointer">
@@ -269,11 +310,11 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
                                                 <div className="flex flex-row gap-4 mb-2 mt-6">
                                                     <div className="flex items-center pl-6 rounded-b mt-[-20px] mb-2 w-full">
                                                         <button
-                                                            onClick={() => toggleModalDelete('cancle')}
+                                                            onClick={() => toggleModalDelete('cancel')}
                                                             type="button"
                                                             className="text-gray-500 bg-white hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full border-2 border-[#D9D9D9]"
                                                         >
-                                                            Cancle
+                                                            Cancel
                                                         </button>
                                                     </div>
                                                     <div className="flex items-center pr-6 rounded-b mt-[-20px] mb-2 w-full">
@@ -314,7 +355,7 @@ function CommentCard({ data, indexQuestion, questionId, toggleCommentQuestion, u
                             </p>
                         </div>
                     </div>
-                    <p className="text-[#A4A4A4] text-l font-[350] px-3">{answer.date}, {answer.time}  {answer.edit && <> (edit)</>}</p>
+                    <p className="text-[#A4A4A4] text-l font-[350] px-3">{convertTimestampToTime(answer.time)}  {answer.edit && <> (edit)</>}</p>
                 </div>
             ))}
             <div name="post" className="relative mx-2">

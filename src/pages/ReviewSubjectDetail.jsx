@@ -13,7 +13,11 @@ function ReviewSubjectDetail() {
   const [questions, setQuestions] = useState([]);
   const [question, setQuestion] = useState("");
   const [activeTab, setActiveTab] = useState("review");
-
+  const sortByTime = (a, b) => {
+    const timeA = a.time._seconds + a.time._nanoseconds / 1e9;
+    const timeB = b.time._seconds + b.time._nanoseconds / 1e9;
+    return timeB - timeA; // Sorting in descending order (latest first)
+  };
   // Modal create open
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
 
@@ -22,6 +26,12 @@ function ReviewSubjectDetail() {
     fetchQuestion();
     fetchReview()
   }, [])
+  useEffect(() => {
+    // Fetch review data when the component mounts
+    setReviews(reviews.sort(sortByTime))
+    setQuestions(questions.sort(sortByTime))
+    console.log(reviews)
+  }, [reviews, questions])
   const toggleModalCreate = () => {
     setIsModalCreateOpen(!isModalCreateOpen);
   };
@@ -63,7 +73,7 @@ function ReviewSubjectDetail() {
       .then(
         (response) => {
           console.log(response.data)
-          setQuestions([...questions, response.data])
+          setQuestions([...questions, response.data].sort(sortByTime))
           setQuestion("");
         },
         (error) => {
@@ -71,7 +81,7 @@ function ReviewSubjectDetail() {
         }
       );
 
-    
+
   };
   const newReview = async () => {
     await axios
@@ -86,7 +96,7 @@ function ReviewSubjectDetail() {
       })
       .then(
         (response) => {
-          setReviews([...reviews, response.data])
+          setReviews([...reviews, response.data].sort(sortByTime))
           // setReviews(response)
           setTextReview("");
           setRating("");
@@ -315,6 +325,7 @@ function ReviewSubjectDetail() {
                   id={reviewId}
                   questions={questions}
                   setQuestions={setQuestions}
+                  sortByTime={sortByTime}
                 />
               </div>
             )}
