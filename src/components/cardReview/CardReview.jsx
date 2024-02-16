@@ -128,7 +128,8 @@ function CardReview({ id, reviews, setReviews }) {
             content: textReview,
             rating: rating,
             grade: grade,
-            reviewId: reviewId
+            reviewId: reviewId,
+            edit:true
         }).then((response) => {
             const indexRe = reviews.findIndex((item) => item.id == reviewId)
             setReviews(() => {
@@ -137,6 +138,7 @@ function CardReview({ id, reviews, setReviews }) {
                 updatedDatabase[indexRe].rating = rating;
                 updatedDatabase[indexRe].grade = grade
                 updatedDatabase[indexRe].time = response.data.time
+                updatedDatabase[indexRe].edit = true
                 return updatedDatabase;
             })
 
@@ -421,7 +423,7 @@ function CardReview({ id, reviews, setReviews }) {
                             )}
 
                             <div className="ml-4">
-                                <p className="text-[#151C38] text-l font-[400]">User@{review.userId}</p>
+                                <p className="text-[#151C38] text-l font-[400]">User@{review.userId} {review.edit && <> (edit)</>}</p>
                                 <p className="text-[#A4A4A4] text-l font-[350]">
                                     {convertTimestampToTime(review.time)}
                                 </p>
