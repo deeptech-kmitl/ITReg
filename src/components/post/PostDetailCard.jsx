@@ -6,9 +6,10 @@ import { parse, compareDesc } from "date-fns";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
 import { UserAuth } from "../../context/AuthContext";
 import Carousel from "./Carousel"
+import axios from "axios";
 
-function PostDetailCard({ database, setDatabase, user }) {
-  const { role } = UserAuth();
+function PostDetailCard({ database, setDatabase, role }) {
+  const { user } = UserAuth();
   const [likedPosts, setLikedPosts] = useState([]);
   const [showFullScreen, setShowFullScreen] = useState(false);
   const [imgForFullScreen, setImgForFullScreen] = useState("");
@@ -16,30 +17,24 @@ function PostDetailCard({ database, setDatabase, user }) {
   const [showComments, setShowComments] = useState([]);
   // const [database, setDatabase] = useState(PostDetail);
 
-  const sortedDetailCard = database.slice().sort((a, b) => {
-    const dateTimeA = parse(`${a.date} ${a.time}`, "dd/MM/yyyy HH.mm", new Date());
-    const dateTimeB = parse(`${b.date} ${b.time}`, "dd/MM/yyyy HH.mm", new Date());
-    return compareDesc(dateTimeA, dateTimeB);
-  });
-
   const handleToggleLike = (postId) => {
     console.log("กด like", postId)
     setDatabase(
       (dumyDatabase) => {
         const updatedDatabase = [...dumyDatabase];
         const indexQuestion = updatedDatabase.findIndex(post => post.id === postId)
-        const likeByUser = updatedDatabase[indexQuestion].like.includes(user);
+        const likeByUser = updatedDatabase[indexQuestion].like.includes(user.uid);
         console.log('user มีข้อมูลใน like >>> ', likeByUser)
-
         // user ไม่มีข้อมูลใน like >>> จะใส่สี
         if (!likeByUser) {
-
           // เพิ่ม user ลง 'like'
-          updatedDatabase[indexQuestion].like.push(user);
+          axios.patch("http://localhost:3001/newPostLikes", {postId: postId, userId: user.uid}).then(res => console.log(res.data).catch(err => console.log(err.message)));
+          updatedDatabase[indexQuestion].like.push(user.uid);
         }
         // user มีข้อมูลใน like >>> จะลบสี
         else {
-          updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user);
+          axios.patch(`http://localhost:3001/delPostLikes`, {postId: postId, userId: user.uid}).then(res => console.log(res.data)).catch(err => console.log(err.message));
+          updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user.uid);
         }
         return [...updatedDatabase];;
       }
@@ -75,56 +70,77 @@ function PostDetailCard({ database, setDatabase, user }) {
     setTextPost(e.target.value);
   };
 
-  const toggleModalEdit = (detail) => {
+  const toggleModalEdit = async (detail) => {
     const currentDate = new Date();
-    if (detail == "save") {
-      console.log("Save toggle Edit")
-      // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
-      const dataIndex = database.findIndex((item) => item.id === clonePost.id);
-      setDatabase((prevDatabase) => {
-        const updatedDatabase = [...prevDatabase];
-        updatedDatabase[dataIndex].message = textPost;
-        updatedDatabase[dataIndex].titlename = newtitle;
-        updatedDatabase[dataIndex].date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
-        updatedDatabase[dataIndex].time = currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-        // updatedDatabase[dataIndex].edit = true;
-        return updatedDatabase;
-      })
-      setClonePost('')
-      setTextPost('')
+    try {
+      if (detail == "save") {
+        console.log("Save toggle Edit")
+        // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
+        const dataIndex = database.findIndex((item) => item.id === clonePost.id);
+        const response = await axios.put(`http://localhost:3001/editPost/${database[dataIndex].id}`, {Title:newtitle, message:textPost});
+        setDatabase((prevDatabase) => {
+          const updatedDatabase = [...prevDatabase];
+          updatedDatabase[dataIndex].message = response.data.message;
+          updatedDatabase[dataIndex].titlename = response.data.titlename;
+          updatedDatabase[dataIndex].dateTime = response.data.dateTime;
+          // updatedDatabase[dataIndex].edit = true;
+          console.log(updatedDatabase);
+          return updatedDatabase;
+        });
+        setClonePost('')
+        setTextPost('')
+      }
+      else {
+        setClonePost(detail)
+        setTextPost(detail.message)
+        setNewtitle(detail.titlename)
+      }
+      setIsModalEditOpen(!isModalEditOpen);
+    } catch (error) {
+      console.log(error.message);
     }
-    else {
-      setClonePost(detail)
-      setTextPost(detail.message)
-      setNewtitle(detail.titlename)
-    }
-    setIsModalEditOpen(!isModalEditOpen);
   };
 
   // Modal delete open
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [isIndexDelete, setIsIndexDelete] = useState(null)
-  const toggleModalDelete = (command, index) => {
-    // console.log(command, index)
-    if (command === 'X' || command === 'cancle') {
-      setIsIndexDelete(null)
-      setIsModalDeleteOpen(false);
-    } else if (command === 'openModal') {
-      setIsIndexDelete(index)
-      setIsModalDeleteOpen(true);
-    } else if (command === 'delete') {
-      const newDatabase = database.filter(detail => detail.id !== isIndexDelete);
-      setDatabase(newDatabase)
-      setIsIndexDelete(null)
-      setIsModalDeleteOpen(false);
+  const toggleModalDelete = async (command, index) => {
+    try {
+      // console.log(command, index)
+      if (command === 'X' || command === 'cancle') {
+        setIsIndexDelete(null)
+        setIsModalDeleteOpen(false);
+      } else if (command === 'openModal') {
+        setIsIndexDelete(index)
+        setIsModalDeleteOpen(true);
+      } else if (command === 'delete') {
+        const response = await axios.delete(`http://localhost:3001/deletePost/${isIndexDelete}`);
+        const newDatabase = database.filter(detail => detail.id !== isIndexDelete);
+        setDatabase(newDatabase)
+        setIsIndexDelete(null)
+        setIsModalDeleteOpen(false);
+      }
+    } catch (error) {
+      console.log(error.message)
     }
   };
+  const convertTimestampToTime = (timestamp) => {
+    // Convert timestamp to milliseconds
+    const milliseconds = timestamp._seconds * 1000 + Math.round(timestamp._nanoseconds / 1000000);
 
-  
+    // Create a new Date object
+    const date = new Date(milliseconds);
+
+    // Format the date and time
+    const formattedTime = date.toLocaleString(); // You can customize the format here
+
+    return formattedTime;
+};
+   
 
   return (
     <div className="mt-5">
-      {sortedDetailCard.map((detail, index) => (
+      {database.map((detail, index) => (
         <div key={index} className="mt-4">
           <div className="flex-shrink-0 border-[1px] border-solid border-gray-300 rounded-[30px] p-6 bg-white">
             <div className="text-[#151C38] text-2xl font-[500] leading-normal flex justify-between">
@@ -312,7 +328,7 @@ function PostDetailCard({ database, setDatabase, user }) {
                   {detail.name}
                 </p>
                 <p className="text-[#A4A4A4] text-l font-[350]">
-                  {detail.date}, {detail.time} น.
+                  {convertTimestampToTime(detail.dateTime)} น.
                 </p>
               </div>
             </div>
@@ -332,7 +348,7 @@ function PostDetailCard({ database, setDatabase, user }) {
 
             <div className="mt-3 flex items-start">
               {/* Did you like it ? */}
-              {detail.like.filter(user_id => user_id === user).length === 1 ?
+              {detail.like.filter(user_id => user_id === user.uid).length === 1 ?
                 (
                   // กรณี มีชื่อ user ใน 'like'
                   <button name="like" className="rotate-0" onClick={() => handleToggleLike(detail.id)}>
@@ -367,12 +383,12 @@ function PostDetailCard({ database, setDatabase, user }) {
                 />
               </div>
               <div className="ml-1 mt-[1px]">
-                <p className="text-[#151C38] text-sm">{detail.comment.length}</p>
+                <p className="text-[#151C38] text-sm">{detail.comments?.length}</p>
               </div>
             </div>
             {showComments[index] && (
               <div>
-                <CommentBox data={detail} user={user} indexPost={index} database={database} setDatabase={setDatabase} postId={detail.id} />
+                <CommentBox data={detail} indexPost={index} database={database} setDatabase={setDatabase} postId={detail.id}/>
               </div>
             )}
           </div>
