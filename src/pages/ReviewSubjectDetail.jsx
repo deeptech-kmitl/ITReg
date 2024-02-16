@@ -16,6 +16,10 @@ function ReviewSubjectDetail() {
   // Modal create open
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
 
+  useEffect(() => {
+    // Fetch review data when the component mounts
+    fetchReview()
+}, [])
   const toggleModalCreate = () => {
     setIsModalCreateOpen(!isModalCreateOpen);
   };
@@ -24,7 +28,6 @@ function ReviewSubjectDetail() {
   const [questions, setQuestions] = useState([]);
   useEffect(() => {
     fetchQuestion();
-    fetchReview();
   }, []);
 
   const [question, setQuestion] = useState("");
@@ -51,13 +54,19 @@ function ReviewSubjectDetail() {
   const fetchQuestion = async () => {
     try {
       const response = await axios.get(baseURL + `getQuestions/${reviewId}`);
-      console.log("question: " + JSON.stringify(response.data));
       setQuestions(response.data);
     } catch (error) {
       console.error("Error fetching question:", error);
     }
   };
-
+  const fetchReview = async () => {
+    try {
+      const response = await axios.get(baseURL + `getReview/${reviewId}`);
+      setReviews(response.data); // Update the review state with the fetched data
+    } catch (error) {
+      console.error("Error fetching review:", error);
+    }
+  };
 
   const auth = getAuth();
   const user = auth.currentUser;
@@ -78,11 +87,11 @@ function ReviewSubjectDetail() {
       })
       .then(
         (response) => {
-          console.log(response);
+    setReviews([...reviews , response.data]) 
+          // setReviews(response)
           setTextReview("");
           setRating("");
           setGrade("");
-          fetchReview();
         },
         (error) => {
           console.log(error);
@@ -92,14 +101,6 @@ function ReviewSubjectDetail() {
 
 
 
-  const fetchReview = async () => {
-    try {
-      const response = await axios.get(baseURL + `getReview/${reviewId}`);
-      setReviews(response.data); // Update the review state with the fetched data
-    } catch (error) {
-      console.error("Error fetching review:", error);
-    }
-  };
   return (
     <div className="w-full">
       {/* ReviewDetail */}
@@ -154,7 +155,7 @@ function ReviewSubjectDetail() {
                       <img src="https://img.icons8.com/ios-filled/20/FFFFFF/plus-math.png"></img>
                     </button>
                   </div>
-                  <CardReview id={reviewId} reviewParent={reviews} />
+                  <CardReview id={reviewId} reviews={reviews}  setReviews={setReviews}/>
 
                   {/* Modal create Review */}
                   {isModalCreateOpen && (

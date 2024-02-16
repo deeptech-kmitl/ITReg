@@ -5,24 +5,10 @@ import axios from "axios";
 import { baseURL } from '../../../baseURL';
 import { UserAuth } from "../../context/AuthContext";
 
-function CardReview({ id, reviewParent }) {
-    const [reviews, setReviews] = useState([])
+function CardReview({ id, reviews ,setReviews}) {
     const [reviewId, setReviewId] = useState('')
     const { user, role } = UserAuth()
-    useEffect(() => {
-        // Fetch review data when the component mounts
-        fetchReview()
-    }, [reviewParent])
-
-    const fetchReview = async () => {
-        try {
-            const response = await axios.get(baseURL + `getReview/${id}`);
-            setReviews(response.data); // Update the review state with the fetched data
-
-        } catch (error) {
-            console.error('Error fetching review:', error);
-        }
-    };
+ 
     // แสดงผลดาวตรง rating
     function DisplayRating(rate) {
         const arrayRate = [];
@@ -128,8 +114,7 @@ function CardReview({ id, reviewParent }) {
                 reviewId: reviewId
             }
         }).then((response) => {
-            console.log(response);
-            fetchReview()
+            setReviews(reviews.filter((item)=> item.id != reviewId))
         }, (error) => {
             console.log(error);
         });
@@ -144,8 +129,18 @@ function CardReview({ id, reviewParent }) {
             grade: grade,
             reviewId: reviewId
         }).then((response) => {
-            console.log(response);
-            fetchReview()
+            console.log(response.data)
+         const indexRe = reviews.findIndex((item)=>item.id == reviewId)
+         setReviews(() => {
+            const updatedDatabase = [...reviews];
+            updatedDatabase[indexRe].content = textReview;
+            updatedDatabase[indexRe].rating = rating;
+            updatedDatabase[indexRe].grade = grade
+            updatedDatabase[indexRe].time = convertTimestampToTime(response.data.time)
+            // updatedDatabase[dataIndex].edit = true;
+            return updatedDatabase;
+          })
+
         }, (error) => {
             console.log(error);
         });
