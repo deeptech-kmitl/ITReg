@@ -10,7 +10,8 @@ import { baseURL } from "../../baseURL";
 function ReviewSubjectDetail() {
   let { reviewId } = useParams();
   const [reviews, setReviews] = useState([]);
-
+  const [questions, setQuestions] = useState([]);
+  const [question, setQuestion] = useState("");
   const [activeTab, setActiveTab] = useState("review");
 
   // Modal create open
@@ -18,39 +19,16 @@ function ReviewSubjectDetail() {
 
   useEffect(() => {
     // Fetch review data when the component mounts
+    fetchQuestion();
     fetchReview()
-}, [])
+  }, [])
   const toggleModalCreate = () => {
     setIsModalCreateOpen(!isModalCreateOpen);
   };
 
   //Question ใน หน้า Review
-  const [questions, setQuestions] = useState([]);
-  useEffect(() => {
-    fetchQuestion();
-  }, []);
 
-  const [question, setQuestion] = useState("");
-  const postQuestion = () => {
-    axios.post(baseURL + "question", {
-      subjectId: reviewId,
-      userId: user.uid,
-      detail: question,
-      like: [],
-      dislike: [],
-    })
-      .then(
-        (response) => {
-          console.log(response);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    fetchQuestion();
 
-    setQuestion("");
-  };
   const fetchQuestion = async () => {
     try {
       const response = await axios.get(baseURL + `getQuestions/${reviewId}`);
@@ -74,6 +52,27 @@ function ReviewSubjectDetail() {
   const [rating, setRating] = useState("1");
   const [grade, setGrade] = useState("A");
 
+  const postQuestion = async () => {
+    axios.post(baseURL + "question", {
+      subjectId: reviewId,
+      userId: user.uid,
+      detail: question,
+      like: [],
+      dislike: [],
+    })
+      .then(
+        (response) => {
+          console.log(response.data)
+          setQuestions([...questions, response.data])
+          setQuestion("");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
+    
+  };
   const newReview = async () => {
     await axios
       .post(baseURL + "newReview", {
@@ -87,7 +86,7 @@ function ReviewSubjectDetail() {
       })
       .then(
         (response) => {
-    setReviews([...reviews , response.data]) 
+          setReviews([...reviews, response.data])
           // setReviews(response)
           setTextReview("");
           setRating("");
@@ -155,7 +154,7 @@ function ReviewSubjectDetail() {
                       <img src="https://img.icons8.com/ios-filled/20/FFFFFF/plus-math.png"></img>
                     </button>
                   </div>
-                  <CardReview id={reviewId} reviews={reviews}  setReviews={setReviews}/>
+                  <CardReview id={reviewId} reviews={reviews} setReviews={setReviews} />
 
                   {/* Modal create Review */}
                   {isModalCreateOpen && (
@@ -314,8 +313,8 @@ function ReviewSubjectDetail() {
                 {/* QuestionCard */}
                 <QuestionCard
                   id={reviewId}
-                  questionParent={questions}
-                 
+                  questions={questions}
+                  setQuestions={setQuestions}
                 />
               </div>
             )}
