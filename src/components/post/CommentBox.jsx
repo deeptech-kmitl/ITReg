@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
+import axios from "axios";
+import { UserAuth } from "../../context/AuthContext";
 
 
-function CommentBox({ data, user, database, setDatabase, indexPost, postId }) {
+function CommentBox({ data, database, setDatabase, indexPost, postId }) {
+  const { user } = UserAuth();
+  const { role } = UserAuth();
 
   // Modal edit open
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
@@ -42,7 +46,7 @@ function CommentBox({ data, user, database, setDatabase, indexPost, postId }) {
   // Modal delete open
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [answerIdDelete, setAnswerIdDelete] = useState(null)
-  const toggleModalDelete = (command, commentId) => {
+  const toggleModalDelete = async (command, commentId) => {
     if (command === 'X' || command === 'cancle') {
       setAnswerIdDelete(null)
       setIsModalDeleteOpen(false);
@@ -50,17 +54,19 @@ function CommentBox({ data, user, database, setDatabase, indexPost, postId }) {
       setAnswerIdDelete(commentId)
       setIsModalDeleteOpen(true);
     } else if (command === 'delete') {
-
+      const response = await axios.delete(`http://localhost:3001/delCommentPost/${postId}/${commentId}`);
+      console.log(response.data)
       const newDatabase = database.map(detail => {
         console.log(detail.id === postId)
         if (detail.id === postId) {
           return {
             ...detail,
-            comment: detail.comment.filter(comment => comment.id !== answerIdDelete),
+            comments: detail.comments.filter(comment => comment.commentId !== answerIdDelete),
           }
         }
         return detail;
       })
+      console.log(newDatabase)
       setDatabase(newDatabase)
       setAnswerIdDelete(null)
       setIsModalDeleteOpen(false);
@@ -69,41 +75,58 @@ function CommentBox({ data, user, database, setDatabase, indexPost, postId }) {
   };
   // เพิ่มข้อมูลลงฐานข้อมูล
   const [comment, setcomment] = useState('');
-  const postComment = () => {
-    const currentDate = new Date();
-    const newcomment = {
-      id: data.comment[data.comment.length - 1].id + 5, //สร้าง ID ไม่ซ้ำกัน
-      name: user,
-      detail: comment,
-      date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`,
-      time: currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
-    };
-    const newDatabase = database.map(detail => {
-      if (detail.id === postId) {
-        return {
-          ...detail,
-          //เอาคำตอบเก่าของคำถามตามid และต่อด้วย คำตอบใหม่
-          comment: [...detail.comment, newcomment],
-        };
-      }
-      return detail;
-    });
-    // Update the state with the new array
-    setDatabase(newDatabase);
-    setcomment('')
+  const postComment = async () => {
+    try {
+      const newcomment = {
+        postId: data.id,
+        userId: user.uid,
+        detail: comment,
+      };
+  
+      const response = await axios.post("http://localhost:3001/newcommentPost", newcomment);
+      console.log(response.data)
+      const newDatabase = database.map(detail => {
+        if (detail.id === postId) {
+          console.log("test")
+          return {
+            ...detail,
+            //เอาคำตอบเก่าของคำถามตามid และต่อด้วย คำตอบใหม่
+            comments: [...detail.comments, response.data],
+          };
+        }
+        return detail;
+      });
+      // Update the state with the new array
+      setDatabase(newDatabase);
+      setcomment('');
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
+  const convertTimestampToTime = (timestamp) => {
+    // Convert timestamp to milliseconds
+    const milliseconds = timestamp._seconds * 1000 + Math.round(timestamp._nanoseconds / 1000000);
+
+    // Create a new Date object
+    const date = new Date(milliseconds);
+
+    // Format the date and time
+    const formattedTime = date.toLocaleString(); // You can customize the format here
+
+    return formattedTime;
+};
   return (
     <div>
       <div className="mt-5 relative">
-        {data.comment.map((comment, index) => (
+        {data.comments.map((comment, index) => (
          <div key={index} className="flex items-start mb-4">
          <div className="w-10 h-10 flex-shrink-0 rounded-full bg-[#151C38] flex items-center justify-center text-white font-bold"></div>
          <div className="ml-3 p-2 bg-[#E3F3FF] relative" style={{ width: '100%', maxWidth: 'calc(100% - 40px)', borderRadius: '10px' }}>
            <div className="flex items-center justify-between mb-1">
              <div className="flex items-center">
-               <p className="text-[#151C38] text-sm font-[400]">{comment.name}</p>
-               <p className="text-[#A4A4A4] text-[10px] font-[350] ml-2 mt-[2px]">{comment.time}</p>
+               <p className="text-[#151C38] text-sm font-[400]">user@{comment?.userId}</p>
+               <p className="text-[#A4A4A4] text-[10px] font-[350] ml-2 mt-[2px]">{convertTimestampToTime(comment?.dateTime)}</p>
              </div>
              <div className="relative">
                <Menu placement="bottom-end">
@@ -124,7 +147,7 @@ function CommentBox({ data, user, database, setDatabase, indexPost, postId }) {
                        <span className="pl-3 text-gray-700">Edit Comment</span>
                      </div>
                    </MenuItem>
-                   <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', comment.id)}>
+                   <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', comment.commentId)}>
                      <div className="hover:bg-gray-200 cursor-pointer">
                        <div className="flex item-center py-3">
                          <Icon
@@ -260,7 +283,7 @@ function CommentBox({ data, user, database, setDatabase, indexPost, postId }) {
                           </div>
                           <div className="flex items-center pr-6 rounded-b mt-[-20px] mb-2 w-full">
                             <button
-                              onClick={() => toggleModalDelete('delete')}
+                              onClick={() => toggleModalDelete('delete', comment?.commentId)}
                               type="button"
                               className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
                             >

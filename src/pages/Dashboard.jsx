@@ -9,10 +9,9 @@ import axios from "axios";
 
 
 function Dashboard() {
-
-  const user = "Admin";
+  const user = "Admin"
   const { role } = UserAuth();
-  const [database, setDatabase] = useState(PostDetail);
+  const [database, setDatabase] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [imageFiles, setImageFiles] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
@@ -28,10 +27,11 @@ function Dashboard() {
   useEffect(()=>{
     axios.get("http://localhost:3001/post")
       .then((res) => {
-        setDatabase([...PostDetail, ...res.data]);
+        setDatabase(res.data);
       })
       .catch((err) => console.log(err.message))
-  },[])
+  }, [])
+  
   const [newtitle, setNewtitle] = useState('');
   const [message, setMessage] = useState('');
 
@@ -52,7 +52,6 @@ function Dashboard() {
       formData.append('images', file);
     }
     const newQuestion = {
-      id: database[database.length - 1].id + 1,
       titlename: newtitle,
       name: user,
       date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`,
@@ -68,6 +67,7 @@ function Dashboard() {
     axios.post(`http://localhost:3001/newPost`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then((res) => {
         // เอาข้อมูลเก่า + ข้อมูลใหม่
+        alert(res.data)
         const newDatabase = [...database, res.data];
         // Update the state with the new array
         setDatabase(newDatabase);
@@ -219,7 +219,7 @@ function Dashboard() {
                 </div>
               )}
             </div>)}
-          <PostDetailCard database={database} setDatabase={setDatabase} user={"Admin"} />
+          <PostDetailCard database={database} setDatabase={setDatabase} role={role} />
         </div>
         <div className='w-[30%] border-l-[1px] border-[#00000052] pl-10'>
           <h1 className='text-[26px] max-2xl:text-[20px] font-medium'>Popular subjects</h1>
