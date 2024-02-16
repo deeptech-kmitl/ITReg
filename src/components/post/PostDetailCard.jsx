@@ -17,29 +17,33 @@ function PostDetailCard({ database, setDatabase, role }) {
   const [showComments, setShowComments] = useState([]);
   // const [database, setDatabase] = useState(PostDetail);
 
-  const handleToggleLike = (postId) => {
-    console.log("กด like", postId)
-    setDatabase(
-      (dumyDatabase) => {
-        const updatedDatabase = [...dumyDatabase];
-        const indexQuestion = updatedDatabase.findIndex(post => post.id === postId)
-        const likeByUser = updatedDatabase[indexQuestion].like.includes(user.uid);
-        console.log('user มีข้อมูลใน like >>> ', likeByUser)
-        // user ไม่มีข้อมูลใน like >>> จะใส่สี
-        if (!likeByUser) {
-          // เพิ่ม user ลง 'like'
-          axios.patch("http://localhost:3001/newPostLikes", {postId: postId, userId: user.uid}).then(res => console.log(res.data).catch(err => console.log(err.message)));
-          updatedDatabase[indexQuestion].like.push(user.uid);
-        }
-        // user มีข้อมูลใน like >>> จะลบสี
-        else {
-          axios.patch(`http://localhost:3001/delPostLikes`, {postId: postId, userId: user.uid}).then(res => console.log(res.data)).catch(err => console.log(err.message));
-          updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user.uid);
-        }
-        return [...updatedDatabase];;
+  const handleToggleLike = async (postId) => {
+    console.log("กด like", postId);
+  
+    try {
+      const updatedDatabase = [...database];
+      const indexQuestion = updatedDatabase.findIndex(post => post.id === postId);
+      const likeByUser = updatedDatabase[indexQuestion].like.includes(user.uid);
+      console.log('user มีข้อมูลใน like >>> ', likeByUser);
+  
+      if (!likeByUser) {
+        // Add user to 'like'
+        await axios.patch("http://localhost:3001/newPostLikes", { postId: postId, userId: user.uid });
+        updatedDatabase[indexQuestion].like.push(user.uid);
+        console.log("like");
+      } else {
+        // Remove user from 'like'
+        await axios.patch("http://localhost:3001/delPostLikes", { postId: postId, userId: user.uid });
+        updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user.uid);
+        console.log("unlike");
       }
-    )
-  }
+  
+      setDatabase([...updatedDatabase]);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  
 
   // const handleImageClick = (item, index) => {
   //   setImgForFullScreen(item);
