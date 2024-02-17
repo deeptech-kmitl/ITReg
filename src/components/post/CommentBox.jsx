@@ -45,20 +45,23 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
 
   // Modal delete open
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+  const [isIndexDelete, setIsIndexDelete] = useState(null)
   const toggleModalDelete = async (command, commentId) => {
     if (command === 'X' || command === 'cancle') {
       setIsModalDeleteOpen(false);
+      setIsIndexDelete(null);
     } else if (command === 'openModal') {
       setIsModalDeleteOpen(true);
+      setIsIndexDelete(commentId)
     } else if (command === 'delete') {
-      const response = await axios.delete(`http://localhost:3001/delCommentPost/${postId}/${commentId}`);
+      const response = await axios.delete(`http://localhost:3001/delCommentPost/${postId}/${isIndexDelete}`);
       console.log(response.data)
       const newDatabase = database.map(detail => {
         console.log(detail.id === postId)
         if (detail.id === postId) {
           return {
             ...detail,
-            comments: detail.comments.filter(comment => comment.commentId !== commentId),
+            comments: detail.comments.filter(comment => comment.commentId !== isIndexDelete),
           }
         }
         return detail;
@@ -124,7 +127,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
                   <p className="text-[#A4A4A4] text-[10px] font-[350] ml-2 mt-[2px]">{convertTimestampToTime(comment?.dateTime)}</p>
                 </div>
                 <div className="relative">
-                  {comment.userId == user.uid && (
+                  {role=="admin" || comment.userId == user.uid ? (
                     <Menu placement="bottom-end">
                       <MenuHandler>
                         <div className="flex items-center cursor-pointer">
@@ -158,7 +161,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
                         </MenuItem>
                       </MenuList>
                     </Menu>
-                  )}
+                  ):<></>}
                 </div>
               </div>
 
@@ -280,7 +283,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
                           </div>
                           <div className="flex items-center pr-6 rounded-b mt-[-20px] mb-2 w-full">
                             <button
-                              onClick={() => toggleModalDelete('delete', comment?.commentId)}
+                              onClick={() => toggleModalDelete('delete', isIndexDelete)}
                               type="button"
                               className="text-white bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] font-medium rounded-lg text-lg px-10 py-2 text-center w-full"
                             >
