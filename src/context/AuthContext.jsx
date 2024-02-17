@@ -7,10 +7,13 @@ import {
 } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useDispatch } from 'react-redux';
+import { saveToken } from '../../redux/tokenReducer';
+import axios from 'axios';
 const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   const [role, setRole] = useState("");
 
   const createUser = async (email, password) => {
@@ -36,6 +39,7 @@ export const AuthContextProvider = ({ children }) => {
         getDoc(docRef)
           .then(docSnap => {
             setUser(currentUser);
+
             setRole(docSnap.data().role);
           })
           .catch(err => console.log(err.message));
@@ -51,8 +55,26 @@ export const AuthContextProvider = ({ children }) => {
     };
   }, []);
 
+  const instance = axios.create({
+    baseURL: 'http://localhost:3001',
+  })
+
+  instance.interceptors.request.use(
+    function (config) {
+      const token = user.accessToken
+      if (token) {
+        config.headers['Authorization'] = `${token}`
+      }
+      // console.log(config)
+      return config;
+    },
+    function (error) {
+      return Promise.reject(error);
+    }
+  );
+
   return (
-    <UserContext.Provider value={{ createUser, user, role, logout, signIn }}>
+    <UserContext.Provider value={{ createUser, user, role, logout, signIn,instance }}>
       {children}
     </UserContext.Provider>
   );

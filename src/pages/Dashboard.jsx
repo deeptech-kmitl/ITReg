@@ -15,6 +15,7 @@ function Dashboard() {
   const [modalVisible, setModalVisible] = useState(false);
   const [imageFiles, setImageFiles] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
+  const {instance} = UserAuth()
   const handleModalToggle = () => {
     setModalVisible(!modalVisible);
   };
@@ -25,7 +26,7 @@ function Dashboard() {
   // };
 
   useEffect(()=>{
-    axios.get("http://localhost:3001/post")
+    instance.get("http://localhost:3001/post")
       .then((res) => {
         setDatabase(res.data);
       })
