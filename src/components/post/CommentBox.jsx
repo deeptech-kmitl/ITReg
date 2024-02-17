@@ -82,7 +82,6 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
       };
 
       const response = await axios.post("http://localhost:3001/newcommentPost", newcomment);
-      console.log(response.data)
       const newDatabase = database.map(detail => {
         if (detail.id === postId) {
           console.log("test")
