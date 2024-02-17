@@ -6,7 +6,7 @@ import axios from "axios";
 import { UserAuth } from "../../context/AuthContext";
 
 
-function CommentBox({ data, database, setDatabase, indexPost, postId }) {
+function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime }) {
   const { user } = UserAuth();
   const { role } = UserAuth();
 
@@ -25,7 +25,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId }) {
       console.log(cloneAnswer.commentId)
       // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
       const dataIndex = database[indexPost].comments.findIndex((item) => item.commentId === cloneAnswer.commentId);
-      const response = await axios.put(`http://localhost:3001/editPostComment/${postId}/${cloneAnswer.commentId}`, {detail: textAnswer, userId: user.uid})
+      const response = await axios.put(`http://localhost:3001/editPostComment/${postId}/${cloneAnswer.commentId}`, { detail: textAnswer, userId: user.uid })
       setDatabase((prevDatabase) => {
         const updatedDatabase = [...prevDatabase];
         updatedDatabase[indexPost].comments[dataIndex].detail = response.data.detail;
@@ -77,7 +77,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId }) {
         userId: user.uid,
         detail: comment,
       };
-  
+
       const response = await axios.post("http://localhost:3001/newcommentPost", newcomment);
       console.log(response.data)
       const newDatabase = database.map(detail => {
@@ -110,55 +110,57 @@ function CommentBox({ data, database, setDatabase, indexPost, postId }) {
     const formattedTime = date.toLocaleString(); // You can customize the format here
 
     return formattedTime;
-};
+  };
   return (
     <div>
       <div className="mt-5 relative">
-        {data.comments.map((comment, index) => (
-         <div key={index} className="flex items-start mb-4">
-         <div className="w-10 h-10 flex-shrink-0 rounded-full bg-[#151C38] flex items-center justify-center text-white font-bold"></div>
-         <div className="ml-3 p-2 bg-[#E3F3FF] relative" style={{ width: '100%', maxWidth: 'calc(100% - 40px)', borderRadius: '10px' }}>
-           <div className="flex items-center justify-between mb-1">
-             <div className="flex items-center">
-               <p className="text-[#151C38] text-sm font-[400]">{role == "Admin" ? "admin": "user"}@{comment?.userId}</p>
-               <p className="text-[#A4A4A4] text-[10px] font-[350] ml-2 mt-[2px]">{convertTimestampToTime(comment?.dateTime)}</p>
-             </div>
-             <div className="relative">
-               <Menu placement="bottom-end">
-                 <MenuHandler>
-                   <div className="flex items-center cursor-pointer">
-                     <Icon icon="prime:ellipsis-h" color="#151c38" width="15" height="15" />
-                   </div>
-                 </MenuHandler>
-                 <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
-                   <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalEdit(comment)}>
-                     <div className="flex item-center py-3">
-                       <Icon
-                         icon="fluent:edit-24-regular"
-                         color="#727272"
-                         width="15"
-                         height="15"
-                       />
-                       <span className="pl-3 text-gray-700">Edit Comment</span>
-                     </div>
-                   </MenuItem>
-                   <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', comment.commentId)}>
-                     <div className="hover:bg-gray-200 cursor-pointer">
-                       <div className="flex item-center py-3">
-                         <Icon
-                           icon="mingcute:delete-3-line"
-                           color="#727272"
-                           width="15"
-                           height="15"
-                         />
-                         <p className="pl-3 text-gray-700">Delete Comment</p>
-                       </div>
-                     </div>
-                   </MenuItem>
-                 </MenuList>
-               </Menu>
-             </div>
-           </div>
+        {data.comments.sort(sortByTime).map((comment, index) => (
+          <div key={index} className="flex items-start mb-4">
+            <div className="w-10 h-10 flex-shrink-0 rounded-full bg-[#151C38] flex items-center justify-center text-white font-bold"></div>
+            <div className="ml-3 p-2 bg-[#E3F3FF] relative" style={{ width: '100%', maxWidth: 'calc(100% - 40px)', borderRadius: '10px' }}>
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center">
+                  <p className="text-[#151C38] text-sm font-[400]">{role == "Admin" ? "admin" : "user"}@{comment?.userId}</p>
+                  <p className="text-[#A4A4A4] text-[10px] font-[350] ml-2 mt-[2px]">{convertTimestampToTime(comment?.dateTime)}</p>
+                </div>
+                <div className="relative">
+                  {comment.userId == user.uid && (
+                    <Menu placement="bottom-end">
+                      <MenuHandler>
+                        <div className="flex items-center cursor-pointer">
+                          <Icon icon="prime:ellipsis-h" color="#151c38" width="15" height="15" />
+                        </div>
+                      </MenuHandler>
+                      <MenuList className="bg-[#ffffff] border border-gray-200 shadow-md rounded-xl text-sm">
+                        <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalEdit(comment)}>
+                          <div className="flex item-center py-3">
+                            <Icon
+                              icon="fluent:edit-24-regular"
+                              color="#727272"
+                              width="15"
+                              height="15"
+                            />
+                            <span className="pl-3 text-gray-700">Edit Comment</span>
+                          </div>
+                        </MenuItem>
+                        <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', comment.commentId)}>
+                          <div className="hover:bg-gray-200 cursor-pointer">
+                            <div className="flex item-center py-3">
+                              <Icon
+                                icon="mingcute:delete-3-line"
+                                color="#727272"
+                                width="15"
+                                height="15"
+                              />
+                              <p className="pl-3 text-gray-700">Delete Comment</p>
+                            </div>
+                          </div>
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  )}
+                </div>
+              </div>
 
               {isModalEditOpen && (
                 <div

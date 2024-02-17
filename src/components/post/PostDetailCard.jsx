@@ -19,13 +19,13 @@ function PostDetailCard({ database, setDatabase, role }) {
 
   const handleToggleLike = async (postId) => {
     console.log("กด like", postId);
-  
+
     try {
       const updatedDatabase = [...database];
       const indexQuestion = updatedDatabase.findIndex(post => post.id === postId);
       const likeByUser = updatedDatabase[indexQuestion].like.includes(user.uid);
       console.log('user มีข้อมูลใน like >>> ', likeByUser);
-  
+
       if (!likeByUser) {
         // Add user to 'like'
         await axios.patch("http://localhost:3001/newPostLikes", { postId: postId, userId: user.uid });
@@ -37,13 +37,13 @@ function PostDetailCard({ database, setDatabase, role }) {
         updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user.uid);
         console.log("unlike");
       }
-  
+
       setDatabase([...updatedDatabase]);
     } catch (error) {
       console.error(error.message);
     }
   };
-  
+
 
   // const handleImageClick = (item, index) => {
   //   setImgForFullScreen(item);
@@ -81,7 +81,7 @@ function PostDetailCard({ database, setDatabase, role }) {
         console.log("Save toggle Edit")
         // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
         const dataIndex = database.findIndex((item) => item.id === clonePost.id);
-        const response = await axios.put(`http://localhost:3001/editPost/${database[dataIndex].id}`, {Title:newtitle, message:textPost});
+        const response = await axios.put(`http://localhost:3001/editPost/${database[dataIndex].id}`, { Title: newtitle, message: textPost });
         setDatabase((prevDatabase) => {
           const updatedDatabase = [...prevDatabase];
           updatedDatabase[dataIndex].message = response.data.message;
@@ -139,8 +139,12 @@ function PostDetailCard({ database, setDatabase, role }) {
     const formattedTime = date.toLocaleString(); // You can customize the format here
 
     return formattedTime;
-};
-   
+  };
+  const sortByTime = (a, b) => {
+    const timeA = a.dateTime._seconds + a.dateTime._nanoseconds / 1e9;
+    const timeB = b.dateTime._seconds + b.dateTime._nanoseconds / 1e9;
+    return timeA - timeB; // Sorting in descending order (latest first)
+  };
 
   return (
     <div className="mt-5">
@@ -339,7 +343,7 @@ function PostDetailCard({ database, setDatabase, role }) {
             <div className="mt-5">
               <p className="text-black text-l font-light">{detail.message}</p>
 
-              <Carousel slides={detail.image}/>
+              <Carousel slides={detail.image} />
 
               {/* {showFullScreen && (
                 <div
@@ -392,7 +396,7 @@ function PostDetailCard({ database, setDatabase, role }) {
             </div>
             {showComments[index] && (
               <div>
-                <CommentBox data={detail} indexPost={index} database={database} setDatabase={setDatabase} postId={detail.id}/>
+                <CommentBox data={detail} indexPost={index} database={database} setDatabase={setDatabase} postId={detail.id} sortByTime={sortByTime} />
               </div>
             )}
           </div>

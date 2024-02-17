@@ -54,8 +54,6 @@ function Dashboard() {
     const newQuestion = {
       titlename: newtitle,
       name: user,
-      date: `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`,
-      time: currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
       message: message,
       image: imageFiles,
       like: [],
@@ -67,8 +65,8 @@ function Dashboard() {
     axios.post(`http://localhost:3001/newPost`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then((res) => {
         // เอาข้อมูลเก่า + ข้อมูลใหม่
-        alert(res.data)
-        const newDatabase = [...database, res.data];
+        console.log(res.data)
+        const newDatabase = [...database, {...res.data}];
         // Update the state with the new array
         setDatabase(newDatabase);
         setModalVisible(false); // ปิด Modal
@@ -86,6 +84,12 @@ function Dashboard() {
         setMessage('')
       })
   }
+
+  const sortByTime = (a, b) => {
+    const timeA = a.dateTime._seconds + a.dateTime._nanoseconds / 1e9;
+    const timeB = b.dateTime._seconds + b.dateTime._nanoseconds / 1e9;
+    return timeB - timeA; // Sorting in descending order (latest first)
+  };
 
   return (
     <div className='w-full h-full'>
@@ -219,7 +223,7 @@ function Dashboard() {
                 </div>
               )}
             </div>)}
-          <PostDetailCard database={database} setDatabase={setDatabase} role={role} />
+          <PostDetailCard database={database.sort(sortByTime)} setDatabase={setDatabase} role={role} />
         </div>
         <div className='w-[30%] border-l-[1px] border-[#00000052] pl-10'>
           <h1 className='text-[26px] max-2xl:text-[20px] font-medium'>Popular subjects</h1>
