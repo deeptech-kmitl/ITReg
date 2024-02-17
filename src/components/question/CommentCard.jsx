@@ -6,6 +6,7 @@ import { baseURL } from "../../../baseURL";
 function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, toggleCommentQuestion, user, questions, setQuestions, convertTimestampToTime }) {
     const [showMore, setShowmore] = useState([]);
     const [answerId, setAnswerId] = useState("")
+    const {instance} = UserAuth()
     const toggleShowmore = (answerId) => {
         const indexAnswer = data.answer.findIndex(answer => answer.id === answerId)
         setShowmore((prevIndex) => {
@@ -40,7 +41,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
         // const currentDate = new Date();
         if (answer == "save") {
             console.log("Save toggle Edit")
-            await axios.put(baseURL + 'answer', {
+            await instance.put(baseURL + 'answer', {
                 subjectId: subjectId,
                 userId: user.uid,
                 detail: textAnswer,
@@ -82,7 +83,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
             setAnswerIdDelete(answerId)
             setIsModalDeleteOpen(true);
         } else if (command === 'delete') {
-            await axios.delete(baseURL + 'answer', {
+            await instance.delete(baseURL + 'answer', {
                 data: {
                     subjectId: subjectId,
                     questionId: questionId,
@@ -112,7 +113,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
     const [answer, setAnswer] = useState('');
 
     const postAnswer = async () => {
-        axios.post(baseURL + "answer", {
+        instance.post(baseURL + "answer", {
             questionId: questionId,
             subjectId: subjectId,
             userId: user.uid,

@@ -8,7 +8,7 @@ import { UserAuth } from "../../context/AuthContext";
 function CardReview({ id, reviews, setReviews }) {
     const [reviewId, setReviewId] = useState('')
     const { user, role } = UserAuth()
-
+    const {instance} = UserAuth()
     // แสดงผลดาวตรง rating
     function DisplayRating(rate) {
         const arrayRate = [];
@@ -108,7 +108,7 @@ function CardReview({ id, reviews, setReviews }) {
     };
 
     const delReview = async () => {
-        await axios.delete(baseURL + 'delReview', {
+        await instance.delete(baseURL + 'delReview', {
             data: {
                 subjectId: id,
                 reviewId: reviewId
@@ -122,7 +122,7 @@ function CardReview({ id, reviews, setReviews }) {
     };
 
     const editReview = async () => {
-        await axios.put(baseURL + 'editReview', {
+        await instance.put(baseURL + 'editReview', {
             subjectId: id,
             userId: user.uid,
             content: textReview,
@@ -150,7 +150,7 @@ function CardReview({ id, reviews, setReviews }) {
     const newLike = async (reviewId) => {
         const indexRe = reviews.findIndex((item) => item.id == reviewId)
         const likeByUser = reviews[indexRe].like.includes(user.uid);
-        await axios.put(baseURL + 'editReviewLikes', {
+        await instance.put(baseURL + 'editReviewLikes', {
             subjectId: id,
             userId: user.uid,
             likeType: likeByUser,
@@ -183,7 +183,7 @@ function CardReview({ id, reviews, setReviews }) {
     const dislike = async (reviewId) => {
         const indexRe = reviews.findIndex((item) => item.id == reviewId)
         const dislikeByUser = reviews[indexRe].dislike.includes(user.uid);
-        await axios.put(baseURL + 'delReviewLikes', {
+        await instance.put(baseURL + 'delReviewLikes', {
             subjectId: id,
             userId: user.uid,
             likeType: dislikeByUser,

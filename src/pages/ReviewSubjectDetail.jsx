@@ -7,6 +7,7 @@ import QuestionDetail from "../dummyData/QuestionDetail";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { baseURL } from "../../baseURL";
+import { UserAuth } from "../context/AuthContext";
 function ReviewSubjectDetail() {
   let { reviewId } = useParams();
   const [reviews, setReviews] = useState([]);
@@ -20,7 +21,7 @@ function ReviewSubjectDetail() {
   };
   // Modal create open
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
-
+  const {instance} = UserAuth()
   useEffect(() => {
     // Fetch review data when the component mounts
     fetchQuestion();
@@ -63,7 +64,7 @@ function ReviewSubjectDetail() {
   const [grade, setGrade] = useState("A");
 
   const postQuestion = async () => {
-    axios.post(baseURL + "question", {
+    instance.post(baseURL + "question", {
       subjectId: reviewId,
       userId: user.uid,
       detail: question,
@@ -84,7 +85,7 @@ function ReviewSubjectDetail() {
 
   };
   const newReview = async () => {
-    await axios
+    await instance
       .post(baseURL + "newReview", {
         subjectId: reviewId,
         userId: user.uid,

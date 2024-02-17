@@ -16,7 +16,7 @@ function PostDetailCard({ database, setDatabase, role }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showComments, setShowComments] = useState([]);
   // const [database, setDatabase] = useState(PostDetail);
-
+  const {instance} = UserAuth()
   const handleToggleLike = async (postId) => {
     console.log("กด like", postId);
 
@@ -28,12 +28,12 @@ function PostDetailCard({ database, setDatabase, role }) {
 
       if (!likeByUser) {
         // Add user to 'like'
-        await axios.patch("http://localhost:3001/newPostLikes", { postId: postId, userId: user.uid });
+        await instance.patch("http://localhost:3001/newPostLikes", { postId: postId, userId: user.uid });
         updatedDatabase[indexQuestion].like.push(user.uid);
         console.log("like");
       } else {
         // Remove user from 'like'
-        await axios.patch("http://localhost:3001/delPostLikes", { postId: postId, userId: user.uid });
+        await instance.patch("http://localhost:3001/delPostLikes", { postId: postId, userId: user.uid });
         updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user.uid);
         console.log("unlike");
       }
@@ -81,7 +81,7 @@ function PostDetailCard({ database, setDatabase, role }) {
         console.log("Save toggle Edit")
         // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
         const dataIndex = database.findIndex((item) => item.id === clonePost.id);
-        const response = await axios.put(`http://localhost:3001/editPost/${database[dataIndex].id}`, { Title: newtitle, message: textPost });
+        const response = await instance.put(`http://localhost:3001/editPost/${database[dataIndex].id}`, { Title: newtitle, message: textPost });
         setDatabase((prevDatabase) => {
           const updatedDatabase = [...prevDatabase];
           updatedDatabase[dataIndex].message = response.data.message;
@@ -118,7 +118,7 @@ function PostDetailCard({ database, setDatabase, role }) {
         setIsIndexDelete(index)
         setIsModalDeleteOpen(true);
       } else if (command === 'delete') {
-        const response = await axios.delete(`http://localhost:3001/deletePost/${isIndexDelete}`);
+        const response = await instance.delete(`http://localhost:3001/deletePost/${isIndexDelete}`);
         const newDatabase = database.filter(detail => detail.id !== isIndexDelete);
         setDatabase(newDatabase)
         setIsIndexDelete(null)

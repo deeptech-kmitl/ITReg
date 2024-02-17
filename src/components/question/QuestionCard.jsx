@@ -6,7 +6,8 @@ import axios from "axios";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
 import { UserAuth } from "../../context/AuthContext";
 function QuestionCard({ id, questions, setQuestions, sortByTime }) {
-    const { user, role } = UserAuth()
+    const { user, role ,instance} = UserAuth()
+    
     // const [questionId, setQuestionId] = useState('')
     // useEffect(() => {
     //     fetchQuestions()
@@ -62,7 +63,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
     const handleToggleLike = async (questionId) => {
         const indexRe = questions.findIndex((item) => item.id == questionId)
         const likeByUser = questions[indexRe].like.includes(user.uid);
-        await axios.patch(baseURL + 'likeQuestion', {
+        await instance.patch(baseURL + 'likeQuestion', {
             subjectId: id,
             userId: user.uid,
             likeType: likeByUser,
@@ -122,7 +123,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
     const handleToggleDislike = async (questionId) => {
         const indexRe = questions.findIndex((item) => item.id == questionId)
         const dislikeByUser = questions[indexRe].dislike.includes(user.uid);
-        await axios.patch(baseURL + 'dislikeQuestion', {
+        await instance.patch(baseURL + 'dislikeQuestion', {
             subjectId: id,
             userId: user.uid,
             likeType: dislikeByUser,
@@ -176,7 +177,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
         // const currentDate = new Date();
         if (question == "save") {
             // GU DO HERE
-            await axios.put(baseURL + 'question', {
+            await instance.put(baseURL + 'question', {
                 subjectId: id,
                 userId: user.uid,
                 detail: textQues,
@@ -218,7 +219,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
             setIsIndexDelete(questionId)
             setIsModalDeleteOpen(true);
         } else if (command === 'delete') {
-            await axios.delete(baseURL + 'question', {
+            await instance.delete(baseURL + 'question', {
                 data: {
                     subjectId: id,
                     questionId: isIndexDelete

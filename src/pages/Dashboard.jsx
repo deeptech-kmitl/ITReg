@@ -26,7 +26,7 @@ function Dashboard() {
   // };
 
   useEffect(()=>{
-    instance.get("http://localhost:3001/post")
+    axios.get("http://localhost:3001/post")
       .then((res) => {
         setDatabase(res.data);
       })
@@ -63,7 +63,7 @@ function Dashboard() {
     Object.entries(newQuestion).forEach(([key, value]) => {
       formData.append(key, value);
     });
-    axios.post(`http://localhost:3001/newPost`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    instance.post(`http://localhost:3001/newPost`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then((res) => {
         // เอาข้อมูลเก่า + ข้อมูลใหม่
         console.log(res.data)
