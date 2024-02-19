@@ -409,7 +409,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
                                 </div>
                             )}
                             <div className="ml-4">
-                                <p className="text-[#151C38] font-[400]">User@{question.userId}</p>
+                                <p className="text-[#151C38] text-l font-[400]">Anonymous</p>
                                 <p className="text-[#A4A4A4] font-[350]">
                                     {convertTimestampToTime(question.time)}
                                     {question.edit && <> (edit)</>}

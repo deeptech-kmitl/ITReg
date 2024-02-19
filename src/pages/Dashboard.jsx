@@ -98,7 +98,7 @@ function Dashboard() {
         Public relations
       </header>
       <div className='w-full h-auto flex mt-5'>
-        <div className='w-[70%] mr-10'>
+        <div className='w-full mr-10'>
           {role == "admin" && (
             <div className="flex-shrink-0 bg-white border-[2px] border-solid border-gray-300 rounded-[20px] p-4 relative">
               <p className="text-[#A4A4A4] text-l font-[350] ml-2">{role}</p>
@@ -226,10 +226,10 @@ function Dashboard() {
             </div>)}
           <PostDetailCard database={database.sort(sortByTime)} setDatabase={setDatabase} role={role} />
         </div>
-        <div className='w-[30%] border-l-[1px] border-[#00000052] pl-10'>
+        {/* <div className='w-[30%] border-l-[1px] border-[#00000052] pl-10'>
           <h1 className='text-[26px] max-2xl:text-[20px] font-medium'>Popular subjects</h1>
           <PopularSubjectsCard />
-        </div>
+        </div> */}
       </div>
     </div>
   )

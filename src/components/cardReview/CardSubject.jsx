@@ -2,6 +2,17 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const CardSubject = ({ item }) => {
+
+    function toPascalCase(str) {
+        if (/^[a-z\d]+$/i.test(str)) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+        return str.replace(
+            /([a-z\d])([a-z\d]*)/gi,
+            (g0, g1, g2) => g1.toUpperCase() + g2.toLowerCase()
+        ).replace(/[^a-z\d]/gi, ' ');
+    }
+
     return (
         <>
             {item.map((detail, index) => (
@@ -11,7 +22,7 @@ const CardSubject = ({ item }) => {
                             <h5 className="mb-2 text-lg font-bold text-[#151C38]">{detail.subjectId}</h5>
                             <div>
                                 <h5 cla ssName="mb-2 text-lg font-bold text-[#151C38]">{detail.thaiSubjectsName}</h5>
-                                <h5 className="mb-2 text-lg font-bold text-[#151C38]">{detail.engSubjectsName}</h5>
+                                <h5 className="mb-2 text-lg font-bold text-[#151C38]">{toPascalCase(detail.engSubjectsName)}</h5>
                             </div>
                             <div className="text-right">
                                 <h5 className="mb-2 text-lg font-bold text-[#151C38]">{detail.credit}</h5>

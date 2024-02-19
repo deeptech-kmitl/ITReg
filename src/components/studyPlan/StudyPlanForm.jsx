@@ -27,18 +27,21 @@ function StudyPlanForm() {
             selectedCourse,
             selectedYearStudy,
         };
-        // console.log('Search', formData);
+        console.log('Search', formData);
         getStudyPlan(formData);
     };
 
     function getStudyPlan(formData) {
 
+        console.log(formData.selectedYear);
+
         let apiUrl = '';
-        if ((formData.selectedYear === '2565' || formData.selectedYear === '2566') && (formData.selectedYearStudy === 'y1' || formData.selectedYearStudy === 'y2')) {
+        if ((formData.selectedYear === '2565' || formData.selectedYear === '2566') && (formData.selectedYearStudy === '1' || formData.selectedYearStudy === '2')) {
             apiUrl = `http://localhost:3001/getStudyPlan/2565`;
         } else {
             apiUrl = `http://localhost:3001/getStudyPlan/2560`;
         }
+        console.log(apiUrl);
 
         axios.get(apiUrl, {
             params: {

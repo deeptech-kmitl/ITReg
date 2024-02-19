@@ -8,7 +8,7 @@ import { UserAuth } from "../../context/AuthContext";
 function CardReview({ id, reviews, setReviews }) {
     const [reviewId, setReviewId] = useState('')
     const { user, role } = UserAuth()
-    const {instance} = UserAuth()
+    const { instance } = UserAuth()
     // แสดงผลดาวตรง rating
     function DisplayRating(rate) {
         const arrayRate = [];
@@ -34,54 +34,6 @@ function CardReview({ id, reviews, setReviews }) {
 
         return formattedTime;
     };
-    // const toggleEditOrDelete = (index) => {
-    //     setOpenEditOrDelete((prevIndex) => (prevIndex === index ? null : index));
-    // }
-    // const handleToggleLike = (index) => {
-    //     setData(
-    //         (dumyDatabase) => {
-    //             const updatedDatabase = [...dumyDatabase];
-    //             const likeByUser = updatedDatabase[index].like.includes(user);
-
-    //             if (likeByUser) {
-    //                 // ถ้า user กด'like'ในข้อมูลเดิม ให้ลบออก
-    //                 updatedDatabase[index].like = updatedDatabase[index].like.filter(user_id => user_id !== user);
-    //             } else {
-    //                 const dislikeByUser = updatedDatabase[index].dislike.includes(user);
-    //                 if (dislikeByUser) {
-    //                     // ถ้า user กด'dislike'ในข้อมูลเดิม แล้วกด'like' ข้อมูล'dislike'เดิมจะถูกนำออก
-    //                     updatedDatabase[index].dislike = updatedDatabase[index].dislike.filter(user_id => user_id !== user);
-    //                 }
-    //                 // ถ้า user ไม่ได้กด'like'ในข้อมูลเดิม ให้เพิ่มเข้า
-    //                 updatedDatabase[index].like.push(user);
-    //             }
-    //             return updatedDatabase;
-    //         }
-    //     )
-    // }
-
-    // const handleToggleDislike = (index) => {
-    //     setData(
-    //         (dumyDatabase) => {
-    //             const updatedDatabase = [...dumyDatabase];
-    //             const dislikeByUser = updatedDatabase[index].dislike.includes(user);
-
-    //             if (dislikeByUser) {
-    //                 // ถ้า user กด'dislike'ในข้อมูลเดิม ให้ลบออก
-    //                 updatedDatabase[index].dislike = updatedDatabase[index].dislike.filter(user_id => user_id !== user);
-    //             } else {
-    //                 const likeByUser = updatedDatabase[index].like.includes(user);
-    //                 if (likeByUser) {
-    //                     // ถ้า user กด'like'ในข้อมูลเดิม แล้วกด'dislike' ข้อมูล'like'เดิมจะถูกนำออก
-    //                     updatedDatabase[index].like = updatedDatabase[index].like.filter(user_id => user_id !== user);
-    //                 }
-    //                 // ถ้า user ไม่ได้กด'dislike'ในข้อมูลเดิม ให้เพิ่มเข้า
-    //                 updatedDatabase[index].dislike.push(user);
-    //             }
-    //             return updatedDatabase;
-    //         }
-    //     )
-    // }
 
     const [textReview, setTextReview] = useState('');
     const [rating, setRating] = useState('');
@@ -129,7 +81,7 @@ function CardReview({ id, reviews, setReviews }) {
             rating: rating,
             grade: grade,
             reviewId: reviewId,
-            edit:true
+            edit: true
         }).then((response) => {
             const indexRe = reviews.findIndex((item) => item.id == reviewId)
             setReviews(() => {
@@ -423,9 +375,10 @@ function CardReview({ id, reviews, setReviews }) {
                             )}
 
                             <div className="ml-4">
-                                <p className="text-[#151C38] text-l font-[400]">User@{review.userId} {review.edit && <> (edit)</>}</p>
+                                <p className="text-[#151C38] text-l font-[400]">Anonymous</p>
                                 <p className="text-[#A4A4A4] text-l font-[350]">
                                     {convertTimestampToTime(review.time)}
+                                    {review.edit && <> (edit)</>}
                                 </p>
                             </div>
                         </div>

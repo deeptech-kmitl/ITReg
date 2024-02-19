@@ -26,7 +26,7 @@ function Review() {
   return (
     <>
       <div className='w-full h-auto flex'>
-        <div className='w-[70%] pr-5'>
+        <div className='pr-5'>
           <div className='flex flex-row gap-3'>
             <h1 className='text-[26px] font-medium text-[#151C38]'>รายวิชาเรียน</h1>
             <select
@@ -45,8 +45,8 @@ function Review() {
               className="text-white bg-[#151C38] rounded-lg text-lg px-2" name='selectType'>
               <option value="type" disabled selected>ประเภทวิชา</option>
               <option value="หมวดวิชาบังคับ">วิชาบังคับ</option>
-              <option value="หมวดวิชาเลือก">วิชาเลือก</option>
-              {/* <option value="Type3">วิชาเสรีคณะ</option> */}
+              <option value="หมวดวิชาเลือก">วิชาเลือกคณะ</option>
+              <option value="หมวดวิชาเสรี">วิชาเสรีทั่วไป</option>
               <option value="">ทั้งหมด</option>
             </select>
           </div>
@@ -62,10 +62,10 @@ function Review() {
 
         </div>
 
-        <div className='w-[30%] border-l-[1px] border-[#00000052] pl-5'>
+        {/* <div className='w-[30%] border-l-[1px] border-[#00000052] pl-5'>
           <h1 className='text-[26px] font-medium'>Announcement</h1>
           <CardAnnouncement />
-        </div>
+        </div> */}
       </div>
     </>
   )
