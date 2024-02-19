@@ -484,7 +484,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
                             </div>
                             {/* openCardComment */}
                             <div className="">
-                                {openComment[index] && <CommentCard data={question} subjectId={id} indexQuestion={index} questionId={question.id} toggleCommentQuestion={toggleComment} user={user} questions={questions} setQuestions={setQuestions} convertTimestampToTime={convertTimestampToTime} sortByTime={sortByTime} />}
+                                {openComment[index] && <CommentCard data={question} subjectId={id} indexQuestion={index} questionId={question.id} toggleCommentQuestion={toggleComment} questions={questions} setQuestions={setQuestions} convertTimestampToTime={convertTimestampToTime} sortByTime={sortByTime} />}
                             </div>
                         </div>
                     </div>

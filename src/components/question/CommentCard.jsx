@@ -3,10 +3,11 @@ import { Icon } from "@iconify/react";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
 import axios from "axios";
 import { baseURL } from "../../../baseURL";
-function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, toggleCommentQuestion, user, questions, setQuestions, convertTimestampToTime }) {
+import { UserAuth } from "../../context/AuthContext";
+function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, toggleCommentQuestion, questions, setQuestions, convertTimestampToTime }) {
     const [showMore, setShowmore] = useState([]);
     const [answerId, setAnswerId] = useState("")
-    const {instance} = UserAuth()
+    const { instance, user } = UserAuth()
     const toggleShowmore = (answerId) => {
         const indexAnswer = data.answer.findIndex(answer => answer.id === answerId)
         setShowmore((prevIndex) => {
