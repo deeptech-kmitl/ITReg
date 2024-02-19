@@ -1,24 +1,71 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 function StudyPlanForm() {
     const navigate = useNavigate();
 
-    const yearOptions = ['2566', '2565', '2564']
-    const courseOptions = [
-        'เทคโนโลยีสารสนเทศ',
-        'วิทยาการข้อมูลและการวิเคราะห์เชิงธุรกิจ',
-        'เทคโนโลยีสารสนเทศทางธุรกิจ (หลักสูตรนานาชาติ)',
-        'เทคโนโลยีปัญญาประดิษฐ์'
-    ]
+    const [selectedYear, setSelectedYear] = useState('2566');
+    const [selectedTerm, setSelectedTerm] = useState('1');
+    const [selectedCoop, setSelectedCoop] = useState('coop');
+    const [selectedCourse, setSelectedCourse] = useState('it');
+    const [selectedYearStudy, setSelectedYearStudy] = useState('1');
 
-    function search(formData) {
-        console.log("Search");
+    const yearOptions = ['2566', '2565', '2564', '2563']
+    const courseOptions = [
+        { name: 'เทคโนโลยีสารสนเทศ', value: 'it' },
+        { name: 'วิทยาการข้อมูลและการวิเคราะห์เชิงธุรกิจ', value: 'dsba' },
+        { name: 'เทคโนโลยีสารสนเทศทางธุรกิจ (หลักสูตรนานาชาติ)', value: 'bit' },
+    ];
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const formData = {
+            selectedYear,
+            selectedTerm,
+            selectedCoop,
+            selectedCourse,
+            selectedYearStudy,
+        };
+        // console.log('Search', formData);
+        getStudyPlan(formData);
+    };
+
+    function getStudyPlan(formData) {
+
+        let apiUrl = '';
+        if ((formData.selectedYear === '2565' || formData.selectedYear === '2566') && (formData.selectedYearStudy === 'y1' || formData.selectedYearStudy === 'y2')) {
+            apiUrl = `http://localhost:3001/getStudyPlan/2565`;
+        } else {
+            apiUrl = `http://localhost:3001/getStudyPlan/2560`;
+        }
+
+        axios.get(apiUrl, {
+            params: {
+                year: formData.selectedYear,
+                term: formData.selectedTerm,
+                coop: formData.selectedCoop,
+                course: formData.selectedCourse,
+                yearStudy: formData.selectedYearStudy,
+            }
+        })
+            .then((res) => {
+                navigate('/studyPlan/result', {
+                    state: {
+                        subjects: res.data,
+                        year: selectedYear,
+                        course: courseOptions.find(opt => opt.value === selectedCourse)?.name,
+                        yearStudy: selectedYearStudy,
+                        term: selectedTerm,
+                    }
+                });
+            })
+            .catch((err) => console.log(err.message))
     }
 
     return (
         <form className="w-[65%] max-2xl:w-[75%] mt-10 max-2xl:mt-2 h-auto p-12 max-2xl:p-8 bg-white border border-gray-200 rounded-[30px]"
-            action={search}
+            onSubmit={handleSearch}
         >
             <div className="flex flex-wrap">
                 <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -27,7 +74,9 @@ function StudyPlanForm() {
                     </label>
                     <select
                         className='bg-[#F4F4F4] border border-gray-200 rounded-[10px] text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
-                        name="selectedYear">
+                        name="selectedYear"
+                        onChange={e => setSelectedYear(e.target.value)}
+                        value={selectedYear}>
                         {yearOptions.map((item, index) => (
                             <option key={index} value={item}>
                                 {item}
@@ -41,9 +90,11 @@ function StudyPlanForm() {
                     </label>
                     <select
                         className='bg-[#F4F4F4] border border-gray-200 rounded-[10px] text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
-                        name="selectedSemester">
-                        <option value="semester1">ภาคเรียนที่ 1</option>
-                        <option value="semester2">ภาคเรียนที่ 2</option>
+                        name="selectedSemester"
+                        onChange={e => setSelectedTerm(e.target.value)}
+                        value={selectedTerm}>
+                        <option value="1">ภาคเรียนที่ 1</option>
+                        <option value="2">ภาคเรียนที่ 2</option>
                     </select>
                 </div>
                 <div className="w-full px-3 mt-5 max-2xl:mt-3">
@@ -74,9 +125,11 @@ function StudyPlanForm() {
                     </label>
                     <select
                         className='bg-[#F4F4F4] border border-gray-200 rounded-[10px] text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
-                        name="selectedCooperative">
-                        <option value="cooperative">สหกิจ</option>
-                        <option value="noCooperative">ไม่สหกิจ</option>
+                        name="selectedCooperative"
+                        onChange={e => setSelectedCoop(e.target.value)}
+                        value={selectedCoop}>
+                        <option value="coop">สหกิจ</option>
+                        <option value="nonCoop">ไม่สหกิจ</option>
                     </select>
                 </div>
                 <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0 mt-5">
@@ -85,10 +138,12 @@ function StudyPlanForm() {
                     </label>
                     <select
                         className='bg-[#F4F4F4] border border-gray-200 rounded-[10px] text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
-                        name="selectedCourse">
+                        name="selectedCourse"
+                        onChange={e => setSelectedCourse(e.target.value)}
+                        value={selectedCourse}>
                         {courseOptions.map((item, index) => (
-                            <option key={index} value={item}>
-                                {item}
+                            <option key={index} value={item.value}>
+                                {item.name}
                             </option>
                         ))}
                     </select>
@@ -99,11 +154,13 @@ function StudyPlanForm() {
                     </label>
                     <select
                         className='bg-[#F4F4F4] border border-gray-200 rounded-[10px] text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500'
-                        name="selectedYearStudy">
-                        <option value="yesr1">1</option>
-                        <option value="year2">2</option>
-                        <option value="year3">3</option>
-                        <option value="year4">4</option>
+                        name="selectedYearStudy"
+                        onChange={e => setSelectedYearStudy(e.target.value)}
+                        value={selectedYearStudy}>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
                     </select>
                 </div>
             </div>
@@ -111,7 +168,6 @@ function StudyPlanForm() {
                 <button
                     className='py-2 tracking-[1px] rounded-[10px] text-white text-[16px] max-2xl:text-[15px] uppercase w-full bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%]'
                     type="submit"
-                    onClick={() => { navigate('/studyPlan/result'); }}
                 >
                     Search
                 </button>
