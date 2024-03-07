@@ -14,11 +14,17 @@ function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
     const navigate = useNavigate();
     const { signIn } = UserAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validateForm()){
+            return;
+        }
         setError('');
         try {
             await signIn(email, password);
@@ -29,6 +35,27 @@ function SignIn() {
         }
     };
     //
+    // validate SignUp
+    const validateForm = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email.trim() === '') {
+            setEmailError('Email cannot be empty.');
+        } else if (!emailRegex.test(email)) {
+            setEmailError('Invalid email format.');
+        } else {
+            setEmailError('');
+        }
+
+        if (password.trim() === '') {
+            setPasswordError('Password cannot be empty.');
+        } else if (password.length < 3) {
+            setPasswordError('Password must be at least 3 characters.');
+        } else {
+            setPasswordError('');
+        }
+
+        return !emailError && !passwordError;
+    }
 
     return (
         <div style={{ backgroundImage: `url(${SignInBG})` }}
@@ -42,11 +69,25 @@ function SignIn() {
                     <form onSubmit={handleSubmit} className='flex flex-col gap-6 mt-6'>
                         <div className='input-box'>
                             <img width="35" height="35" src='https://img.icons8.com/fluency-systems-regular/48/151c38/new-post.png' className='icon mt-3 ml-6'></img>
-                            <input type='email' name='email' placeholder='Email' className='w-[600px] h-[60px] font-light' onChange={(e) => setEmail(e.target.value)}></input>
+                            {emailError == '' ? (
+                            <input type='email' name='email' placeholder='Email' className='w-[600px] h-[60px] font-light' onChange={(e) => setEmail(e.target.value)}></input>) : 
+                            (
+                                <div>
+                                    <p className="text-red-500 absolute text-sm pl-7">{emailError}</p>
+                                    <input type='text' name='email' placeholder='Email' className='w-[600px] h-[60px] font-light'
+                                        style={{ borderColor: "red" }} onChange={(e) => setEmail(e.target.value)} value={email}></input></div>
+                            )}
+       
                         </div>
                         <div className='input-box'>
                             <img width="35" height="35" src='https://img.icons8.com/fluency-systems-regular/48/151c38/password--v1.png' className='icon mt-3 ml-6'></img>
-                            <input type='password' name='password' placeholder='Password' className='w-[600px] h-[60px] font-light' onChange={(e) => setPassword(e.target.value)}></input>
+                            {passwordError == '' ? (
+                                <input type='password' name='password' placeholder='Password' className='w-[600px] h-[60px] font-light' onChange={(e) => setPassword(e.target.value)}></input>
+                            ) : (
+                                <div>
+                                    <p className="text-red-500 absolute text-sm pl-7">{passwordError}</p>
+                                    <input type='password' name='password' placeholder='Password' className='w-[600px] h-[60px] font-light' style={{ borderColor: "red" }} onChange={(e) => setPassword(e.target.value)}></input></div>
+                            )}
                         </div>
                         <button className='box-btnGradient font-bold text-[20px] text-[#0cb6ff] flex flex-col justify-center items-center py-3 mt-10 w-[600px]'>LOGIN</button>
                     </form>
