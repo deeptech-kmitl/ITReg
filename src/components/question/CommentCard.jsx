@@ -112,8 +112,20 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
 
     // เพิ่มข้อมูลลงฐานข้อมูล
     const [answer, setAnswer] = useState('');
+    const [errorComment, setErrorComment] = useState('');
+    const [borderComment, setBorderComment] = useState('#ced4da');
 
     const postAnswer = async () => {
+        // ตรวจสอบว่ามีข้อความที่ป้อนมาหรือไม่
+        if (!answer.trim()) {
+            setErrorComment('Please enter a Comment');
+            setBorderComment('#dc3545'); // เปลี่ยนสีขอบของ input เป็นสีแดง
+            setTimeout(() => {
+                setErrorComment('');
+                setBorderComment('#ced4da');
+            }, 1000);
+            return;
+        }
         instance.post(baseURL + "answer", {
             questionId: questionId,
             subjectId: subjectId,
@@ -136,6 +148,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
                     console.log(newDatabase)
                     setQuestions(newDatabase);
                     setAnswer('')
+                    setErrorComment('');
                 },
                 (error) => {
                     console.log(error);
@@ -159,7 +172,8 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
             <div className="flex items-center gap-2">
                 <div className="border-gray-300 border-b-[1.5px] w-full"></div>
                 <button className={`rotate-180`}>
-                    <Icon icon="mingcute:down-line" color='#00000080' width="19" height="19" onClick={() => toggleCommentQuestion(indexQuestion)} />
+                    <Icon icon="mingcute:down-line" color='#00000080' width="19" height="19" 
+                    onClick={() => toggleCommentQuestion(questionId)} />
                 </button>
             </div>
             {data.answers.map((answer, index) => (
@@ -360,18 +374,26 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
                     <p className="text-[#A4A4A4] text-l font-[350] px-3">{convertTimestampToTime(answer.time)}  {answer.edit && <> (edit)</>}</p>
                 </div>
             ))}
-            <div name="post" className="relative mx-2">
+            <div className="inputReview flex flex-row gap-3 drop-shadow-sm">
                 <input
-                    className="w-full h-[50px] rounded-[10px] border-0 py-5 pl-7 pr-20 text-[16px] text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1.5 focus:ring-inset focus:ring-[#0D0B5F] "
-                    placeholder="Answer" value={answer}
+                    type="text"
+                    placeholder="Comment"
+                    className="w-full h-[50px] font-light pr-[80px]"
+                    value={answer}
                     onChange={(e) => setAnswer(e.target.value)}
+                    style={{ borderColor: borderComment }}
                 ></input>
                 <button
-                    className="py-[6px] px-[12px] rounded-[10px] bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-[#ffffff] hover:from-[#029BE0] hover:to-[#0D0B5F] absolute right-4 top-3 text-[16px]"
-                    onClick={postAnswer}>
-                    <Icon icon="wpf:sent" color="#fff" className="py-0.1" />
+                    className="py-[6px] px-[12px] rounded-[10px] bg-gradient-to-br 
+                    from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] text-[#ffffff]  
+                    hover:from-[#029BE0] hover:to-[#0D0B5F]
+                    absolute right-2 top-2 text-[16px]"
+                    onClick={postAnswer}
+                >
+                    POST
                 </button>
             </div>
+            {errorComment && <p className="text-red-500 absolute text-sm">{errorComment}</p>}
         </div>
     )
 };

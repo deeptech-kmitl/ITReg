@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import CardDetailSubject from "../components/cardReview/CardDetailSubject";
 import CardReview from "../components/cardReview/CardReview";
 import QuestionCard from "../components/question/QuestionCard";
-import { Outlet, useLocation, Link, useParams } from "react-router-dom";
-import QuestionDetail from "../dummyData/QuestionDetail";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { baseURL } from "../../baseURL";
@@ -13,6 +12,8 @@ function ReviewSubjectDetail() {
   const [reviews, setReviews] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [question, setQuestion] = useState("");
+  const [errorQuestion, setErrorQuestion] = useState('');
+  const [borderQues, setBorderQues] = useState('#ced4da');
   const [activeTab, setActiveTab] = useState("review");
   const sortByTime = (a, b) => {
     const timeA = a.time._seconds + a.time._nanoseconds / 1e9;
@@ -21,7 +22,7 @@ function ReviewSubjectDetail() {
   };
   // Modal create open
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
-  const {instance} = UserAuth()
+  const { instance } = UserAuth()
   useEffect(() => {
     // Fetch review data when the component mounts
     fetchQuestion();
@@ -64,6 +65,18 @@ function ReviewSubjectDetail() {
   const [grade, setGrade] = useState("A");
 
   const postQuestion = async () => {
+    // ตรวจสอบว่ามีข้อความที่ป้อนมาหรือไม่
+    if (!question.trim()) {
+      setErrorQuestion('Please enter a question');
+      setBorderQues('#dc3545'); // เปลี่ยนสีขอบของ input เป็นสีแดง
+      setTimeout(() => {
+        setErrorQuestion('');
+        setBorderQues('#ced4da');
+      }, 1000);
+      return;
+    }
+
+
     instance.post(baseURL + "question", {
       subjectId: reviewId,
       userId: user.uid,
@@ -76,14 +89,15 @@ function ReviewSubjectDetail() {
           console.log(response.data)
           setQuestions([...questions, response.data].sort(sortByTime))
           setQuestion("");
+          setErrorQuestion('');
         },
         (error) => {
           console.log(error);
         }
       );
-
-
   };
+
+
   const newReview = async () => {
     await instance
       .post(baseURL + "newReview", {
@@ -309,6 +323,7 @@ function ReviewSubjectDetail() {
                     className="w-full h-[50px] font-light pr-[80px]"
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
+                    style={{ borderColor: borderQues }}
                   ></input>
                   <button
                     className="py-[6px] px-[12px] rounded-[10px] bg-gradient-to-br 
@@ -320,6 +335,7 @@ function ReviewSubjectDetail() {
                     POST
                   </button>
                 </div>
+                {errorQuestion && <p className="text-red-500 absolute text-sm">{errorQuestion}</p>}
 
                 {/* QuestionCard */}
                 <QuestionCard

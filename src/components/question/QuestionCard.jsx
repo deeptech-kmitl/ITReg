@@ -154,7 +154,9 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
     // เปิด-ปิด Commentทั้งหมด/คำถาม
     const [openComment, setOpenComment] = useState([]);
     const toggleComment = (questionId) => {
+        console.log(questionId)
         const indexQuestion = questions.findIndex(question => question.id === questionId)
+        
         setOpenComment((prevIndex) => {
             const newOpenComments = [...prevIndex];
             newOpenComments[indexQuestion] = !newOpenComments[indexQuestion];
