@@ -22,9 +22,12 @@ function SignIn() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!validateForm()){
-            return;
+         // Check ว่าฟอร์มที่กรอกข้อมูลผ่านไหม
+        const isValidForm = validateForm();
+        if (!isValidForm) {
+            return; // ถ้าไม่ถูกต้อว เป็น false ก็ไม่ทำการล้อคอินต่อ
         }
+
         setError('');
         try {
             await signIn(email, password);
@@ -35,26 +38,31 @@ function SignIn() {
         }
     };
     //
-    // validate SignUp
+    // validate SignIn
     const validateForm = () => {
+        let isValid = true;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (email.trim() === '') {
             setEmailError('Email cannot be empty.');
+            isValid = false;
         } else if (!emailRegex.test(email)) {
             setEmailError('Invalid email format.');
+            isValid = false;
         } else {
             setEmailError('');
         }
 
         if (password.trim() === '') {
             setPasswordError('Password cannot be empty.');
+            isValid = false;
         } else if (password.length < 3) {
             setPasswordError('Password must be at least 3 characters.');
+            isValid = false;
         } else {
             setPasswordError('');
         }
 
-        return !emailError && !passwordError;
+        return isValid;
     }
 
     return (
@@ -75,7 +83,7 @@ function SignIn() {
                                 <div>
                                     <p className="text-red-500 absolute text-sm pl-7">{emailError}</p>
                                     <input type='text' name='email' placeholder='Email' className='w-[600px] h-[60px] font-light'
-                                        style={{ borderColor: "red" }} onChange={(e) => setEmail(e.target.value)} value={email}></input></div>
+                                        style={{ borderColor: "red" }} onChange={(e) => setEmail(e.target.value)}></input></div>
                             )}
        
                         </div>
