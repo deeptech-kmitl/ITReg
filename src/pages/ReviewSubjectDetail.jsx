@@ -61,7 +61,7 @@ function ReviewSubjectDetail() {
   const auth = getAuth();
   const user = auth.currentUser;
   const [textReview, setTextReview] = useState("");
-  const [rating, setRating] = useState("1");
+  const [rating, setRating] = useState("5");
   const [grade, setGrade] = useState("A");
 
   const postQuestion = async () => {
