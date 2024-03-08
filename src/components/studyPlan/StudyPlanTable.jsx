@@ -45,52 +45,48 @@ function StudyPlanTable() {
                             </tr>
                         </thead>
                         <tbody>
-                            {subjects.map(({ subjectId, thaiSubjectsName, engSubjectsName, credit }, index) => {
+                            {subjects.map((item, index) => {
                                 const isLast = index === subjects.length - 1;
                                 const classes = isLast ? "p-5 border-r" : "p-5 border-b border-r border-gray-200";
                                 const textClass = "font-medium text-[20px] max-2xl:text-[16px] tracking-[1px]";
                                 const titleClass = "font-semibold text-[20px] max-2xl:text-[16px] tracking-[1px] bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] text-transparent bg-clip-text";
+                                const titleAreas = "font-semibold text-[20px] max-2xl:text-[16px] mb-5 underline";
+
+                                const shouldRenderTitleAreas = index === 0 || item.subjectAreas !== subjects[index - 1].subjectAreas;
 
                                 return (
                                     <>
-                                        <tr>
+                                        <tr key={item.subjectId}>
                                             <td className={`${classes} w-[25%]`}>
-                                                <Typography
-                                                    color="black"
-                                                    className={textClass}
-                                                >
-                                                    {subjectId}
+                                                <Typography color="black" className={textClass}>
+                                                    {item.subjectId}
                                                 </Typography>
                                             </td>
                                             <td className={`${classes} w-52`}>
-                                                <Link to={`/review/${subjectId}`}>
-                                                    <Typography
-                                                        color="black"
-                                                        className={`${titleClass}`}
-                                                    >
-                                                        {thaiSubjectsName}
+                                                {item.subjectAreas && shouldRenderTitleAreas && (
+                                                    <Typography color="black" className={`${titleAreas}`}>
+                                                        แขนงวิชา{item.subjectAreas}
                                                     </Typography>
-                                                    <Typography
-                                                        color="black"
-                                                        className={`${titleClass} uppercase`}
-                                                    >
-                                                        {engSubjectsName}
+                                                )}
+                                                <Link to={`/review/${item.subjectId}`}>
+                                                    <Typography color="black" className={`${titleClass}`}>
+                                                        {item.thaiSubjectsName}
+                                                    </Typography>
+                                                    <Typography color="black" className={`${titleClass} uppercase`}>
+                                                        {item.engSubjectsName}
                                                     </Typography>
                                                 </Link>
                                             </td>
                                             <td className={`${classes} w-[25%]`}>
-                                                <Typography
-                                                    color="black"
-                                                    className={textClass}
-                                                >
-                                                    {credit}
+                                                <Typography color="black" className={textClass}>
+                                                    {item.credit}
                                                 </Typography>
                                             </td>
                                         </tr>
                                     </>
-                                );
-                            })}
+                                )
 
+                            })}
                         </tbody>
                     </table>
                 </Card>

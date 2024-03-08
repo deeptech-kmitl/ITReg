@@ -308,7 +308,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
           value={comment}
           onChange={(e) => setcomment(e.target.value)}
         ></input>
-        <button className="py-[6px] px-[12px] rounded-[10px] flex-shrink-0 bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] rounded-[10px] absolute top-1/2 right-[-6px] transform -translate-x-1/2 -translate-y-1/2 text-[16px]">
+        <button className="py-[6px] px-[12px] flex-shrink-0 bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] rounded-[10px] absolute top-1/2 right-[-6px] transform -translate-x-1/2 -translate-y-1/2 text-[16px]">
           <Icon icon="wpf:sent" color="#fff" className="py-0.1" onClick={postComment} />
         </button>
       </div>
