@@ -7,13 +7,15 @@ import { useDispatch } from "react-redux";
 import { saveAllSubject, show } from '../../redux/subjectSlice';
 import axios from 'axios';
 import { baseURL } from '../../baseURL';
+import { UserAuth } from "../context/AuthContext";
 
 function Layout() {
+    const { instance } = UserAuth()
     const dispatch = useDispatch()
 
     const fecthSubject = async () => {
         try {
-            const res = await axios.get(baseURL + "getAllSubjects")
+            const res = await instance.get("/getAllSubjects")
             dispatch(saveAllSubject(res.data))
         }
         catch (e) {

@@ -60,7 +60,7 @@ function CardReview({ id, reviews, setReviews }) {
     };
 
     const delReview = async () => {
-        await instance.delete(baseURL + 'delReview', {
+        await instance.delete('/delReview', {
             data: {
                 subjectId: id,
                 reviewId: reviewId
@@ -74,7 +74,7 @@ function CardReview({ id, reviews, setReviews }) {
     };
 
     const editReview = async () => {
-        await instance.put(baseURL + 'editReview', {
+        await instance.put('/editReview', {
             subjectId: id,
             userId: user.uid,
             content: textReview,
@@ -102,7 +102,7 @@ function CardReview({ id, reviews, setReviews }) {
     const newLike = async (reviewId) => {
         const indexRe = reviews.findIndex((item) => item.id == reviewId)
         const likeByUser = reviews[indexRe].like.includes(user.uid);
-        await instance.put(baseURL + 'editReviewLikes', {
+        await instance.put('/editReviewLikes', {
             subjectId: id,
             userId: user.uid,
             likeType: likeByUser,
@@ -135,7 +135,7 @@ function CardReview({ id, reviews, setReviews }) {
     const dislike = async (reviewId) => {
         const indexRe = reviews.findIndex((item) => item.id == reviewId)
         const dislikeByUser = reviews[indexRe].dislike.includes(user.uid);
-        await instance.put(baseURL + 'delReviewLikes', {
+        await instance.put('/delReviewLikes', {
             subjectId: id,
             userId: user.uid,
             likeType: dislikeByUser,

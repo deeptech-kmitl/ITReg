@@ -56,7 +56,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   const instance = axios.create({
-    baseURL: 'http://localhost:3001',
+    baseURL: 'http://localhost/api',
   })
 
   instance.interceptors.request.use(
@@ -74,7 +74,7 @@ export const AuthContextProvider = ({ children }) => {
   );
 
   return (
-    <UserContext.Provider value={{ createUser, user, role, logout, signIn,instance }}>
+    <UserContext.Provider value={{ createUser, user, role, logout, signIn, instance }}>
       {children}
     </UserContext.Provider>
   );

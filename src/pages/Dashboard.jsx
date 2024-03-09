@@ -10,18 +10,17 @@ import axios from "axios";
 
 function Dashboard() {
   const user = "Admin"
-  const { role } = UserAuth();
+  const { role, instance } = UserAuth();
   const [database, setDatabase] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [imageFiles, setImageFiles] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
-  const {instance} = UserAuth()
   const handleModalToggle = () => {
     setModalVisible(!modalVisible);
   };
 
   useEffect(()=>{
-    axios.get("http://localhost:3001/post")
+    instance.get("/post")
       .then((res) => {
         setDatabase(res.data);
       })
@@ -73,7 +72,7 @@ function Dashboard() {
     Object.entries(newQuestion).forEach(([key, value]) => {
       formData.append(key, value);
     });
-    instance.post(`http://localhost:3001/newPost`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    instance.post(`/newPost`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then((res) => {
         const newDatabase = [...database, {...res.data}];
         setDatabase(newDatabase);

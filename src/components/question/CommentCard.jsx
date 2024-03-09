@@ -42,7 +42,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
         // const currentDate = new Date();
         if (answer == "save") {
             console.log("Save toggle Edit")
-            await instance.put(baseURL + 'answer', {
+            await instance.put('/answer', {
                 subjectId: subjectId,
                 userId: user.uid,
                 detail: textAnswer,
@@ -84,7 +84,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
             setAnswerIdDelete(answerId)
             setIsModalDeleteOpen(true);
         } else if (command === 'delete') {
-            await instance.delete(baseURL + 'answer', {
+            await instance.delete('/answer', {
                 data: {
                     subjectId: subjectId,
                     questionId: questionId,
@@ -126,7 +126,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
             }, 1000);
             return;
         }
-        instance.post(baseURL + "answer", {
+        instance.post("/answer", {
             questionId: questionId,
             subjectId: subjectId,
             userId: user.uid,

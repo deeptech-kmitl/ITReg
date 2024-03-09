@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-
+import { UserAuth } from "../../context/AuthContext";
 function StudyPlanForm() {
+    const { instance } = UserAuth()
     const navigate = useNavigate();
 
     const [selectedYear, setSelectedYear] = useState('2566');
@@ -37,13 +38,13 @@ function StudyPlanForm() {
 
         let apiUrl = '';
         if ((formData.selectedYear === '2565' || formData.selectedYear === '2566') && (formData.selectedYearStudy === '1' || formData.selectedYearStudy === '2')) {
-            apiUrl = `http://localhost:3001/getStudyPlan/2565`;
+            apiUrl = `/getStudyPlan/2565`;
         } else {
-            apiUrl = `http://localhost:3001/getStudyPlan/2560`;
+            apiUrl = `/getStudyPlan/2560`;
         }
         console.log(apiUrl);
 
-        axios.get(apiUrl, {
+        instance.get(apiUrl, {
             params: {
                 year: formData.selectedYear,
                 term: formData.selectedTerm,

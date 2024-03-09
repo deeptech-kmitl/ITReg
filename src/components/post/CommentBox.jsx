@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
 import axios from "axios";
 import { UserAuth } from "../../context/AuthContext";
+import { baseURL } from "../../../baseURL";
 
 
 function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime }) {
@@ -26,7 +27,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
       console.log(cloneAnswer.commentId)
       // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
       const dataIndex = database[indexPost].comments.findIndex((item) => item.commentId === cloneAnswer.commentId);
-      const response = await instance.put(`http://localhost:3001/editPostComment/${postId}/${cloneAnswer.commentId}`, { detail: textAnswer, userId: user.uid })
+      const response = await instance.put(`/editPostComment/${postId}/${cloneAnswer.commentId}`, { detail: textAnswer, userId: user.uid })
       setDatabase((prevDatabase) => {
         const updatedDatabase = [...prevDatabase];
         updatedDatabase[indexPost].comments[dataIndex].detail = response.data.detail;
@@ -55,7 +56,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
       setIsModalDeleteOpen(true);
       setIsIndexDelete(commentId)
     } else if (command === 'delete') {
-      const response = await instance.delete(`http://localhost:3001/delCommentPost/${postId}/${isIndexDelete}`);
+      const response = await instance.delete(`/delCommentPost/${postId}/${isIndexDelete}`);
       console.log(response.data)
       const newDatabase = database.map(detail => {
         console.log(detail.id === postId)
@@ -89,7 +90,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
         detail: comment,
       };
   
-      const response = await instance.post("http://localhost:3001/newcommentPost", newcomment);
+      const response = await instance.post(`/newcommentPost`, newcomment);
       const newDatabase = database.map(detail => {
         if (detail.id === postId) {
           return {
