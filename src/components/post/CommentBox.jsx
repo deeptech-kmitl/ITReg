@@ -10,6 +10,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
   const { user } = UserAuth();
   const { role } = UserAuth();
 
+  
   // Modal edit open
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   // ดึงคำถามที่เลือกจะแก้ไข
@@ -72,34 +73,40 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
     setIsModalDeleteOpen(!isModalDeleteOpen);
   };
   // เพิ่มข้อมูลลงฐานข้อมูล
-  const [comment, setcomment] = useState('');
+  const [comment, setComment] = useState('');
+  const [isError, setIsError] = useState(false);
   const postComment = async () => {
     try {
+      if (!comment.trim()) {
+        setIsError(true); // ตั้งค่าให้มีข้อผิดพลาดเป็น true เมื่อไม่มีข้อความที่ถูกป้อน
+        return; // ไม่ส่งข้อมูลถ้า comment เป็นค่าว่าง
+      }
+  
+      // เมื่อ comment ไม่ใช่ค่าว่าง ก็ทำการส่งข้อมูลต่อไป
       const newcomment = {
         postId: data.id,
         userId: user.uid,
         detail: comment,
       };
-
+  
       const response = await instance.post("http://localhost:3001/newcommentPost", newcomment);
       const newDatabase = database.map(detail => {
         if (detail.id === postId) {
-          console.log("test")
           return {
             ...detail,
-            //เอาคำตอบเก่าของคำถามตามid และต่อด้วย คำตอบใหม่
             comments: [...detail.comments, response.data],
           };
         }
         return detail;
       });
-      // Update the state with the new array
       setDatabase(newDatabase);
-      setcomment('');
+      setComment('');
+      setIsError(false); // รีเซ็ตข้อผิดพลาดเป็น false เมื่อส่งข้อมูลเสร็จสิ้น
     } catch (error) {
       console.log(error.message);
     }
   }
+  
 
   const convertTimestampToTime = (timestamp) => {
     // Convert timestamp to milliseconds
@@ -302,12 +309,13 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
       </div>
 
       <div name="post" className="relative mx-2">
-        <input
-          className="w-full h-[40px] rounded-[10px] border-0 py-5 pl-7 pr-20 text-[16px] text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1.5 focus:ring-inset focus:ring-[#0D0B5F] text-sm font-light "
-          placeholder="Your Message ..."
-          value={comment}
-          onChange={(e) => setcomment(e.target.value)}
-        ></input>
+      <input
+  className={`w-full h-[40px] rounded-[10px] border-0 py-5 pl-7 pr-20 text-[16px] text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1.5 focus:ring-inset focus:ring-[#0D0B5F] text-sm font-light ${isError ? 'ring-red-500' : ''}`}
+  placeholder="Your Message ..."
+  value={comment}
+  onChange={(e) => setComment(e.target.value)}
+></input>
+
         <button className="py-[6px] px-[12px] flex-shrink-0 bg-gradient-to-br from-[#0D0B5F] to-[#029BE0] hover:from-[#029BE0] hover:to-[#0D0B5F] rounded-[10px] absolute top-1/2 right-[-6px] transform -translate-x-1/2 -translate-y-1/2 text-[16px]">
           <Icon icon="wpf:sent" color="#fff" className="py-0.1" onClick={postComment} />
         </button>

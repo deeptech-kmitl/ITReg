@@ -20,11 +20,6 @@ function Dashboard() {
     setModalVisible(!modalVisible);
   };
 
-  // const handlePost = () => {
-  //   // ทำงานที่ต้องการเมื่อผู้ใช้กด Accept
-  //   setModalVisible(false); // ปิด Modal
-  // };
-
   useEffect(()=>{
     axios.get("http://localhost:3001/post")
       .then((res) => {
@@ -35,6 +30,8 @@ function Dashboard() {
   
   const [newtitle, setNewtitle] = useState('');
   const [message, setMessage] = useState('');
+  const [showTitleError, setShowTitleError] = useState(false);
+  const [showMessageError, setShowMessageError] = useState(false);
 
   const handleImageChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -47,7 +44,12 @@ function Dashboard() {
 
   // เพิ่มข้อมูลลงฐานข้อมูล
   const newPost = () => {
-    const currentDate = new Date();
+    if (!newtitle.trim() || !message.trim()) {
+      setShowTitleError(!newtitle.trim());
+      setShowMessageError(!message.trim());
+      return;
+    }
+
     const formData = new FormData();
     for (const file of imageFiles) {
       formData.append('images', file);
@@ -65,24 +67,21 @@ function Dashboard() {
     });
     instance.post(`http://localhost:3001/newPost`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then((res) => {
-        // เอาข้อมูลเก่า + ข้อมูลใหม่
-        console.log(res.data)
         const newDatabase = [...database, {...res.data}];
-        // Update the state with the new array
         setDatabase(newDatabase);
-        setModalVisible(false); // ปิด Modal
-        setImageFiles([]); // Clear the selected image files
-        setPreviewImages([]); // Clear image previews
-        setNewtitle('')
-        setMessage('')
+        setModalVisible(false);
+        setImageFiles([]);
+        setPreviewImages([]);
+        setNewtitle('');
+        setMessage('');
       })
       .catch((err) => { 
         console.log(err);
-        setModalVisible(false); // ปิด Modal
-        setImageFiles([]); // Clear the selected image files
-        setPreviewImages([]); // Clear image previews
-        setNewtitle('')
-        setMessage('')
+        setModalVisible(false);
+        setImageFiles([]);
+        setPreviewImages([]);
+        setNewtitle('');
+        setMessage('');
       })
   }
 
@@ -140,6 +139,7 @@ function Dashboard() {
                     >
                       &#8203;
                     </span>
+                    
                     {/* Pop up */}
                     <div className="inline-block align-bottom bg-white rounded-[20px] text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                       <div className="bg-white rounded-[30px]">
@@ -180,6 +180,7 @@ function Dashboard() {
                             value={newtitle}
                             onChange={(e) => setNewtitle(e.target.value)}
                           />
+                          {showTitleError && <p className="text-red-500 ml-2 text-sm">Please enter a title</p>}
                           <textarea
                             rows="4"
                             cols="50"
@@ -188,6 +189,7 @@ function Dashboard() {
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                           />
+                          {showMessageError && <p className="text-red-500 ml-2 text-sm ">Please enter a message</p>}
                         </div>
                         <div className="flex items-center p-4 md:p-5 rounded-b mt-[-20px]">
                           <input
@@ -235,4 +237,4 @@ function Dashboard() {
   )
 }
 
-export default Dashboard
+export default Dashboard;
