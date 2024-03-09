@@ -33,6 +33,14 @@ function Dashboard() {
   const [showTitleError, setShowTitleError] = useState(false);
   const [showMessageError, setShowMessageError] = useState(false);
 
+  useEffect(() => {
+    if (!modalVisible) {
+      setShowTitleError(false);
+      setShowMessageError(false);
+    }
+  }, [modalVisible]);
+  
+
   const handleImageChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     setImageFiles(selectedFiles);
