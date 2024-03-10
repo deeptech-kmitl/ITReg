@@ -7,8 +7,7 @@ WORKDIR /ITREG
 # Copy package.json and package-lock.json to container
 
 COPY package*.json ./
-
-
+COPY .env ./
 
 # Install dependencies
 RUN npm install
