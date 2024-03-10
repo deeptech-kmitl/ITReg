@@ -17,11 +17,12 @@ export const AuthContextProvider = ({ children }) => {
   const [role, setRole] = useState("");
 
   const createUser = async (email, password) => {
-    const docRef = doc(db, "users", currentUser.uid);
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const docRef = doc(db, "users", res.user.uid);
     await setDoc(docRef, {
       role: "student"
     });
-    return createUserWithEmailAndPassword(auth, email, password);
+    return res
   };
 
   const signIn = (email, password) => {
