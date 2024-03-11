@@ -16,8 +16,6 @@ function ReviewSubjectDetail() {
   const [borderQues, setBorderQues] = useState('#ced4da');
   const [activeTab, setActiveTab] = useState("review");
   const [textReview, setTextReview] = useState("");
-  const [rating, setRating] = useState("5");
-  const [grade, setGrade] = useState("A");
   const sortByTime = (a, b) => {
     const timeA = a.time._seconds + a.time._nanoseconds / 1e9;
     const timeB = b.time._seconds + b.time._nanoseconds / 1e9;
@@ -26,6 +24,8 @@ function ReviewSubjectDetail() {
   // Modal create open
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
   const { instance } = UserAuth()
+  const [rating, setRating] = useState("5");
+  const [grade, setGrade] = useState("A");
   useEffect(() => {
     // Fetch review data when the component mounts
     fetchQuestion();
@@ -117,8 +117,8 @@ function ReviewSubjectDetail() {
           setReviews([...reviews, response.data].sort(sortByTime))
           // setReviews(response)
           setTextReview("");
-          setRating("");
-          setGrade("");
+          setRating("5");
+          setGrade("A");
         },
         (error) => {
           console.log(error);
