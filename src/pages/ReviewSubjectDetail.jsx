@@ -279,7 +279,7 @@ function ReviewSubjectDetail() {
                                 </label>
                                 <select
                                   className="bg-[#F4F4F4] border border-gray-200 text-gray-500 rounded-[10px] mt-2 text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500"
-                                  name="selectedGrade"
+                                  name="selectedGrade" value={grade}
                                   onChange={(event) =>
                                     setGrade(event.target.value)
                                   }
