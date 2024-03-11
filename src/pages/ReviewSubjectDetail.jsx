@@ -15,6 +15,9 @@ function ReviewSubjectDetail() {
   const [errorQuestion, setErrorQuestion] = useState('');
   const [borderQues, setBorderQues] = useState('#ced4da');
   const [activeTab, setActiveTab] = useState("review");
+  const [textReview, setTextReview] = useState("");
+  const [rating, setRating] = useState("5");
+  const [grade, setGrade] = useState("A");
   const sortByTime = (a, b) => {
     const timeA = a.time._seconds + a.time._nanoseconds / 1e9;
     const timeB = b.time._seconds + b.time._nanoseconds / 1e9;
@@ -60,9 +63,9 @@ function ReviewSubjectDetail() {
 
   const auth = getAuth();
   const user = auth.currentUser;
-  const [textReview, setTextReview] = useState("");
-  const [rating, setRating] = useState("5");
-  const [grade, setGrade] = useState("A");
+  // const [textReview, setTextReview] = useState("");
+  // const [rating, setRating] = useState("5");
+  // const [grade, setGrade] = useState("A");
 
   const postQuestion = async () => {
     // ตรวจสอบว่ามีข้อความที่ป้อนมาหรือไม่
@@ -257,10 +260,8 @@ function ReviewSubjectDetail() {
                                 </label>
                                 <select
                                   className="bg-[#F4F4F4] border border-gray-200 rounded-[10px] text-gray-500 mt-2 text-[16px] max-2xl:text-[15px] w-full py-2 px-3 leading-tight focus:outline-none focus:border-gray-500"
-                                  name="selectedPoint"
-                                  onChange={(event) =>
-                                    setRating(event.target.value)
-                                  }
+                                  name="selectedPoint" value={rating}
+                                  onChange={(event) => setRating(event.target.value)}
                                 >
                                   <option value="1">1 point</option>
                                   <option value="2">2 point</option>
