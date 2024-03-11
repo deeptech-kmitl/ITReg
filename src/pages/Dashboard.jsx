@@ -15,19 +15,19 @@ function Dashboard() {
   const [modalVisible, setModalVisible] = useState(false);
   const [imageFiles, setImageFiles] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
-  const {instance} = UserAuth()
+  const { instance } = UserAuth()
   const handleModalToggle = () => {
     setModalVisible(!modalVisible);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     axios.get("http://localhost:3001/post")
       .then((res) => {
         setDatabase(res.data);
       })
       .catch((err) => console.log(err.message))
   }, [])
-  
+
   const [newtitle, setNewtitle] = useState('');
   const [message, setMessage] = useState('');
   const [showTitleError, setShowTitleError] = useState(false);
@@ -39,7 +39,7 @@ function Dashboard() {
       setShowMessageError(false);
     }
   }, [modalVisible]);
-  
+
 
   const handleImageChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -75,7 +75,7 @@ function Dashboard() {
     });
     instance.post(`http://localhost:3001/newPost`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then((res) => {
-        const newDatabase = [...database, {...res.data}];
+        const newDatabase = [...database, { ...res.data }];
         setDatabase(newDatabase);
         setModalVisible(false);
         setImageFiles([]);
@@ -83,7 +83,7 @@ function Dashboard() {
         setNewtitle('');
         setMessage('');
       })
-      .catch((err) => { 
+      .catch((err) => {
         console.log(err);
         setModalVisible(false);
         setImageFiles([]);
@@ -102,7 +102,7 @@ function Dashboard() {
   return (
     <div className='w-full h-full'>
       <header className='text-[40px] max-2xl:text-[34px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] inline-block text-transparent bg-clip-text'>
-        Public relations
+        Annoucement
       </header>
       <div className='w-full h-auto flex mt-5'>
         <div className='w-full mr-10'>
@@ -147,7 +147,7 @@ function Dashboard() {
                     >
                       &#8203;
                     </span>
-                    
+
                     {/* Pop up */}
                     <div className="inline-block align-bottom bg-white rounded-[20px] text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                       <div className="bg-white rounded-[30px]">
