@@ -8,7 +8,7 @@ import { UserAuth } from "../context/AuthContext";
 import axios from "axios";
 
 
-function Dashboard() {
+function Announcement() {
   const user = "Admin"
   const { role } = UserAuth();
   const [database, setDatabase] = useState([]);
@@ -102,7 +102,7 @@ function Dashboard() {
   return (
     <div className='w-full h-full'>
       <header className='text-[40px] max-2xl:text-[34px] font-semibold bg-gradient-to-br from-[#0D0B5F] from-[12.5%] to-[#029BE0] to-[100%] inline-block text-transparent bg-clip-text'>
-        Annoucement
+        Announcement
       </header>
       <div className='w-full h-auto flex mt-5'>
         <div className='w-full mr-10'>
@@ -159,7 +159,7 @@ function Dashboard() {
                           <button
                             type="button"
                             onClick={handleModalToggle}
-                            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-300 hover:text-white"
+                            className="text-gray-400 bg-transparent rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-300 hover:text-white"
                           >
                             <svg
                               className="w-3 h-3"
@@ -245,4 +245,4 @@ function Dashboard() {
   )
 }
 
-export default Dashboard;
+export default Announcement;

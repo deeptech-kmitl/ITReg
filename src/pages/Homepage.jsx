@@ -12,7 +12,7 @@ function Homepage() {
             navigate("/signin")
         }
         else{
-            navigate("/dashboard");
+            navigate("/announcement");
         }
     };
 

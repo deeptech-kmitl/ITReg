@@ -5,6 +5,7 @@ import Logo from '../assets/Logo.png'
 import SignUpImage from '../assets/SignUpImage.png'
 import { UserAuth } from '../context/AuthContext';
 import { validatePassword } from 'firebase/auth';
+
 function SignUp() {
     const { user, createUser } = UserAuth();
     const navigate = useNavigate();

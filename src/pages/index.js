@@ -1,5 +1,5 @@
 import Homepage from "./Homepage"
-import Dashboard from "./Dashboard"
+import Announcement from "./Announcement"
 import Review from "./Review"
 import StudyPlan from "./StudyPlan"
 import HowToRegister from "./howToRegister/HowToRegister"
@@ -11,7 +11,7 @@ import ReviewLayout from "./ReviewLayout"
 
 export {
     Homepage,
-    Dashboard,
+    Announcement,
     Review,
     StudyPlan,
     HowToRegister,
