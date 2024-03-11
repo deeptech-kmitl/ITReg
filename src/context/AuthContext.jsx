@@ -57,7 +57,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   const instance = axios.create({
-    baseURL: 'http://34.134.157.200/api',
+    baseURL: `${import.meta.env.PUBLIC_IP}/api`,
   })
 
   instance.interceptors.request.use(
