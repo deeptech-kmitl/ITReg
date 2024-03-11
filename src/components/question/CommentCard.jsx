@@ -181,7 +181,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
                     {/* profile */}
                     <div className="mx-2 bg-[#E3F3FF] rounded-[10px]">
                         <div className="flex pt-3 px-3">
-                            <p className="text-[#A4A4A4] text-l font-[400] ">Answer by User@{answer.userId}</p>
+                            <p className="text-[#A4A4A4] text-l font-[400] ">Answer by Anonymous</p>
                             {/* Can it be Edit/Delete ? */}
                             {answer.userId === user.uid &&
                                 <Menu placement="bottom-end">

@@ -130,7 +130,7 @@ function CommentBox({ data, database, setDatabase, indexPost, postId, sortByTime
             <div className="ml-3 p-2 bg-[#E3F3FF] relative" style={{ width: '100%', maxWidth: 'calc(100% - 40px)', borderRadius: '10px' }}>
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center">
-                  <p className="text-[#151C38] text-sm font-[400]">{role == "Admin" ? "admin" : "user"}@{comment?.userId}</p>
+                  <p className="text-[#151C38] text-sm font-[400]">{role == "Admin" ? `admin@${comment?.userId}` : "Anonymous"}</p>
                   <p className="text-[#A4A4A4] text-[10px] font-[350] ml-2 mt-[2px]">{convertTimestampToTime(comment?.dateTime)}</p>
                 </div>
                 <div className="relative">
