@@ -7,7 +7,7 @@ const ProtectAuthenRoute = ({
     const { user } = UserAuth();
     console.log(user)
     if (user) {
-      return <Navigate to={"/dashboard"} replace />;
+      return <Navigate to={"/announcement"} replace />;
     }
     return children ? children : <Outlet />;
 };

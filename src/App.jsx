@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   Homepage,
-  Dashboard,
+  Announcement,
   Review,
   StudyPlan,
   HowToRegister,
@@ -42,10 +42,10 @@ function App() {
                 </ProtectAuthenRoute>
               } />
             <Route element={<Layout />}>
-              <Route path="/dashboard"
+              <Route path="/announcement"
                 element={
                   <ProtectedRoute redirectPath="/signin">
-                    <Dashboard />
+                    <Announcement />
                   </ProtectedRoute>}>
               </Route>
               <Route path="review"

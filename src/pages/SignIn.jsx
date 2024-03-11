@@ -30,7 +30,7 @@ function SignIn() {
         setError('');
         try {
             await signIn(email, password);
-            navigate('/dashboard');
+            navigate('/announcement');
         } catch (e) {
             setError(e.message);
             alert(e.message);
