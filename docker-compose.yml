@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - react
+      - express
+
+  react:
+    image: react
+    build: .
+    ports:
+      - "5173:5173"
+
+  express:
+    image: express
+    build: ./ITReg-Backend
+    ports:
+      - "3001:3001"

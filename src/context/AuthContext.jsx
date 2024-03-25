@@ -17,11 +17,12 @@ export const AuthContextProvider = ({ children }) => {
   const [role, setRole] = useState("");
 
   const createUser = async (email, password) => {
-    const docRef = doc(db, "users", currentUser.uid);
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const docRef = doc(db, "users", res.user.uid);
     await setDoc(docRef, {
       role: "student"
     });
-    return createUserWithEmailAndPassword(auth, email, password);
+    return res
   };
 
   const signIn = (email, password) => {
@@ -56,7 +57,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   const instance = axios.create({
-    baseURL: 'http://localhost:3001',
+    baseURL: `${import.meta.env.PUBLIC_IP}/api`,
   })
 
   instance.interceptors.request.use(
@@ -74,7 +75,7 @@ export const AuthContextProvider = ({ children }) => {
   );
 
   return (
-    <UserContext.Provider value={{ createUser, user, role, logout, signIn,instance }}>
+    <UserContext.Provider value={{ createUser, user, role, logout, signIn, instance }}>
       {children}
     </UserContext.Provider>
   );

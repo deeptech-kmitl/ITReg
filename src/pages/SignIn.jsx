@@ -8,7 +8,7 @@ import { Button } from '@material-tailwind/react';
 
 
 function SignIn() {
-    const { user } = UserAuth();
+    const { user, signIn } = UserAuth();
 
     //signin
     const [email, setEmail] = useState('');
@@ -17,7 +17,6 @@ function SignIn() {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const navigate = useNavigate();
-    const { signIn } = UserAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();

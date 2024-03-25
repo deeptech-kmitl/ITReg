@@ -7,6 +7,7 @@ import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react"
 import { UserAuth } from "../../context/AuthContext";
 import Carousel from "./Carousel"
 import axios from "axios";
+import { baseURL } from "../../../baseURL";
 
 function PostDetailCard({ database, setDatabase, role }) {
   const { user } = UserAuth();
@@ -28,12 +29,12 @@ function PostDetailCard({ database, setDatabase, role }) {
 
       if (!likeByUser) {
         // Add user to 'like'
-        await instance.patch("http://localhost:3001/newPostLikes", { postId: postId, userId: user.uid });
+        await instance.patch(`/newPostLikes`, { postId: postId, userId: user.uid });
         updatedDatabase[indexQuestion].like.push(user.uid);
         console.log("like");
       } else {
         // Remove user from 'like'
-        await instance.patch("http://localhost:3001/delPostLikes", { postId: postId, userId: user.uid });
+        await instance.patch("/delPostLikes", { postId: postId, userId: user.uid });
         updatedDatabase[indexQuestion].like = updatedDatabase[indexQuestion].like.filter(user_id => user_id !== user.uid);
         console.log("unlike");
       }
@@ -81,7 +82,7 @@ function PostDetailCard({ database, setDatabase, role }) {
         console.log("Save toggle Edit")
         // ค้นหา index ของข้อมูลที่ต้องการอัพเดท
         const dataIndex = database.findIndex((item) => item.id === clonePost.id);
-        const response = await instance.put(`http://localhost:3001/editPost/${database[dataIndex].id}`, { Title: newtitle, message: textPost });
+        const response = await instance.put(`/editPost/${database[dataIndex].id}`, { Title: newtitle, message: textPost });
         setDatabase((prevDatabase) => {
           const updatedDatabase = [...prevDatabase];
           updatedDatabase[dataIndex].message = response.data.message;
@@ -118,7 +119,7 @@ function PostDetailCard({ database, setDatabase, role }) {
         setIsIndexDelete(index)
         setIsModalDeleteOpen(true);
       } else if (command === 'delete') {
-        const response = await instance.delete(`http://localhost:3001/deletePost/${isIndexDelete}`);
+        const response = await instance.delete(`/deletePost/${isIndexDelete}`);
         const newDatabase = database.filter(detail => detail.id !== isIndexDelete);
         setDatabase(newDatabase)
         setIsIndexDelete(null)

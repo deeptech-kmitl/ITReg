@@ -46,7 +46,7 @@ function ReviewSubjectDetail() {
 
   const fetchQuestion = async () => {
     try {
-      const response = await axios.get(baseURL + `getQuestions/${reviewId}`);
+      const response = await instance.get(`/getQuestions/${reviewId}`);
       setQuestions(response.data);
     } catch (error) {
       console.error("Error fetching question:", error);
@@ -54,7 +54,7 @@ function ReviewSubjectDetail() {
   };
   const fetchReview = async () => {
     try {
-      const response = await axios.get(baseURL + `getReview/${reviewId}`);
+      const response = await instance.get(`/getReview/${reviewId}`);
       setReviews(response.data); // Update the review state with the fetched data
     } catch (error) {
       console.error("Error fetching review:", error);
@@ -63,9 +63,6 @@ function ReviewSubjectDetail() {
 
   const auth = getAuth();
   const user = auth.currentUser;
-  // const [textReview, setTextReview] = useState("");
-  // const [rating, setRating] = useState("5");
-  // const [grade, setGrade] = useState("A");
 
   const postQuestion = async () => {
     // ตรวจสอบว่ามีข้อความที่ป้อนมาหรือไม่
@@ -80,7 +77,7 @@ function ReviewSubjectDetail() {
     }
 
 
-    instance.post(baseURL + "question", {
+    instance.post("/question", {
       subjectId: reviewId,
       userId: user.uid,
       detail: question,
@@ -103,7 +100,7 @@ function ReviewSubjectDetail() {
 
   const newReview = async () => {
     await instance
-      .post(baseURL + "newReview", {
+      .post("/newReview", {
         subjectId: reviewId,
         userId: user.uid,
         content: textReview,

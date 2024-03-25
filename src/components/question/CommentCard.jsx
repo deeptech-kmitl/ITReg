@@ -42,7 +42,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
         // const currentDate = new Date();
         if (answer == "save") {
             console.log("Save toggle Edit")
-            await instance.put(baseURL + 'answer', {
+            await instance.put('/answer', {
                 subjectId: subjectId,
                 userId: user.uid,
                 detail: textAnswer,
@@ -84,7 +84,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
             setAnswerIdDelete(answerId)
             setIsModalDeleteOpen(true);
         } else if (command === 'delete') {
-            await instance.delete(baseURL + 'answer', {
+            await instance.delete('/answer', {
                 data: {
                     subjectId: subjectId,
                     questionId: questionId,
@@ -126,7 +126,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
             }, 1000);
             return;
         }
-        instance.post(baseURL + "answer", {
+        instance.post("/answer", {
             questionId: questionId,
             subjectId: subjectId,
             userId: user.uid,
@@ -181,7 +181,7 @@ function CommentCard({ sortByTime, data, indexQuestion, subjectId, questionId, t
                     {/* profile */}
                     <div className="mx-2 bg-[#E3F3FF] rounded-[10px]">
                         <div className="flex pt-3 px-3">
-                            <p className="text-[#A4A4A4] text-l font-[400] ">Answer by User@{answer.userId}</p>
+                            <p className="text-[#A4A4A4] text-l font-[400] ">Answer by Anonymous</p>
                             {/* Can it be Edit/Delete ? */}
                             {answer.userId === user.uid &&
                                 <Menu placement="bottom-end">

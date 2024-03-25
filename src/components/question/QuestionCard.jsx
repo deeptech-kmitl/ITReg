@@ -64,7 +64,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
     const handleToggleLike = async (questionId) => {
         const indexRe = questions.findIndex((item) => item.id == questionId)
         const likeByUser = questions[indexRe].like.includes(user.uid);
-        await instance.patch(baseURL + 'likeQuestion', {
+        await instance.patch('/likeQuestion', {
             subjectId: id,
             userId: user.uid,
             likeType: likeByUser,
@@ -124,7 +124,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
     const handleToggleDislike = async (questionId) => {
         const indexRe = questions.findIndex((item) => item.id == questionId)
         const dislikeByUser = questions[indexRe].dislike.includes(user.uid);
-        await instance.patch(baseURL + 'dislikeQuestion', {
+        await instance.patch('/dislikeQuestion', {
             subjectId: id,
             userId: user.uid,
             likeType: dislikeByUser,
@@ -180,7 +180,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
         // const currentDate = new Date();
         if (question == "save") {
             // GU DO HERE
-            await instance.put(baseURL + 'question', {
+            await instance.put('/question', {
                 subjectId: id,
                 userId: user.uid,
                 detail: textQues,
@@ -222,7 +222,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
             setIsIndexDelete(questionId)
             setIsModalDeleteOpen(true);
         } else if (command === 'delete') {
-            await instance.delete(baseURL + 'question', {
+            await instance.delete('/question', {
                 data: {
                     subjectId: id,
                     questionId: isIndexDelete
