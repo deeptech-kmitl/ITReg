@@ -57,7 +57,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   const instance = axios.create({
-    baseURL: `${import.meta.env.PUBLIC_IP}/api`,
+    baseURL: `https://it-reg-backend.vercel.app/api`,
   })
 
   instance.interceptors.request.use(
