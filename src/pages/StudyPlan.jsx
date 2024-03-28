@@ -13,9 +13,7 @@ function StudyPlan() {
           {location.pathname === '/studyPlan/result' && (
             <>
               <span className='text-[36px] max-2xl:text-[30px] mx-5'>&gt;</span>
-              <Link to='/studyPlan/result'>
                 <span className='text-[36px] max-2xl:text-[30px]'>ผลการค้นหา</span>
-              </Link>
             </>
           )}
         </p>
