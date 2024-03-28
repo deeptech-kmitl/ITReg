@@ -262,7 +262,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
                                                     width="15"
                                                     height="15"
                                                 />
-                                                <span className="pl-3 text-gray-700">Edit Review</span>
+                                                <span className="pl-3 text-gray-700">Edit Question</span>
                                             </div>
                                         </MenuItem>
                                         <MenuItem className="hover:bg-gray-200 cursor-pointer rounded-xl" onClick={() => toggleModalDelete('openModal', question.id)}>
@@ -274,7 +274,7 @@ function QuestionCard({ id, questions, setQuestions, sortByTime }) {
                                                         width="15"
                                                         height="15"
                                                     />
-                                                    <p className="pl-3 text-gray-700">Delete Review</p>
+                                                    <p className="pl-3 text-gray-700">Delete Question</p>
                                                 </div></div>
                                         </MenuItem>
                                     </MenuList>
